@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#b8902f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>حالاتي – Dental Cases</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--tx:#1f2328;--mu:#6b7280;--gd:#b8902f;--bd:#e5e1d6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15171a;--card:#202327;--tx:#eceff1;--mu:#9aa3ad;--gd:#d4af55;--bd:#33383d}}
+:root[data-theme="dark"]{--bg:#15171a;--card:#202327;--tx:#eceff1;--mu:#9aa3ad;--gd:#d4af55;--bd:#33383d}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;max-width:640px;margin-inline:auto;padding:12px}
+h1{font-size:20px;margin:6px 0 12px;color:var(--gd)}
+input,select,textarea,button{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px;width:100%}
+textarea{min-height:80px}
+button{cursor:pointer;width:auto}
+.pri{background:var(--gd);color:#fff;border:0;font-weight:600}
+.row{display:flex;gap:8px;margin-bottom:8px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:6px}
+.chip{white-space:nowrap;border-radius:20px;padding:6px 12px;font-size:14px}
+.chip.on{background:var(--gd);color:#fff;border-color:var(--gd)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:10px;margin-bottom:10px}
+.card h3{margin:0 0 4px;font-size:16px}
+.mu{color:var(--mu);font-size:13px}
+.th{display:flex;gap:6px;margin-top:8px;overflow-x:auto}
+.th img{width:84px;height:84px;object-fit:cover;border-radius:8px;flex:none}
+.big img{width:100%;height:auto;margin-bottom:8px;border-radius:10px}
+.fab{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));inset-inline-start:16px;border-radius:50%;width:56px;height:56px;font-size:28px;padding:0;box-shadow:0 2px 8px #0004}
+.hide{display:none}
+.hd{display:flex;align-items:center;gap:8px}.hd h1{margin:6px 0 12px;flex:1}.hd img{height:36px;margin-bottom:6px}
+.slots{display:block}
+.stage{margin-bottom:12px}
+.sh{font-size:13px;color:var(--mu);margin-bottom:6px}
+.tr{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tb{position:relative;aspect-ratio:1}
+.tb img{width:100%;height:100%;object-fit:cover;border-radius:10px;display:block}
+.tb i{position:absolute;top:4px;inset-inline-end:4px;background:#000a;color:#fff;border-radius:50%;width:24px;height:24px;line-height:24px;text-align:center;font-style:normal;cursor:pointer}
+.add{aspect-ratio:1;margin:0;text-align:center;font-size:14px;gap:4px;flex-direction:column;border:2px dashed var(--bd);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--mu);cursor:pointer}
+.add input{display:none}
+.cnt{font-size:13px;color:var(--mu);margin:2px 0 10px}
+.fbb{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:16px;border-radius:50%;width:56px;height:56px;font-size:26px;padding:0;box-shadow:0 2px 8px #0004}
+.ov{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:50;padding:12px}
+.ov.on{display:flex}
+.sheet{background:var(--card);border-radius:16px;padding:14px;width:100%;max-width:640px}
+.sheet textarea{margin:8px 0}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.sg div{font-size:13px;color:var(--mu)}.sg img{width:100%;border-radius:10px;display:block}
+#pr{display:none}
+@media print{.add,.tb i,button,.fbb,.ov{display:none!important}body>*:not(#pr){display:none!important}#pr{display:block;color:#000;background:#fff;padding:8px}#pr img.lg{height:50px}#pr .sg div{color:#333}#pr .sg>div{break-inside:avoid}@page{margin:12mm}}
+label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
+.note{font-size:12px;color:var(--mu);margin-top:6px}
+</style>
+</head>
+<body>
+<div id="list">
+  <div class="hd"><img id="lg" class="hide" alt=""><h1>🦷 حالاتي</h1><button id="gear" aria-label="الإعدادات">⚙️</button></div>
+  <div id="set" class="card hide"><b>لوجو خاص بك (اختياري)</b><div class="mu" style="margin:4px 0 8px">يظهر في التطبيق وفي ملف الـ PDF.</div><div class="row"><label class="pri" style="margin:0;padding:10px;border-radius:10px;color:#fff">اختر لوجو<input id="lf" type="file" accept="image/*" hidden></label><button id="lrm">حذف اللوجو</button></div></div>
+  <input id="q" placeholder="ابحث في الحالات...">
+  <div class="chips" id="chips" style="margin-top:8px"></div>
+  <div id="cards"></div>
+  <button class="fab pri" id="add" aria-label="إضافة حالة">+</button>
+  <button class="fbb" id="fbo" aria-label="شكاوي واقتراحات">💬</button>
+  <div class="ov" id="fbm"><div class="sheet">
+    <b>💬 شكاوي واقتراحات</b>
+    <div class="mu" style="margin:4px 0 8px">تُرسل إلينا عبر واتساب فقط.</div>
+    <select id="fbk"><option>اقتراح</option><option>شكوى</option></select>
+    <textarea id="fbt" placeholder="اكتب رسالتك هنا... (بدون أي بيانات مرضى)"></textarea>
+    <div class="row" style="margin:8px 0 0"><button class="pri" id="fbs" style="flex:1">إرسال عبر واتساب</button><button id="fbc">إلغاء</button></div>
+  </div></div>
+</div>
+
+<div id="form" class="hide">
+  <h1 id="ft">حالة جديدة</h1>
+  <label>عنوان الحالة</label><input id="t" placeholder="مثال: تاج زيركون ضرس 36">
+  <label>التخصص</label><select id="s"></select>
+  <label>التاريخ</label><input id="d" type="date">
+  <label>الصور (داخل الفم فقط) – يمكنك إضافة أكثر من صورة لكل مرحلة (بحد أقصى 5 صور للحالة)</label>
+  <div class="cnt" id="cnt"></div>
+  <div class="slots" id="slots"></div>
+  <label>التفاصيل (التشخيص، خطوات العلاج، الخامات...)</label><textarea id="n"></textarea>
+  <div class="note">ملحوظة: لا تضف اسم المريض أو أي بيانات تعريفية.</div>
+  <div class="row" style="margin-top:12px">
+    <button class="pri" id="save" style="flex:1">حفظ</button>
+    <button id="cancel">إلغاء</button>
+  </div>
+</div>
+
+<div id="view" class="hide">
+  <div class="row"><button id="back">← رجوع</button><button id="pdf" class="pri" style="margin-inline-start:auto">📄 حفظ PDF / طباعة</button><button id="del">حذف</button></div>
+  <div class="card" id="vc"></div>
+</div>
+
+<div id="pr"></div>
+<script>
+const SP=["الكل","Operative","Fixed","Endo","Prosthesis","Surgery","Perio","Ortho","Pedo"];
+const WA="201224080401";/* ضع رقم واتساب هنا بالصيغة الدولية بدون + أو أصفار، مثال: 201001234567 */
+const MAX=5;
+const $=id=>document.getElementById(id);
+const arr=v=>Array.isArray(v)?v:(v?[v]:[]);
+const tot=o=>stg($("s").value).reduce((n,k)=>n+arr(o[k]).length,0);
+const ST={Operative:["Before","Cavity","After"],Fixed:["Before","Preparation","After"],Endo:["Before","X-ray Master Cone","X-ray Obturation","After"],Prosthesis:["Before","Try-in","After"]};
+const stg=sp=>ST[sp]||["Before","After"];
+let db,cases=[],flt="الكل",imgs={},cur=null,mem=[],logo="";
+const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function open(){return new Promise(r=>{try{const q=indexedDB.open("cases",1);q.onupgradeneeded=()=>q.result.createObjectStore("c",{keyPath:"id"});q.onsuccess=()=>{db=q.result;r()};q.onerror=()=>r()}catch(e){r()}})}
+function all(){return new Promise(r=>{if(!db)return r(mem);const q=db.transaction("c").objectStore("c").getAll();q.onsuccess=()=>r(q.result);q.onerror=()=>r(mem)})}
+function put(c){return new Promise(r=>{if(!db){mem=mem.filter(x=>x.id!=c.id).concat(c);return r()}const t=db.transaction("c","readwrite");t.objectStore("c").put(c);t.oncomplete=r;t.onerror=r})}
+function rm(id){return new Promise(r=>{if(!db){mem=mem.filter(x=>x.id!=id);return r()}const t=db.transaction("c","readwrite");t.objectStore("c").delete(id);t.oncomplete=r;t.onerror=r})}
+
+function shrink(file,png){return new Promise(r=>{const fr=new FileReader();fr.onload=()=>{const i=new Image();i.onload=()=>{const m=png?400:1280,k=Math.min(1,m/Math.max(i.width,i.height)),c=document.createElement("canvas");c.width=i.width*k;c.height=i.height*k;c.getContext("2d").drawImage(i,0,0,c.width,c.height);r(png?c.toDataURL("image/png"):c.toDataURL("image/jpeg",.8))};i.src=fr.result};fr.readAsDataURL(file)})}
+
+function grid(c){return `<div class="sg">${stg(c.sp).flatMap(k=>arr(c.im[k]).map((x,i,a)=>`<div>${k}${a.length>1?" "+(i+1):""}<img src="${x}" alt=""></div>`)).join("")}</div>`}
+function slots(){const full=tot(imgs)>=MAX;
+  $("cnt").textContent="عدد الصور: "+tot(imgs)+" من "+MAX;
+  $("slots").innerHTML=stg($("s").value).map(k=>`<div class="stage" data-k="${k}"><div class="sh">${k}</div><div class="tr">${arr(imgs[k]).map((x,i)=>`<div class="tb"><img src="${x}" alt=""><i data-x="${k}" data-i="${i}">×</i></div>`).join("")}${full?"":`<label class="add"><span style="font-size:30px;line-height:1">+</span>إضافة صورة<input type="file" accept="image/*" multiple></label>`}</div></div>`).join("")}
+function show(p){["list","form","view"].forEach(x=>$(x).classList.toggle("hide",x!=p));window.scrollTo(0,0)}
+
+async function render(){
+  const A=await all();const lr=A.find(x=>x.id=="logo");logo=lr?lr.d:"";$("lg").src=logo;$("lg").classList.toggle("hide",!logo);
+  cases=A.filter(x=>x.id!="logo").sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  $("chips").innerHTML=SP.map(s=>`<button class="chip ${s==flt?"on":""}" data-s="${s}">${s}</button>`).join("");
+  const q=$("q").value.trim().toLowerCase();
+  const l=cases.filter(c=>(flt=="الكل"||c.sp==flt)&&(!q||(c.t+" "+c.n).toLowerCase().includes(q)));
+  $("cards").innerHTML=l.length?l.map(c=>`<div class="card" data-id="${c.id}"><h3>${esc(c.t)}</h3><div class="mu">${esc(c.sp)} · ${esc(c.date)}</div>${Object.values(c.im).flatMap(arr).length?`<div class="th">${Object.values(c.im).flatMap(arr).map(x=>`<img src="${x}" alt="">`).join("")}</div>`:""}</div>`).join(""):`<p class="mu" style="text-align:center;margin-top:40px">لا توجد حالات بعد. اضغط + لإضافة أول حالة.</p>`;
+}
+
+$("chips").onclick=e=>{const s=e.target.dataset.s;if(s){flt=s;render()}};
+$("q").oninput=render;
+$("cards").onclick=e=>{const el=e.target.closest(".card");if(!el)return;cur=cases.find(c=>c.id==el.dataset.id);
+  $("vc").innerHTML=`<h3>${esc(cur.t)}</h3><div class="mu">${esc(cur.sp)} · ${esc(cur.date)}</div>${grid(cur)}<p style="white-space:pre-wrap">${esc(cur.n)}</p>`;show("view")};
+$("back").onclick=()=>show("list");
+$("del").onclick=async()=>{if(cur&&confirm("حذف الحالة نهائيًا؟")){await rm(cur.id);await render();show("list")}};
+$("add").onclick=()=>{imgs={};$("t").value="";$("n").value="";$("d").value=new Date().toISOString().slice(0,10);$("s").value=flt!="الكل"?flt:SP[1];slots();show("form")};
+$("cancel").onclick=()=>show("list");
+$("s").onchange=slots;
+$("slots").onclick=e=>{const x=e.target.dataset.x;if(x){e.preventDefault();arr(imgs[x]).splice(+e.target.dataset.i,1);imgs[x]=arr(imgs[x]);if(!imgs[x].length)delete imgs[x];slots()}};
+$("slots").onchange=async e=>{const st=e.target.closest(".stage");if(!st)return;const k=st.dataset.k,fs=[...e.target.files],room=MAX-tot(imgs);
+  if(fs.length>room)alert("الحد الأقصى "+MAX+" صور للحالة");
+  for(const f of fs.slice(0,Math.max(room,0))){imgs[k]=arr(imgs[k]).concat(await shrink(f))}
+  slots()};
+$("gear").onclick=()=>$("set").classList.toggle("hide");
+$("lf").onchange=async e=>{const f=e.target.files[0];if(f){await put({id:"logo",d:await shrink(f,true)});render()}};
+$("lrm").onclick=async()=>{await rm("logo");render()};
+$("pdf").onclick=()=>{if(!cur)return;$("pr").innerHTML=`${logo?`<img class="lg" src="${logo}" alt="">`:""}<h2 style="margin:6px 0">${esc(cur.t)}</h2><div>${esc(cur.sp)} · ${esc(cur.date)}</div>${grid(cur)}<p style="white-space:pre-wrap">${esc(cur.n)}</p>`;setTimeout(()=>window.print(),200)};
+$("save").onclick=async()=>{
+  if(!$("t").value.trim()){alert("اكتب عنوان الحالة");return}
+  await put({id:Date.now(),t:$("t").value.trim(),sp:$("s").value,date:$("d").value,n:$("n").value,im:Object.fromEntries(stg($("s").value).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
+  await render();show("list")};
+
+$("fbo").onclick=()=>$("fbm").classList.add("on");
+$("fbc").onclick=()=>$("fbm").classList.remove("on");
+$("fbm").onclick=e=>{if(e.target===$("fbm"))$("fbm").classList.remove("on")};
+$("fbs").onclick=()=>{const t=$("fbt").value.trim();if(!t){alert("اكتب رسالتك أولًا");return}
+  if(!WA){alert("رقم الواتساب غير مضبوط بعد");return}
+  const a=document.createElement("a");a.href="https://wa.me/"+WA+"?text="+encodeURIComponent("["+$("fbk").value+"] حالاتي:\n"+t);a.target="_blank";a.rel="noopener";a.click();$("fbt").value="";$("fbm").classList.remove("on")};
+
+$("s").innerHTML=SP.slice(1).map(s=>`<option>${s}</option>`).join("");
+open().then(render);
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
