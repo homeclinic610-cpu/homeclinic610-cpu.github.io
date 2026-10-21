@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.homeclinic610.dentalcases",
+        "sha256_cert_fingerprints": ["5A:77:00:20:5D:E6:0F:9C:3D:64:FE:FD:4D:CA:C8:06:04:D4:ED:9C:70:3E:8A:29:5F:95:F3:B5:42:10:8F:14"]
+      }
+    }]
