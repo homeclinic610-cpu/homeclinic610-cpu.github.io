@@ -38,6 +38,11 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--bl);outline-offs
 .wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(72vw,360px);aspect-ratio:1;background:url(icons/wm-light.png) center/contain no-repeat;opacity:.2;pointer-events:none;z-index:-1}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .wm{background:url(icons/icon-512.png) center/cover;border-radius:22%;opacity:.16}}
 :root[data-theme="dark"] .wm{background:url(icons/icon-512.png) center/cover;border-radius:22%;opacity:.16}
+.ph{position:relative}
+.ph svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--bl);pointer-events:none}
+.ph input{padding-left:42px;text-align:left}
+.pv{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0}
+.pv a{border:1px solid var(--bl);color:var(--bl);border-radius:999px;padding:5px 12px;text-decoration:none;font-size:14px}
 .appmark{width:36px;height:36px;border-radius:10px;vertical-align:middle;margin-inline-end:8px}
 .hd h1 .appmark{height:36px;margin-bottom:0}
 .ic{display:inline-flex;align-items:center;justify-content:center;padding:8px;color:var(--bl);border-color:var(--bl)}
@@ -88,11 +93,12 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
   <label>عنوان الحالة</label><input id="t" placeholder="مثال: تاج زيركون ضرس 36">
   <label>التخصص</label><select id="s"></select>
   <label>التاريخ</label><input id="d" type="date">
+  <label>رقم هاتف المريض (اختياري)</label><div class="ph"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><input id="ph" type="tel" inputmode="tel" dir="ltr" placeholder="01xxxxxxxxx" autocomplete="off"></div>
   <label>الصور (داخل الفم فقط) – يمكنك إضافة أكثر من صورة لكل مرحلة (بحد أقصى 5 صور للحالة)</label>
   <div class="cnt" id="cnt"></div>
   <div class="slots" id="slots"></div>
   <label>التفاصيل (التشخيص، خطوات العلاج، الخامات...)</label><textarea id="n"></textarea>
-  <div class="note">ملحوظة: لا تضف اسم المريض أو أي بيانات تعريفية.</div>
+  <div class="note">ملحوظة: لا تكتب اسم المريض. رقم الهاتف يُحفظ على جهازك فقط ولا يظهر في ملف PDF.</div>
   <div class="row" style="margin-top:12px">
     <button class="pri" id="save" style="flex:1">حفظ</button>
     <button id="cancel">إلغاء</button>
@@ -128,6 +134,8 @@ function grid(c){return `<div class="sg">${stg(c.sp).flatMap(k=>arr(c.im[k]).map
 function slots(){const full=tot(imgs)>=MAX;
   $("cnt").textContent="عدد الصور: "+tot(imgs)+" من "+MAX;
   $("slots").innerHTML=stg($("s").value).map(k=>`<div class="stage" data-k="${k}"><div class="sh">${k}</div><div class="tr">${arr(imgs[k]).map((x,i)=>`<div class="tb"><img src="${x}" alt=""><i data-x="${k}" data-i="${i}">×</i></div>`).join("")}${full?"":`<label class="add"><span style="font-size:30px;line-height:1">+</span>إضافة صورة<input type="file" accept="image/*" multiple></label>`}</div></div>`).join("")}
+function phoneRow(p){if(!p)return"";const d=String(p).replace(/[^\d+]/g,""),n=d.replace(/\D/g,""),w=n.startsWith("00")?n.slice(2):n.startsWith("0")?"20"+n.slice(1):n;
+  return `<div class="pv"><span dir="ltr">${esc(p)}</span><a href="tel:${esc(d)}">اتصال</a><a href="https://wa.me/${esc(w)}" target="_blank" rel="noopener">واتساب</a></div>`}
 function show(p){["list","form","view"].forEach(x=>$(x).classList.toggle("hide",x!=p));window.scrollTo(0,0)}
 
 async function render(){
@@ -135,17 +143,17 @@ async function render(){
   cases=A.filter(x=>x.id!="logo").sort((a,b)=>(b.date||"").localeCompare(a.date||""));
   $("chips").innerHTML=SP.map(s=>`<button class="chip ${s==flt?"on":""}" data-s="${s}">${s}</button>`).join("");
   const q=$("q").value.trim().toLowerCase();
-  const l=cases.filter(c=>(flt=="الكل"||c.sp==flt)&&(!q||(c.t+" "+c.n).toLowerCase().includes(q)));
+  const l=cases.filter(c=>(flt=="الكل"||c.sp==flt)&&(!q||(c.t+" "+c.n+" "+(c.ph||"")).toLowerCase().includes(q)));
   $("cards").innerHTML=l.length?l.map(c=>`<div class="card" data-id="${c.id}"><h3>${esc(c.t)}</h3><div class="mu">${esc(c.sp)} · ${esc(c.date)}</div>${Object.values(c.im).flatMap(arr).length?`<div class="th">${Object.values(c.im).flatMap(arr).map(x=>`<img src="${x}" alt="">`).join("")}</div>`:""}</div>`).join(""):`<p class="mu" style="text-align:center;margin-top:40px">لا توجد حالات بعد. اضغط + لإضافة أول حالة.</p>`;
 }
 
 $("chips").onclick=e=>{const s=e.target.dataset.s;if(s){flt=s;render()}};
 $("q").oninput=render;
 $("cards").onclick=e=>{const el=e.target.closest(".card");if(!el)return;cur=cases.find(c=>c.id==el.dataset.id);
-  $("vc").innerHTML=`<h3>${esc(cur.t)}</h3><div class="mu">${esc(cur.sp)} · ${esc(cur.date)}</div>${grid(cur)}<p style="white-space:pre-wrap">${esc(cur.n)}</p>`;show("view")};
+  $("vc").innerHTML=`<h3>${esc(cur.t)}</h3><div class="mu">${esc(cur.sp)} · ${esc(cur.date)}</div>${phoneRow(cur.ph)}${grid(cur)}<p style="white-space:pre-wrap">${esc(cur.n)}</p>`;show("view")};
 $("back").onclick=()=>show("list");
 $("del").onclick=async()=>{if(cur&&confirm("حذف الحالة نهائيًا؟")){await rm(cur.id);await render();show("list")}};
-$("add").onclick=()=>{imgs={};$("t").value="";$("n").value="";$("d").value=new Date().toISOString().slice(0,10);$("s").value=flt!="الكل"?flt:SP[1];slots();show("form")};
+$("add").onclick=()=>{imgs={};$("t").value="";$("ph").value="";$("n").value="";$("d").value=new Date().toISOString().slice(0,10);$("s").value=flt!="الكل"?flt:SP[1];slots();show("form")};
 $("cancel").onclick=()=>show("list");
 $("s").onchange=slots;
 $("slots").onclick=e=>{const x=e.target.dataset.x;if(x){e.preventDefault();arr(imgs[x]).splice(+e.target.dataset.i,1);imgs[x]=arr(imgs[x]);if(!imgs[x].length)delete imgs[x];slots()}};
@@ -159,7 +167,7 @@ $("lrm").onclick=async()=>{await rm("logo");render()};
 $("pdf").onclick=()=>{if(!cur)return;$("pr").innerHTML=`${logo?`<img class="lg" src="${logo}" alt="">`:""}<h2 style="margin:6px 0">${esc(cur.t)}</h2><div>${esc(cur.sp)} · ${esc(cur.date)}</div>${grid(cur)}<p style="white-space:pre-wrap">${esc(cur.n)}</p>`;setTimeout(()=>window.print(),200)};
 $("save").onclick=async()=>{
   if(!$("t").value.trim()){alert("اكتب عنوان الحالة");return}
-  await put({id:Date.now(),t:$("t").value.trim(),sp:$("s").value,date:$("d").value,n:$("n").value,im:Object.fromEntries(stg($("s").value).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
+  await put({id:Date.now(),t:$("t").value.trim(),sp:$("s").value,date:$("d").value,ph:$("ph").value.trim(),n:$("n").value,im:Object.fromEntries(stg($("s").value).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
   await render();show("list")};
 
 $("fbo").onclick=()=>$("fbm").classList.add("on");
