@@ -43,6 +43,26 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--bl);outline-offs
 .ph input{padding-left:42px;text-align:left}
 .pv{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0}
 .pv a{border:1px solid var(--bl);color:var(--bl);border-radius:999px;padding:5px 12px;text-decoration:none;font-size:14px}
+.spc{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}
+.tc{direction:ltr;margin:6px 0 2px}
+.tr2{display:flex;margin-bottom:8px}
+.tr2 .h{display:flex;flex:1;min-width:0}
+.tr2 .h+.h{border-left:2px solid var(--bd);margin-left:3px;padding-left:3px}
+.tt{all:unset;box-sizing:border-box;flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:1px;padding:3px 0;border-radius:6px;color:var(--mu);font-size:9px;cursor:pointer}
+.tt:active{background:#8883}
+.tt.ro{pointer-events:none}
+.tt svg{width:100%;height:30px;display:block}
+.tt path{fill:var(--card);stroke:var(--mu);stroke-width:1.4}
+.tt b{font-weight:600;font-size:9px;line-height:1}
+.tt i{display:flex;gap:2px;height:4px}
+.tt .d{width:4px;height:4px;border-radius:50%;display:block}
+.lgd{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--mu);margin:2px 0 8px}
+.lgd .d,.chip .dt{display:inline-block;width:9px;height:9px;border-radius:50%;margin-inline-end:5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vs{border-top:1px solid var(--bd);padding:10px 0}
+.vs b{display:block;margin-bottom:4px}
+.vs div{margin:3px 0;font-size:14px}
+.vs .dt,.vsh .dt{display:inline-block;width:9px;height:9px;border-radius:50%;margin-inline-end:6px}
 .appmark{width:36px;height:36px;border-radius:10px;vertical-align:middle;margin-inline-end:8px}
 .hd h1 .appmark{height:36px;margin-bottom:0}
 .ic{display:inline-flex;align-items:center;justify-content:center;padding:8px;color:var(--bl);border-color:var(--bl)}
@@ -90,15 +110,25 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
 
 <div id="form" class="hide">
   <h1 id="ft">حالة جديدة</h1>
-  <label>عنوان الحالة</label><input id="t" placeholder="مثال: تاج زيركون ضرس 36">
-  <label>التخصص</label><select id="s"></select>
+  <label>اسم المريض</label><input id="t" placeholder="مثال: مصطفى أحمد">
+  <div class="two"><div><label>العمر (بالسنوات)</label><input id="ag" type="number" inputmode="numeric" min="0" max="120" placeholder="مثال: 35"></div>
+  <div><label>النوع</label><div class="spc" id="sx"></div></div></div>
+  <label>التخصص (يمكنك اختيار أكثر من تخصص)</label><div class="spc" id="sps"></div>
+  <label>الأسنان (اضغط على السن لتحديد ما تم عليه)</label>
+  <div id="tc"></div>
+  <div class="ov" id="tm"><div class="sheet">
+    <b id="tmt"></b>
+    <div class="mu" style="margin:4px 0 8px">اختر ما تم عمله على هذا السن (يمكن أكثر من اختيار)</div>
+    <div class="spc" id="tmo"></div>
+    <div class="row" style="margin:8px 0 0"><button class="pri" id="tmd" style="flex:1">تم</button><button id="tmc">مسح العلامة</button></div>
+  </div></div>
   <label>التاريخ</label><input id="d" type="date">
   <label>رقم هاتف المريض (اختياري)</label><div class="ph"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><input id="ph" type="tel" inputmode="tel" dir="ltr" placeholder="01xxxxxxxxx" autocomplete="off"></div>
-  <label>الصور (داخل الفم فقط) – يمكنك إضافة أكثر من صورة لكل مرحلة (بحد أقصى 5 صور للحالة)</label>
+  <label>الصور (داخل الفم فقط) – يمكنك إضافة أكثر من صورة لكل مرحلة (بدون حد أقصى)</label>
   <div class="cnt" id="cnt"></div>
   <div class="slots" id="slots"></div>
   <label>التفاصيل (التشخيص، خطوات العلاج، الخامات...)</label><textarea id="n"></textarea>
-  <div class="note">ملحوظة: لا تكتب اسم المريض. رقم الهاتف يُحفظ على جهازك فقط ولا يظهر في ملف PDF.</div>
+  <div class="note">ملحوظة: الاسم ورقم الهاتف يُحفظان على جهازك فقط. رقم الهاتف لا يظهر في ملف PDF، أما الاسم فيظهر في عنوان الملف.</div>
   <div class="row" style="margin-top:12px">
     <button class="pri" id="save" style="flex:1">حفظ</button>
     <button id="cancel">إلغاء</button>
@@ -107,19 +137,57 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
 
 <div id="view" class="hide">
   <div class="row"><button id="back">← رجوع</button><button id="pdf" class="pri" style="margin-inline-start:auto">📄 حفظ PDF / طباعة</button><button id="del">حذف</button></div>
-  <div class="card" id="vc"></div>
+  <button id="sm" class="ic" style="width:100%;margin-top:8px;gap:8px;font-weight:600"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg> ملخص الحالة</button>
+  <div class="card" id="vc" style="margin-top:8px"></div>
+  <div class="ov" id="sv"><div class="sheet" style="max-height:82vh;overflow:auto">
+    <div id="svb"></div>
+    <button class="pri" id="svc" style="width:100%;margin-top:12px">إغلاق</button>
+  </div></div>
 </div>
 
 <div id="pr"></div>
 <script>
 const SP=["الكل","Operative","Fixed","Endo","Prosthesis","Surgery","Perio","Ortho","Pedo"];
 const WA="201224080401";/* ضع رقم واتساب هنا بالصيغة الدولية بدون + أو أصفار، مثال: 201001234567 */
-const MAX=5;
 const $=id=>document.getElementById(id);
 const arr=v=>Array.isArray(v)?v:(v?[v]:[]);
-const tot=o=>stg($("s").value).reduce((n,k)=>n+arr(o[k]).length,0);
+const tot=o=>stagesFor(sel).reduce((n,k)=>n+arr(o[k]).length,0);
 const ST={Operative:["Before","Cavity","After"],Fixed:["Before","Preparation","After"],Endo:["Before","X-ray Master Cone","X-ray Obturation","After"],Prosthesis:["Before","Try-in","After"]};
 const stg=sp=>ST[sp]||["Before","After"];
+let sel=[],teeth={},tcur=0,sex="",spAuto=true;
+const TC={Operative:"#40a4d5",Fixed:"#d4b574",Endo:"#e0626f",Prosthesis:"#9b7be0",Surgery:"#e0884a",Perio:"#4fb286",Ortho:"#27c4d8",Pedo:"#e08fbc"};
+const UP=[18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28],LO=[48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38];
+const TOOTH="M6 2C3 2 2 5 2 9c0 5 2 8 3 13 .5 4 1.5 8 3.5 8s2-6 3.5-6 1.5 6 3.5 6 3-4 3.5-8c1-5 3-8 3-13 0-4-1-7-4-7-2.5 0-4 1.5-6 1.5S8.5 2 6 2z";
+const col=x=>TC[x]||"#999";
+function legend(t){const u=[...new Set(Object.values(t).flat())];return u.length?`<div class="lgd">${u.map(x=>`<span><span class="dt" style="display:inline-block;width:9px;height:9px;border-radius:50%;margin-inline-end:5px;background:${col(x)}"></span>${esc(x)}</span>`).join("")}</div>`:""}
+function chart(t,edit){const mk=n=>{const a=t[n]||[],c=a.length?col(a[0]):"",up=UP.includes(n);
+    const sv=`<svg viewBox="0 0 24 32" style="${up?"transform:scaleY(-1)":""}"><path d="${TOOTH}"${c?` style="fill:${c};stroke:${c}"`:""}/></svg>`;
+    const dots=`<i>${a.map(x=>`<span class="d" style="background:${col(x)}"></span>`).join("")}</i>`,num=`<b>${n}</b>`;
+    return `<button type="button" class="tt${edit?"":" ro"}" data-t="${n}" aria-label="سن ${n}">${up?num+dots+sv:sv+dots+num}</button>`};
+  const row=l=>`<div class="tr2"><div class="h">${l.slice(0,8).map(mk).join("")}</div><div class="h">${l.slice(8).map(mk).join("")}</div></div>`;
+  return `<div class="tc">${row(UP)}${row(LO)}</div>`+legend(t)}
+const tkeys=t=>Object.keys(t||{}).filter(k=>(t[k]||[]).length).sort((a,b)=>a-b);
+const teethLine=c=>tkeys(c.teeth).map(k=>`${k} (${c.teeth[k].join(" + ")})`).join(" · ");
+const demo=c=>{const a=[c.sex,c.age?c.age+" سنة":""].filter(Boolean);return a.length?`<div class="mu">${esc(a.join(" · "))}</div>`:""};
+function sxChips(){$("sx").innerHTML=["ذكر","أنثى"].map(x=>`<button type="button" class="chip ${sex==x?"on":""}" data-s="${x}">${x}</button>`).join("")}
+$("sx").onclick=e=>{const x=e.target.dataset.s;if(!x)return;sex=sex==x?"":x;sxChips()};
+function summary(c){const k=x=>String(x.t||"").trim().toLowerCase();
+  const L=cases.filter(x=>k(x)==k(c)).sort((a,b)=>(a.date||"").localeCompare(b.date||""));
+  const info=[...L].reverse().find(x=>x.sex||x.age)||{};
+  let h=`<h3 style="margin:0">${esc(c.t)}</h3>${demo(info)}<div class="mu">عدد الزيارات: ${L.length}</div>`;
+  L.forEach(x=>{const by={};tkeys(x.teeth).forEach(t=>x.teeth[t].forEach(tr=>(by[tr]=by[tr]||[]).push(t)));
+    const used=Object.keys(by),rest=spsOf(x).filter(y=>!used.includes(y));
+    h+=`<div class="vs"><b>${esc(x.date||"بدون تاريخ")}</b>`+
+      SP.slice(1).filter(y=>by[y]).map(y=>`<div dir="ltr" style="text-align:right"><span class="dt" style="background:${col(y)}"></span>${esc(y)}: ${by[y].join(" - ")}</div>`).join("")+
+      (rest.length?`<div class="mu">${used.length?"تخصصات أخرى: ":"التخصصات: "}${esc(rest.join(" + "))}</div>`:"")+`</div>`});
+  return h}
+$("sm").onclick=()=>{if(!cur)return;$("svb").innerHTML=summary(cur);$("sv").classList.add("on")};
+$("svc").onclick=()=>$("sv").classList.remove("on");
+$("sv").onclick=e=>{if(e.target===$("sv"))$("sv").classList.remove("on")};
+function drawTeeth(){$("tc").innerHTML=chart(teeth,true)}
+const spsOf=c=>Array.isArray(c.sps)&&c.sps.length?c.sps:[c.sp];
+const spl=c=>spsOf(c).join(" + ");
+const stagesFor=l=>{const mid=[];l.forEach(sp=>stg(sp).forEach(k=>{if(k!="Before"&&k!="After"&&!mid.includes(k))mid.push(k)}));return["Before",...mid,"After"]};
 let db,cases=[],flt="الكل",imgs={},cur=null,mem=[],logo="";
 const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
@@ -130,10 +198,10 @@ function rm(id){return new Promise(r=>{if(!db){mem=mem.filter(x=>x.id!=id);retur
 
 function shrink(file,png){return new Promise(r=>{const fr=new FileReader();fr.onload=()=>{const i=new Image();i.onload=()=>{const m=png?400:1280,k=Math.min(1,m/Math.max(i.width,i.height)),c=document.createElement("canvas");c.width=i.width*k;c.height=i.height*k;c.getContext("2d").drawImage(i,0,0,c.width,c.height);r(png?c.toDataURL("image/png"):c.toDataURL("image/jpeg",.8))};i.src=fr.result};fr.readAsDataURL(file)})}
 
-function grid(c){return `<div class="sg">${stg(c.sp).flatMap(k=>arr(c.im[k]).map((x,i,a)=>`<div>${k}${a.length>1?" "+(i+1):""}<img src="${x}" alt=""></div>`)).join("")}</div>`}
-function slots(){const full=tot(imgs)>=MAX;
-  $("cnt").textContent="عدد الصور: "+tot(imgs)+" من "+MAX;
-  $("slots").innerHTML=stg($("s").value).map(k=>`<div class="stage" data-k="${k}"><div class="sh">${k}</div><div class="tr">${arr(imgs[k]).map((x,i)=>`<div class="tb"><img src="${x}" alt=""><i data-x="${k}" data-i="${i}">×</i></div>`).join("")}${full?"":`<label class="add"><span style="font-size:30px;line-height:1">+</span>إضافة صورة<input type="file" accept="image/*" multiple></label>`}</div></div>`).join("")}
+function grid(c){return `<div class="sg">${stagesFor(spsOf(c)).flatMap(k=>arr(c.im[k]).map((x,i,a)=>`<div>${k}${a.length>1?" "+(i+1):""}<img src="${x}" alt=""></div>`)).join("")}</div>`}
+function slots(){const full=false;
+  $("cnt").textContent="عدد الصور: "+tot(imgs);
+  $("slots").innerHTML=stagesFor(sel).map(k=>`<div class="stage" data-k="${k}"><div class="sh">${k}</div><div class="tr">${arr(imgs[k]).map((x,i)=>`<div class="tb"><img src="${x}" alt=""><i data-x="${k}" data-i="${i}">×</i></div>`).join("")}${full?"":`<label class="add"><span style="font-size:30px;line-height:1">+</span>إضافة صورة<input type="file" accept="image/*" multiple></label>`}</div></div>`).join("")}
 function phoneRow(p){if(!p)return"";const d=String(p).replace(/[^\d+]/g,""),n=d.replace(/\D/g,""),w=n.startsWith("00")?n.slice(2):n.startsWith("0")?"20"+n.slice(1):n;
   return `<div class="pv"><span dir="ltr">${esc(p)}</span><a href="tel:${esc(d)}">اتصال</a><a href="https://wa.me/${esc(w)}" target="_blank" rel="noopener">واتساب</a></div>`}
 function show(p){["list","form","view"].forEach(x=>$(x).classList.toggle("hide",x!=p));window.scrollTo(0,0)}
@@ -143,31 +211,42 @@ async function render(){
   cases=A.filter(x=>x.id!="logo").sort((a,b)=>(b.date||"").localeCompare(a.date||""));
   $("chips").innerHTML=SP.map(s=>`<button class="chip ${s==flt?"on":""}" data-s="${s}">${s}</button>`).join("");
   const q=$("q").value.trim().toLowerCase();
-  const l=cases.filter(c=>(flt=="الكل"||c.sp==flt)&&(!q||(c.t+" "+c.n+" "+(c.ph||"")).toLowerCase().includes(q)));
-  $("cards").innerHTML=l.length?l.map(c=>`<div class="card" data-id="${c.id}"><h3>${esc(c.t)}</h3><div class="mu">${esc(c.sp)} · ${esc(c.date)}</div>${Object.values(c.im).flatMap(arr).length?`<div class="th">${Object.values(c.im).flatMap(arr).map(x=>`<img src="${x}" alt="">`).join("")}</div>`:""}</div>`).join(""):`<p class="mu" style="text-align:center;margin-top:40px">لا توجد حالات بعد. اضغط + لإضافة أول حالة.</p>`;
+  const l=cases.filter(c=>(flt=="الكل"||spsOf(c).includes(flt))&&(!q||(c.t+" "+c.n+" "+(c.ph||"")+" "+tkeys(c.teeth).join(" ")).toLowerCase().includes(q)));
+  $("cards").innerHTML=l.length?l.map(c=>`<div class="card" data-id="${c.id}"><h3>${esc(c.t)}</h3><div class="mu">${esc(spl(c))} · ${esc(c.date)}</div>${tkeys(c.teeth).length?`<div class="mu">الأسنان: ${tkeys(c.teeth).join(" · ")}</div>`:""}${Object.values(c.im).flatMap(arr).length?`<div class="th">${Object.values(c.im).flatMap(arr).map(x=>`<img src="${x}" alt="">`).join("")}</div>`:""}</div>`).join(""):`<p class="mu" style="text-align:center;margin-top:40px">لا توجد حالات بعد. اضغط + لإضافة أول حالة.</p>`;
 }
 
 $("chips").onclick=e=>{const s=e.target.dataset.s;if(s){flt=s;render()}};
 $("q").oninput=render;
 $("cards").onclick=e=>{const el=e.target.closest(".card");if(!el)return;cur=cases.find(c=>c.id==el.dataset.id);
-  $("vc").innerHTML=`<h3>${esc(cur.t)}</h3><div class="mu">${esc(cur.sp)} · ${esc(cur.date)}</div>${phoneRow(cur.ph)}${grid(cur)}<p style="white-space:pre-wrap">${esc(cur.n)}</p>`;show("view")};
+  $("vc").innerHTML=`<h3>${esc(cur.t)}</h3><div class="mu">${esc(spl(cur))} · ${esc(cur.date)}</div>${demo(cur)}${phoneRow(cur.ph)}${tkeys(cur.teeth).length?chart(cur.teeth,false)+`<div class="mu" dir="ltr" style="margin-bottom:8px;text-align:right">${esc(teethLine(cur))}</div>`:""}${grid(cur)}<p style="white-space:pre-wrap">${esc(cur.n)}</p>`;show("view")};
 $("back").onclick=()=>show("list");
 $("del").onclick=async()=>{if(cur&&confirm("حذف الحالة نهائيًا؟")){await rm(cur.id);await render();show("list")}};
-$("add").onclick=()=>{imgs={};$("t").value="";$("ph").value="";$("n").value="";$("d").value=new Date().toISOString().slice(0,10);$("s").value=flt!="الكل"?flt:SP[1];slots();show("form")};
+$("add").onclick=()=>{imgs={};$("t").value="";$("ph").value="";$("n").value="";$("d").value=new Date().toISOString().slice(0,10);$("ag").value="";sex="";spAuto=true;sxChips();teeth={};drawTeeth();sel=[flt!="الكل"?flt:SP[1]];spchips();slots();show("form")};
 $("cancel").onclick=()=>show("list");
-$("s").onchange=slots;
+function tmChips(){$("tmo").innerHTML=SP.slice(1).map(x=>`<button type="button" class="chip ${(teeth[tcur]||[]).includes(x)?"on":""}" data-s="${x}"><span class="dt" style="background:${col(x)}"></span>${x}</button>`).join("")}
+$("tc").onclick=e=>{const b=e.target.closest(".tt");if(!b)return;tcur=+b.dataset.t;$("tmt").textContent="سن رقم "+tcur;tmChips();$("tm").classList.add("on")};
+$("tmo").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;const x=b.dataset.s,a=teeth[tcur]||[];
+  if(a.includes(x)){teeth[tcur]=a.filter(y=>y!=x);if(!teeth[tcur].length)delete teeth[tcur]}
+  else{teeth[tcur]=a.concat(x);if(spAuto){sel=[x];spAuto=false;spchips();slots()}else if(!sel.includes(x)){sel=SP.slice(1).filter(y=>sel.includes(y)||y==x);spchips();slots()}}
+  tmChips();drawTeeth()};
+$("tmd").onclick=()=>$("tm").classList.remove("on");
+$("tmc").onclick=()=>{delete teeth[tcur];drawTeeth();$("tm").classList.remove("on")};
+$("tm").onclick=e=>{if(e.target===$("tm"))$("tm").classList.remove("on")};
+function spchips(){$("sps").innerHTML=SP.slice(1).map(x=>`<button type="button" class="chip ${sel.includes(x)?"on":""}" data-s="${x}">${x}</button>`).join("")}
+$("sps").onclick=e=>{const x=e.target.dataset.s;if(!x)return;spAuto=false;
+  if(sel.includes(x)){if(sel.length==1){alert("اختر تخصصًا واحدًا على الأقل");return}sel=sel.filter(y=>y!=x)}else{sel=SP.slice(1).filter(y=>sel.includes(y)||y==x)}
+  spchips();slots()};
 $("slots").onclick=e=>{const x=e.target.dataset.x;if(x){e.preventDefault();arr(imgs[x]).splice(+e.target.dataset.i,1);imgs[x]=arr(imgs[x]);if(!imgs[x].length)delete imgs[x];slots()}};
-$("slots").onchange=async e=>{const st=e.target.closest(".stage");if(!st)return;const k=st.dataset.k,fs=[...e.target.files],room=MAX-tot(imgs);
-  if(fs.length>room)alert("الحد الأقصى "+MAX+" صور للحالة");
-  for(const f of fs.slice(0,Math.max(room,0))){imgs[k]=arr(imgs[k]).concat(await shrink(f))}
+$("slots").onchange=async e=>{const st=e.target.closest(".stage");if(!st)return;const k=st.dataset.k;
+  for(const f of [...e.target.files]){imgs[k]=arr(imgs[k]).concat(await shrink(f))}
   slots()};
 $("gear").onclick=()=>$("set").classList.toggle("hide");
 $("lf").onchange=async e=>{const f=e.target.files[0];if(f){await put({id:"logo",d:await shrink(f,true)});render()}};
 $("lrm").onclick=async()=>{await rm("logo");render()};
-$("pdf").onclick=()=>{if(!cur)return;$("pr").innerHTML=`${logo?`<img class="lg" src="${logo}" alt="">`:""}<h2 style="margin:6px 0">${esc(cur.t)}</h2><div>${esc(cur.sp)} · ${esc(cur.date)}</div>${grid(cur)}<p style="white-space:pre-wrap">${esc(cur.n)}</p>`;setTimeout(()=>window.print(),200)};
+$("pdf").onclick=()=>{if(!cur)return;$("pr").innerHTML=`${logo?`<img class="lg" src="${logo}" alt="">`:""}<h2 style="margin:6px 0">${esc(cur.t)}</h2>${demo(cur)}<div>${esc(spl(cur))} · ${esc(cur.date)}</div>${tkeys(cur.teeth).length?`<div dir="ltr" style="text-align:right">${esc(teethLine(cur))}</div>`:""}${grid(cur)}<p style="white-space:pre-wrap">${esc(cur.n)}</p>`;setTimeout(()=>window.print(),200)};
 $("save").onclick=async()=>{
-  if(!$("t").value.trim()){alert("اكتب عنوان الحالة");return}
-  await put({id:Date.now(),t:$("t").value.trim(),sp:$("s").value,date:$("d").value,ph:$("ph").value.trim(),n:$("n").value,im:Object.fromEntries(stg($("s").value).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
+  if(!$("t").value.trim()){alert("اكتب اسم المريض");return}
+  await put({id:Date.now(),t:$("t").value.trim(),sp:sel[0],sps:sel.slice(),teeth:Object.fromEntries(tkeys(teeth).map(k=>[k,teeth[k]])),date:$("d").value,ph:$("ph").value.trim(),age:$("ag").value.trim(),sex:sex,n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
   await render();show("list")};
 
 $("fbo").onclick=()=>$("fbm").classList.add("on");
@@ -177,7 +256,6 @@ $("fbs").onclick=()=>{const t=$("fbt").value.trim();if(!t){alert("اكتب رس�
   if(!WA){alert("رقم الواتساب غير مضبوط بعد");return}
   const a=document.createElement("a");a.href="https://wa.me/"+WA+"?text="+encodeURIComponent("["+$("fbk").value+"] حالاتي:\n"+t);a.target="_blank";a.rel="noopener";a.click();$("fbt").value="";$("fbm").classList.remove("on")};
 
-$("s").innerHTML=SP.slice(1).map(s=>`<option>${s}</option>`).join("");
 open().then(render);
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
