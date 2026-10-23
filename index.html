@@ -63,6 +63,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--bl);outline-offs
 .vs b{display:block;margin-bottom:4px}
 .vs div{margin:3px 0;font-size:14px}
 .vs .dt,.vsh .dt{display:inline-block;width:9px;height:9px;border-radius:50%;margin-inline-end:6px}
+.ses{border-top:1px solid var(--bd);padding:12px 0;margin-top:6px}
+.ses>b{display:block;margin-bottom:4px}
 .appmark{width:36px;height:36px;border-radius:10px;vertical-align:middle;margin-inline-end:8px}
 .hd h1 .appmark{height:36px;margin-bottom:0}
 .ic{display:inline-flex;align-items:center;justify-content:center;padding:8px;color:var(--bl);border-color:var(--bl)}
@@ -110,8 +112,8 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
 
 <div id="form" class="hide">
   <h1 id="ft">حالة جديدة</h1>
-  <label>اسم المريض</label><input id="t" placeholder="مثال: مصطفى أحمد">
-  <div class="two"><div><label>العمر (بالسنوات)</label><input id="ag" type="number" inputmode="numeric" min="0" max="120" placeholder="مثال: 35"></div>
+  <label class="pf">اسم المريض</label><input id="t" class="pf" placeholder="مثال: مصطفى أحمد">
+  <div class="two pf"><div><label>العمر (بالسنوات)</label><input id="ag" type="number" inputmode="numeric" min="0" max="120" placeholder="مثال: 35"></div>
   <div><label>النوع</label><div class="spc" id="sx"></div></div></div>
   <label>التخصص (يمكنك اختيار أكثر من تخصص)</label><div class="spc" id="sps"></div>
   <label>الأسنان (اضغط على السن لتحديد ما تم عليه)</label>
@@ -123,7 +125,7 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
     <div class="row" style="margin:8px 0 0"><button class="pri" id="tmd" style="flex:1">تم</button><button id="tmc">مسح العلامة</button></div>
   </div></div>
   <label>التاريخ</label><input id="d" type="date">
-  <label>رقم هاتف المريض (اختياري)</label><div class="ph"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><input id="ph" type="tel" inputmode="tel" dir="ltr" placeholder="01xxxxxxxxx" autocomplete="off"></div>
+  <label class="pf">رقم هاتف المريض (اختياري)</label><div class="ph pf"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><input id="ph" type="tel" inputmode="tel" dir="ltr" placeholder="01xxxxxxxxx" autocomplete="off"></div>
   <label>الصور (داخل الفم فقط) – يمكنك إضافة أكثر من صورة لكل مرحلة (بدون حد أقصى)</label>
   <div class="cnt" id="cnt"></div>
   <div class="slots" id="slots"></div>
@@ -137,6 +139,7 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
 
 <div id="view" class="hide">
   <div class="row"><button id="back">← رجوع</button><button id="pdf" class="pri" style="margin-inline-start:auto">📄 حفظ PDF / طباعة</button><button id="del">حذف</button></div>
+  <button id="addss" class="pri" style="width:100%;margin-top:8px">＋ إضافة جلسة جديدة لهذه الحالة</button>
   <button id="sm" class="ic" style="width:100%;margin-top:8px;gap:8px;font-weight:600"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg> ملخص الحالة</button>
   <div class="card" id="vc" style="margin-top:8px"></div>
   <div class="ov" id="sv"><div class="sheet" style="max-height:82vh;overflow:auto">
@@ -172,12 +175,13 @@ const demo=c=>{const a=[c.sex,c.age?c.age+" سنة":""].filter(Boolean);return a
 function sxChips(){$("sx").innerHTML=["ذكر","أنثى"].map(x=>`<button type="button" class="chip ${sex==x?"on":""}" data-s="${x}">${x}</button>`).join("")}
 $("sx").onclick=e=>{const x=e.target.dataset.s;if(!x)return;sex=sex==x?"":x;sxChips()};
 function summary(c){const k=x=>String(x.t||"").trim().toLowerCase();
-  const L=cases.filter(x=>k(x)==k(c)).sort((a,b)=>(a.date||"").localeCompare(b.date||""));
+  const L=cases.filter(x=>k(x)==k(c));
+  const V=L.flatMap(x=>sessOf(x)).sort((a,b)=>(a.date||"").localeCompare(b.date||""));
   const info=[...L].reverse().find(x=>x.sex||x.age)||{};
-  let h=`<h3 style="margin:0">${esc(c.t)}</h3>${demo(info)}<div class="mu">عدد الزيارات: ${L.length}</div>`;
-  L.forEach(x=>{const by={};tkeys(x.teeth).forEach(t=>x.teeth[t].forEach(tr=>(by[tr]=by[tr]||[]).push(t)));
+  let h=`<h3 style="margin:0">${esc(c.t)}</h3>${demo(info)}<div class="mu">عدد الجلسات: ${V.length}</div>`;
+  V.forEach(x=>{const by={};tkeys(x.teeth).forEach(t=>x.teeth[t].forEach(tr=>(by[tr]=by[tr]||[]).push(t)));
     const used=Object.keys(by),rest=spsOf(x).filter(y=>!used.includes(y));
-    h+=`<div class="vs"><b>${esc(x.date||"بدون تاريخ")}</b>`+
+    h+=`<div class="vs"><b>${x.date?fd(x.date):"بدون تاريخ"}</b>`+
       SP.slice(1).filter(y=>by[y]).map(y=>`<div dir="ltr" style="text-align:right"><span class="dt" style="background:${col(y)}"></span>${esc(y)}: ${by[y].join(" - ")}</div>`).join("")+
       (rest.length?`<div class="mu">${used.length?"تخصصات أخرى: ":"التخصصات: "}${esc(rest.join(" + "))}</div>`:"")+`</div>`});
   return h}
@@ -187,6 +191,13 @@ $("sv").onclick=e=>{if(e.target===$("sv"))$("sv").classList.remove("on")};
 function drawTeeth(){$("tc").innerHTML=chart(teeth,true)}
 const spsOf=c=>Array.isArray(c.sps)&&c.sps.length?c.sps:[c.sp];
 const spl=c=>spsOf(c).join(" + ");
+const sessOf=c=>[{date:c.date||"",sps:spsOf(c),teeth:c.teeth||{},im:c.im||{},n:c.n||""}].concat((c.ss||[]).map(x=>({id:x.id,date:x.date||"",sps:x.sps&&x.sps.length?x.sps:[c.sp],teeth:x.teeth||{},im:x.im||{},n:x.n||""}))).map((x,i)=>({...x,o:i})).sort((a,b)=>(a.date||"").localeCompare(b.date||"")||a.o-b.o);
+const allSps=c=>{const u=new Set(sessOf(c).flatMap(x=>x.sps));return SP.slice(1).filter(x=>u.has(x))};
+const allImgs=c=>sessOf(c).flatMap(x=>Object.values(x.im).flatMap(arr));
+const lastDate=c=>sessOf(c).map(x=>x.date).sort().pop()||"";
+const allTeeth=c=>[...new Set(sessOf(c).flatMap(x=>tkeys(x.teeth)))].sort((a,b)=>a-b);
+let addTo=null;
+const fd=d=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d||"");return m?`<bdi dir="ltr">${m[3]}/${m[2]}/${m[1]}</bdi>`:esc(d||"")};
 const stagesFor=l=>{const mid=[];l.forEach(sp=>stg(sp).forEach(k=>{if(k!="Before"&&k!="After"&&!mid.includes(k))mid.push(k)}));return["Before",...mid,"After"]};
 let db,cases=[],flt="الكل",imgs={},cur=null,mem=[],logo="";
 const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -208,21 +219,27 @@ function show(p){["list","form","view"].forEach(x=>$(x).classList.toggle("hide",
 
 async function render(){
   const A=await all();const lr=A.find(x=>x.id=="logo");logo=lr?lr.d:"";$("lg").src=logo;$("lg").classList.toggle("hide",!logo);
-  cases=A.filter(x=>x.id!="logo").sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  cases=A.filter(x=>x.id!="logo").sort((a,b)=>lastDate(b).localeCompare(lastDate(a)));
   $("chips").innerHTML=SP.map(s=>`<button class="chip ${s==flt?"on":""}" data-s="${s}">${s}</button>`).join("");
   const q=$("q").value.trim().toLowerCase();
-  const l=cases.filter(c=>(flt=="الكل"||spsOf(c).includes(flt))&&(!q||(c.t+" "+c.n+" "+(c.ph||"")+" "+tkeys(c.teeth).join(" ")).toLowerCase().includes(q)));
-  $("cards").innerHTML=l.length?l.map(c=>`<div class="card" data-id="${c.id}"><h3>${esc(c.t)}</h3><div class="mu">${esc(spl(c))} · ${esc(c.date)}</div>${tkeys(c.teeth).length?`<div class="mu">الأسنان: ${tkeys(c.teeth).join(" · ")}</div>`:""}${Object.values(c.im).flatMap(arr).length?`<div class="th">${Object.values(c.im).flatMap(arr).map(x=>`<img src="${x}" alt="">`).join("")}</div>`:""}</div>`).join(""):`<p class="mu" style="text-align:center;margin-top:40px">لا توجد حالات بعد. اضغط + لإضافة أول حالة.</p>`;
+  const l=cases.filter(c=>(flt=="الكل"||allSps(c).includes(flt))&&(!q||(c.t+" "+sessOf(c).map(x=>x.n).join(" ")+" "+(c.ph||"")+" "+allTeeth(c).join(" ")).toLowerCase().includes(q)));
+  $("cards").innerHTML=l.length?l.map(c=>{const n=sessOf(c).length,tt=allTeeth(c),im=allImgs(c);return `<div class="card" data-id="${c.id}"><h3>${esc(c.t)}</h3><div class="mu">${esc(allSps(c).join(" + "))} · ${fd(lastDate(c))}${n>1?` · ${n} جلسات`:""}</div>${tt.length?`<div class="mu">الأسنان: ${tt.join(" · ")}</div>`:""}${im.length?`<div class="th">${im.map(x=>`<img src="${x}" alt="">`).join("")}</div>`:""}</div>`}).join(""):`<p class="mu" style="text-align:center;margin-top:40px">لا توجد حالات بعد. اضغط + لإضافة أول حالة.</p>`;
 }
 
 $("chips").onclick=e=>{const s=e.target.dataset.s;if(s){flt=s;render()}};
 $("q").oninput=render;
-$("cards").onclick=e=>{const el=e.target.closest(".card");if(!el)return;cur=cases.find(c=>c.id==el.dataset.id);
-  $("vc").innerHTML=`<h3>${esc(cur.t)}</h3><div class="mu">${esc(spl(cur))} · ${esc(cur.date)}</div>${demo(cur)}${phoneRow(cur.ph)}${tkeys(cur.teeth).length?chart(cur.teeth,false)+`<div class="mu" dir="ltr" style="margin-bottom:8px;text-align:right">${esc(teethLine(cur))}</div>`:""}${grid(cur)}<p style="white-space:pre-wrap">${esc(cur.n)}</p>`;show("view")};
+function openView(c){cur=c;
+  $("vc").innerHTML=`<h3>${esc(c.t)}</h3>${demo(c)}${phoneRow(c.ph)}`+sessOf(c).map((x,i,A)=>`<div class="ses"><b>${A.length>1?`الجلسة ${i+1} · `:""}${fd(x.date)}</b>${x.id?`<button type="button" class="ic" data-ds="${x.id}" style="float:left;padding:2px 10px;font-size:12px">حذف الجلسة</button>`:""}<div class="mu">${esc(spl(x))}</div>${tkeys(x.teeth).length?chart(x.teeth,false)+`<div class="mu" dir="ltr" style="margin-bottom:8px;text-align:right">${esc(teethLine(x))}</div>`:""}${grid(x)}${x.n?`<p style="white-space:pre-wrap">${esc(x.n)}</p>`:""}</div>`).join("");show("view")}
+$("cards").onclick=e=>{const el=e.target.closest(".card");if(!el)return;openView(cases.find(c=>c.id==el.dataset.id))};
+$("vc").onclick=async e=>{const id=e.target.dataset.ds;if(!id||!cur)return;if(!confirm("حذف هذه الجلسة نهائيًا؟"))return;
+  cur.ss=(cur.ss||[]).filter(x=>x.id!=id);await put(cur);await render();openView(cases.find(c=>c.id==cur.id))};
+$("addss").onclick=()=>{if(!cur)return;addTo=cur.id;imgs={};teeth={};spAuto=true;$("n").value="";$("d").value=new Date().toISOString().slice(0,10);
+  const last=sessOf(cur).slice(-1)[0];sel=[(last.sps[0])||SP[1]];$("ft").textContent="جلسة جديدة — "+cur.t;
+  document.querySelectorAll(".pf").forEach(x=>x.style.display="none");drawTeeth();spchips();slots();show("form")};
 $("back").onclick=()=>show("list");
 $("del").onclick=async()=>{if(cur&&confirm("حذف الحالة نهائيًا؟")){await rm(cur.id);await render();show("list")}};
-$("add").onclick=()=>{imgs={};$("t").value="";$("ph").value="";$("n").value="";$("d").value=new Date().toISOString().slice(0,10);$("ag").value="";sex="";spAuto=true;sxChips();teeth={};drawTeeth();sel=[flt!="الكل"?flt:SP[1]];spchips();slots();show("form")};
-$("cancel").onclick=()=>show("list");
+$("add").onclick=()=>{addTo=null;$("ft").textContent="حالة جديدة";document.querySelectorAll(".pf").forEach(x=>x.style.display="");imgs={};$("t").value="";$("ph").value="";$("n").value="";$("d").value=new Date().toISOString().slice(0,10);$("ag").value="";sex="";spAuto=true;sxChips();teeth={};drawTeeth();sel=[flt!="الكل"?flt:SP[1]];spchips();slots();show("form")};
+$("cancel").onclick=()=>{const v=addTo;addTo=null;show(v?"view":"list")};
 function tmChips(){$("tmo").innerHTML=SP.slice(1).map(x=>`<button type="button" class="chip ${(teeth[tcur]||[]).includes(x)?"on":""}" data-s="${x}"><span class="dt" style="background:${col(x)}"></span>${x}</button>`).join("")}
 $("tc").onclick=e=>{const b=e.target.closest(".tt");if(!b)return;tcur=+b.dataset.t;$("tmt").textContent="سن رقم "+tcur;tmChips();$("tm").classList.add("on")};
 $("tmo").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;const x=b.dataset.s,a=teeth[tcur]||[];
@@ -243,8 +260,12 @@ $("slots").onchange=async e=>{const st=e.target.closest(".stage");if(!st)return;
 $("gear").onclick=()=>$("set").classList.toggle("hide");
 $("lf").onchange=async e=>{const f=e.target.files[0];if(f){await put({id:"logo",d:await shrink(f,true)});render()}};
 $("lrm").onclick=async()=>{await rm("logo");render()};
-$("pdf").onclick=()=>{if(!cur)return;$("pr").innerHTML=`${logo?`<img class="lg" src="${logo}" alt="">`:""}<h2 style="margin:6px 0">${esc(cur.t)}</h2>${demo(cur)}<div>${esc(spl(cur))} · ${esc(cur.date)}</div>${tkeys(cur.teeth).length?`<div dir="ltr" style="text-align:right">${esc(teethLine(cur))}</div>`:""}${grid(cur)}<p style="white-space:pre-wrap">${esc(cur.n)}</p>`;setTimeout(()=>window.print(),200)};
+$("pdf").onclick=()=>{if(!cur)return;const A=sessOf(cur);
+  $("pr").innerHTML=`${logo?`<img class="lg" src="${logo}" alt="">`:""}<h2 style="margin:6px 0">${esc(cur.t)}</h2>${demo(cur)}`+A.map((x,i)=>`<div style="margin-top:${i?16:0}px">${A.length>1?`<b>الجلسة ${i+1} · ${fd(x.date)}</b><div>${esc(spl(x))}</div>`:`<div>${esc(spl(x))} · ${fd(x.date)}</div>`}${tkeys(x.teeth).length?`<div dir="ltr" style="text-align:right">${esc(teethLine(x))}</div>`:""}${grid(x)}${x.n?`<p style="white-space:pre-wrap">${esc(x.n)}</p>`:""}</div>`).join("");setTimeout(()=>window.print(),200)};
 $("save").onclick=async()=>{
+  if(addTo){const c=cases.find(x=>x.id==addTo);if(!c){addTo=null;show("list");return}
+    c.ss=(c.ss||[]).concat({id:Date.now(),date:$("d").value,sps:sel.slice(),teeth:Object.fromEntries(tkeys(teeth).map(k=>[k,teeth[k]])),n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
+    await put(c);addTo=null;await render();openView(cases.find(x=>x.id==c.id));return}
   if(!$("t").value.trim()){alert("اكتب اسم المريض");return}
   await put({id:Date.now(),t:$("t").value.trim(),sp:sel[0],sps:sel.slice(),teeth:Object.fromEntries(tkeys(teeth).map(k=>[k,teeth[k]])),date:$("d").value,ph:$("ph").value.trim(),age:$("ag").value.trim(),sex:sex,n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
   await render();show("list")};
