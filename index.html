@@ -68,7 +68,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--bl);outline-offs
 .tc.p1{width:72%;margin:6px auto 2px}
 .tc.p2{width:64%;margin:6px auto 2px}
 .dtl{font-size:11px;color:var(--mu);text-align:center;direction:ltr;margin:8px 0 0}
-#list,#view,#aview{padding-bottom:104px}
+#list,#view,#aview,#form{padding-bottom:104px}
+body.am .np{display:none!important}
 #bar{position:fixed;left:0;right:0;bottom:0;max-width:640px;margin:auto;display:flex;align-items:flex-end;justify-content:space-around;padding:6px 14px calc(8px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--bd);box-shadow:0 -4px 16px #0002}
 #bar.hide{display:none}
 #bar button{border:0;background:transparent;color:var(--bl);width:58px;height:48px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:16px}
@@ -158,9 +159,9 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
   <label id="dl2">التاريخ</label><input id="d" type="date">
   <label class="ap">الساعة (اختيارية)</label><input id="ti" type="time" class="ap">
   <label class="pf">رقم هاتف المريض (اختياري)</label><div class="ph pf"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><input id="ph" type="tel" inputmode="tel" dir="ltr" placeholder="01xxxxxxxxx" autocomplete="off"></div>
-  <label>الصور (داخل الفم فقط) – يمكنك إضافة أكثر من صورة لكل مرحلة (بدون حد أقصى)</label>
-  <div class="cnt" id="cnt"></div>
-  <div class="slots" id="slots"></div>
+  <label class="np">الصور (داخل الفم فقط) – يمكنك إضافة أكثر من صورة لكل مرحلة (بدون حد أقصى)</label>
+  <div class="cnt np" id="cnt"></div>
+  <div class="slots np" id="slots"></div>
   <label>التفاصيل (التشخيص، خطوات العلاج، الخامات...)</label><textarea id="n"></textarea>
   <div class="note">ملحوظة: الاسم ورقم الهاتف يُحفظان على جهازك فقط. رقم الهاتف لا يظهر في ملف PDF، أما الاسم فيظهر في عنوان الملف.</div>
   <div class="row" style="margin-top:12px">
@@ -275,7 +276,7 @@ function slots(){const full=false;
   $("slots").innerHTML=stagesFor(sel).map(k=>`<div class="stage" data-k="${k}"><div class="sh">${k}</div><div class="tr">${arr(imgs[k]).map((x,i)=>`<div class="tb"><img src="${x}" alt=""><i data-x="${k}" data-i="${i}">×</i></div>`).join("")}${full?"":`<label class="add"><span style="font-size:30px;line-height:1">+</span>إضافة صورة<input type="file" accept="image/*" multiple></label>`}</div></div>`).join("")}
 function phoneRow(p){if(!p)return"";const d=String(p).replace(/[^\d+]/g,""),n=d.replace(/\D/g,""),w=n.startsWith("00")?n.slice(2):n.startsWith("0")?"20"+n.slice(1):n;
   return `<div class="pv"><span dir="ltr">${esc(p)}</span><a href="tel:${esc(d)}">اتصال</a><a href="https://wa.me/${esc(w)}" target="_blank" rel="noopener">واتساب</a></div>`}
-function show(p){["list","form","view","aview"].forEach(x=>$(x).classList.toggle("hide",x!=p));$("bar").classList.toggle("hide",p=="form");window.scrollTo(0,0)}
+function show(p){["list","form","view","aview"].forEach(x=>$(x).classList.toggle("hide",x!=p));window.scrollTo(0,0)}
 
 async function render(){
   const A=await all();const lr=A.find(x=>x.id=="logo");logo=lr?lr.d:"";$("lg").src=logo;$("lg").classList.toggle("hide",!logo);
@@ -317,7 +318,12 @@ function startForm(appt){apptMode=!!appt;document.body.classList.toggle("am",app
   $("d").value=appt?"":new Date().toISOString().slice(0,10);$("ag").value="";sex="";spAuto=true;sxChips();teeth={};drawTeeth();sel=[flt!="الكل"?flt:SP[1]];spchips();slots();show("form")}
 $("add").onclick=()=>startForm(false);
 $("nvP").onclick=()=>startForm(true);
-$("nvH").onclick=()=>{addTo=null;show("list")};
+$("nvH").onclick=()=>{
+  const inForm=!$("form").classList.contains("hide");
+  if(inForm&&($("t").value.trim()||$("n").value.trim()||tot(imgs))&&!confirm("الخروج بدون حفظ؟ سيتم تجاهل البيانات المكتوبة."))return;
+  addTo=null;apptMode=false;document.body.classList.remove("am");
+  document.querySelectorAll(".ov.on").forEach(x=>x.classList.remove("on"));
+  flt="الكل";$("q").value="";render();show("list")};
 $("cancel").onclick=()=>{const v=addTo;addTo=null;apptMode=false;document.body.classList.remove("am");show(v?"view":"list")};
 function tmChips(){$("tmo").innerHTML=SP.slice(1).map(x=>`<button type="button" class="chip ${(teeth[tcur]||[]).includes(x)?"on":""}" data-s="${x}"><span class="dt" style="background:${col(x)}"></span>${x}</button>`).join("")}
 $("tc").onclick=e=>{const b=e.target.closest(".tt");if(!b)return;tcur=+b.dataset.t;$("tmt").textContent="سن رقم "+tcur;tmChips();$("tm").classList.add("on")};
