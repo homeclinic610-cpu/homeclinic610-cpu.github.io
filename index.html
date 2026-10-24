@@ -97,6 +97,9 @@ body.am input.ap{display:block}
 #bar button.tgt:not(.home){background:var(--card)}
 .tgt{position:relative;z-index:101;box-shadow:0 0 0 4px #fff,0 0 0 8px var(--bl)!important;animation:pls 1.3s infinite}
 @keyframes pls{50%{transform:scale(1.08)}}
+.soon{border:2px solid var(--gd);margin-bottom:10px}
+.soon b{display:flex;gap:6px;align-items:center;color:var(--gd);margin-bottom:4px}
+.soon .mu{padding:3px 0;cursor:pointer}
 .appmark{width:36px;height:36px;border-radius:10px;vertical-align:middle;margin-inline-end:8px}
 .hd h1 .appmark{height:36px;margin-bottom:0}
 .ic{display:inline-flex;align-items:center;justify-content:center;padding:8px;color:var(--bl);border-color:var(--bl)}
@@ -127,7 +130,7 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
 <div id="list">
   <div class="wm" aria-hidden="true"></div>
   <div class="hd"><img id="lg" class="hide" alt=""><h1><img class="appmark" src="icons/icon-192.png" alt="">حالاتي</h1><button id="fbo" class="ic" aria-label="شكاوي واقتراحات"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.3A8 8 0 1 1 21 12z"/></svg></button><button id="gear" class="ic" aria-label="الإعدادات"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
-  <div id="set" class="card hide"><b>لوجو خاص بك (اختياري)</b><div class="mu" style="margin:4px 0 8px">يظهر في التطبيق وفي ملف الـ PDF.</div><div class="row"><label class="pri" style="margin:0;padding:10px;border-radius:10px;color:#fff">اختر لوجو<input id="lf" type="file" accept="image/*" hidden></label><button id="lrm">حذف اللوجو</button></div><button id="tourbtn" style="margin-top:8px;width:100%">إعادة الجولة التعريفية</button></div>
+  <div id="set" class="card hide"><b>لوجو خاص بك (اختياري)</b><div class="mu" style="margin:4px 0 8px">يظهر في التطبيق وفي ملف الـ PDF.</div><div class="row"><label class="pri" style="margin:0;padding:10px;border-radius:10px;color:#fff">اختر لوجو<input id="lf" type="file" accept="image/*" hidden></label><button id="lrm">حذف اللوجو</button></div><div id="ntxt" class="mu" style="margin-top:10px"></div><button id="nbtn" style="margin-top:6px;width:100%">تفعيل تنبيهات المواعيد</button><button id="tourbtn" style="margin-top:8px;width:100%">إعادة الجولة التعريفية</button></div>
   <input id="q" placeholder="ابحث في الحالات...">
   <div class="chips" id="chips" style="margin-top:8px"></div>
   <div id="appts"></div>
@@ -185,6 +188,7 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
 <div id="pr"></div>
 <div id="aview" class="hide">
   <div class="row"><button id="aback">← رجوع</button><button id="adel" style="margin-inline-start:auto">حذف الموعد</button></div>
+  <button id="aics" class="ic" style="width:100%;margin-top:8px;gap:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> إضافة للتقويم (تذكير قبلها بـ 20 ساعة)</button>
   <button id="adone" class="pri" style="width:100%;margin-top:8px">✓ تم الموعد — حوّله لحالة / جلسة</button>
   <div class="card" id="avc" style="margin-top:8px"></div>
 </div>
@@ -256,6 +260,12 @@ const allImgs=c=>sessOf(c).flatMap(x=>Object.values(x.im).flatMap(arr));
 const lastDate=c=>sessOf(c).map(x=>x.date).sort().pop()||"";
 const allTeeth=c=>[...new Set(sessOf(c).flatMap(x=>tkeys(x.teeth)))].sort((a,b)=>a-b);
 let addTo=null,apptMode=false,apFrom=null,appts=[],curA=null;
+const REM=20*3600e3,BELL=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>`;
+const apptMs=a=>{if(!a.date)return null;const[y,m,d]=a.date.split("-").map(Number),[h,n]=(a.time||"09:00").split(":").map(Number);return new Date(y,m-1,d,h,n).getTime()};
+const inWin=(a,now)=>{const t=apptMs(a);return t!=null&&now<t&&now>=t-REM};
+const remDue=(a,now)=>{const t=apptMs(a);return a.kind=="appt"&&!a.notified&&t!=null&&now<t&&now>=t-REM&&a.id<=t-REM};
+const noteText=a=>`${a.t} — ${a.date.split("-").reverse().join("/")}${a.time?" "+(+a.time.slice(0,2)%12||12)+":"+a.time.slice(3,5)+" "+(+a.time.slice(0,2)<12?"ص":"م"):" (الصباح)"}`;
+function soonHTML(){const l=appts.filter(a=>inWin(a,Date.now()));return l.length?`<div class="card soon"><b>${BELL} مواعيد خلال 20 ساعة</b>${l.map(a=>`<div class="mu" data-aid="${a.id}">${esc(a.t)} · ${when(a)}</div>`).join("")}</div>`:""}
 const when=a=>[a.date?fd(a.date):"",a.time?ft12(a.time):""].filter(Boolean).join(" · ")||"بدون موعد محدد";
 const overdue=a=>!!a.date&&new Date(a.date+"T"+(a.time||"23:59"))<new Date();
 const ft12=t=>{if(!t)return"";const h=+t.slice(0,2),m=t.slice(3,5);return `<bdi>${h%12||12}:${m} ${h<12?"ص":"م"}</bdi>`};
@@ -287,6 +297,7 @@ async function render(){
   const q=$("q").value.trim().toLowerCase();
   const al=appts.filter(a=>(flt=="الكل"||flt=="المواعيد"||spsOf(a).includes(flt))&&(!q||(a.t+" "+(a.ph||"")+" "+(a.n||"")+" "+tkeys(a.teeth).join(" ")).toLowerCase().includes(q)));
   $("appts").innerHTML=al.length?`<div class="sec">المواعيد القادمة (${al.length})</div>`+al.map(a=>{const od=overdue(a);return `<div class="card apc" data-aid="${a.id}"><h3>${esc(a.t)}</h3><div class="mu">${when(a)}${od?` · <span class="od">فات موعده</span>`:""}</div><div class="mu">${esc(spl(a))}${tkeys(a.teeth).length?` · الأسنان: ${tkeys(a.teeth).join(" · ")}`:""}</div></div>`}).join("")+(flt=="المواعيد"?"":`<div class="sec">الحالات</div>`):flt=="المواعيد"?`<p class="mu" style="text-align:center;margin-top:40px">لا توجد مواعيد محددة بعد. اضغط زر التقويم بالأسفل لحجز موعد.</p>`:"";
+  $("appts").innerHTML=soonHTML()+$("appts").innerHTML;
   const l=flt=="المواعيد"?[]:cases.filter(c=>(flt=="الكل"||allSps(c).includes(flt))&&(!q||(c.t+" "+sessOf(c).map(x=>x.n).join(" ")+" "+(c.ph||"")+" "+allTeeth(c).join(" ")).toLowerCase().includes(q)));
   $("cards").innerHTML=flt=="المواعيد"?"":l.length?l.map(c=>{const n=sessOf(c).length,tt=allTeeth(c),im=allImgs(c);return `<div class="card" data-id="${c.id}"><h3>${esc(c.t)}</h3><div class="mu">${esc(allSps(c).join(" + "))} · ${fd(lastDate(c))}${n>1?` · ${n} جلسات`:""}</div>${tt.length?`<div class="mu">الأسنان: ${tt.join(" · ")}</div>`:""}${im.length?`<div class="th">${im.map(x=>`<img src="${x}" alt="">`).join("")}</div>`:""}</div>`}).join(""):`<p class="mu" style="text-align:center;margin-top:40px">لا توجد حالات بعد. اضغط زر إضافة حالة في الشريط السفلي لإضافة أول حالة.</p>`;
 }
@@ -302,7 +313,7 @@ $("addss").onclick=()=>{if(!cur)return;addTo=cur.id;imgs={};teeth={};spAuto=true
   const last=sessOf(cur).slice(-1)[0];sel=[(last.sps[0])||SP[1]];dent=last.dent||"permanent";dentChips();apptMode=false;document.body.classList.remove("am");$("dl2").textContent="التاريخ";$("save").textContent="حفظ";$("ft").textContent="جلسة جديدة — "+cur.t;
   document.querySelectorAll(".pf").forEach(x=>x.style.display="none");drawTeeth();spchips();slots();show("form")};
 $("back").onclick=()=>show("list");
-$("appts").onclick=e=>{const el=e.target.closest(".apc");if(!el)return;openA(appts.find(a=>a.id==el.dataset.aid))};
+$("appts").onclick=e=>{const el=e.target.closest("[data-aid]");if(!el)return;openA(appts.find(a=>a.id==el.dataset.aid))};
 function openA(a){curA=a;const od=overdue(a);
   $("avc").innerHTML=`<h3>${esc(a.t)}</h3>${demo(a)}${phoneRow(a.ph)}<div class="ses"><b>الموعد: ${when(a)}${od?` · <span class="od">فات موعده</span>`:""}</b><div class="mu">${esc(spl(a))} · ${dl(a)}</div>${tkeys(a.teeth).length?chart(a.teeth,false,a.dent)+`<div class="mu" dir="ltr" style="margin-bottom:8px;text-align:right">${esc(teethLine(a))}</div>`:""}${grid(a)}${a.n?`<p style="white-space:pre-wrap">${esc(a.n)}</p>`:""}</div>`;show("aview")}
 $("aback").onclick=()=>show("list");
@@ -346,7 +357,7 @@ $("slots").onclick=e=>{const x=e.target.dataset.x;if(x){e.preventDefault();arr(i
 $("slots").onchange=async e=>{const st=e.target.closest(".stage");if(!st)return;const k=st.dataset.k;
   for(const f of [...e.target.files]){imgs[k]=arr(imgs[k]).concat(await shrink(f))}
   slots()};
-$("gear").onclick=()=>$("set").classList.toggle("hide");
+$("gear").onclick=()=>{ntUpdate();$("set").classList.toggle("hide")};
 $("lf").onchange=async e=>{const f=e.target.files[0];if(f){await put({id:"logo",d:await shrink(f,true)});render()}};
 $("lrm").onclick=async()=>{await rm("logo");render()};
 $("pdf").onclick=()=>{if(!cur)return;const A=sessOf(cur);
@@ -354,7 +365,7 @@ $("pdf").onclick=()=>{if(!cur)return;const A=sessOf(cur);
 $("save").onclick=async()=>{
   if(apptMode){if(!$("t").value.trim()){alert("اكتب اسم المريض");return}
     await put({id:Date.now(),kind:"appt",t:$("t").value.trim(),sp:sel[0],sps:sel.slice(),dent:dent,teeth:Object.fromEntries(tkeys(teeth).filter(k=>vis(k,dent)).map(k=>[k,teeth[k]])),date:$("d").value,time:$("ti").value,ph:$("ph").value.trim(),age:$("ag").value.trim(),sex:sex,n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
-    if(apFrom){apFrom=null;flt="المواعيد";$("q").value=""}apptMode=false;document.body.classList.remove("am");await render();show("list");return}
+    if(apFrom){apFrom=null;flt="المواعيد";$("q").value=""}apptMode=false;document.body.classList.remove("am");await render();show("list");askPerm();return}
   if(addTo){const c=cases.find(x=>x.id==addTo);if(!c){addTo=null;show("list");return}
     c.ss=(c.ss||[]).concat({id:Date.now(),date:$("d").value,sps:sel.slice(),dent:dent,teeth:Object.fromEntries(tkeys(teeth).filter(k=>vis(k,dent)).map(k=>[k,teeth[k]])),n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
     await put(c);addTo=null;await render();openView(cases.find(x=>x.id==c.id));return}
@@ -379,7 +390,11 @@ const IC={tooth:`<svg width="28" height="28" viewBox="0 0 24 32" fill="none" str
  img:I('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>'),
  chat:I('<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.3A8 8 0 1 1 21 12z"/>'),
  gear:I('<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>'),
+ bell:I('<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>'),
  plus:I('<path d="M12 5v14M5 12h14"/>')};
+const NEW3=[{ic:IC.cal,ti:"فلتر المواعيد",tx:"في الصفحة الرئيسية اضغط فلتر \"المواعيد\" لتشوف المواعيد المحجوزة بس، مرتبة بالأقرب."},
+  {ic:IC.cal,ti:"حجز موعد لحالة موجودة",tx:"افتح أي حالة واضغط \"حجز موعد لهذه الحالة\"، وبيانات المريض بتتكتب لوحدها."},
+  {ic:IC.bell,ti:"تنبيه قبل الموعد بـ 20 ساعة",tx:"فعّل التنبيهات لما التطبيق يطلبها. لو الموعد من غير ساعة بنحسبه الساعة 9 الصبح. وللتأكيد أكتر، من صفحة الموعد اضغط \"إضافة للتقويم\" وهيفكّرك التقويم حتى لو التطبيق مقفول."}];
 const TS={
  new:[{ic:IC.tooth,ti:"أهلاً بك في حالاتي",tx:"أرشيف حالاتك السنية في جيبك. هنعرّفك على كل زر في ثواني."},
   {ic:IC.doc,t:"add",pos:"bot",ti:"إضافة حالة",tx:"الزر اللي على اليمين: سجّل مريض جديد بصوره وأسنانه وتفاصيله."},
@@ -397,21 +412,40 @@ const TS={
   {ic:IC.clip,ti:"ملخص الحالة",tx:"في صفحة الحالة، زرار \"ملخص الحالة\" بيعرض كل جلسات المريض: عملتله إيه وعلى أنهي سن وامتى."},
   {ic:IC.phone,ti:"بيانات المريض",tx:"سجّل العمر والنوع ورقم الهاتف، وبضغطة تتصل بالمريض أو تبعتله على واتساب."},
   {ic:IC.img,ti:"صور بلا حد وPDF",tx:"أضف أي عدد من الصور في كل مرحلة، واحفظ الحالة كلها كملف PDF."},
+  ...NEW3,
   {ic:IC.chat,t:"fbo",pos:"top",ti:"شكاوي واقتراحات",tx:"الأيقونة دي بتبعتلنا رأيك مباشرة على واتساب."}]};
+TS.v3=[{ic:IC.tooth,ti:"جديد في حالاتي",tx:"في 3 حاجات جديدة تخص المواعيد. تعالى نشوفهم."},...NEW3];
 let tsteps=[],tix=0;
 function tourShow(){const s=tsteps[tix];document.querySelectorAll(".tgt").forEach(x=>x.classList.remove("tgt"));
   if(s.t&&$(s.t))$(s.t).classList.add("tgt");$("tour").dataset.pos=s.pos||"mid";$("tic").innerHTML=s.ic||"";$("ttl").textContent=s.ti;$("ttx").textContent=s.tx;
   $("tdots").innerHTML=tsteps.map((_,i)=>`<i class="${i==tix?"on":""}"></i>`).join("");$("tprev").style.visibility=tix?"visible":"hidden";
   $("tnext").textContent=tix==tsteps.length-1?"ابدأ الاستخدام":"التالي"}
 function tourStart(l){show("list");tsteps=l;tix=0;$("tour").classList.add("on");tourShow()}
-function tourEnd(){$("tour").classList.remove("on");document.querySelectorAll(".tgt").forEach(x=>x.classList.remove("tgt"));try{localStorage.setItem("tour","2")}catch(e){}}
+function tourEnd(){$("tour").classList.remove("on");document.querySelectorAll(".tgt").forEach(x=>x.classList.remove("tgt"));try{localStorage.setItem("tour","3")}catch(e){}}
 $("tnext").onclick=()=>{if(tix>=tsteps.length-1)tourEnd();else{tix++;tourShow()}};
 $("tprev").onclick=()=>{if(tix>0){tix--;tourShow()}};
 $("tskip").onclick=tourEnd;
 $("tourbtn").onclick=()=>{$("set").classList.add("hide");tourStart(TS.upd)};
+async function showNote(a){try{const reg=await navigator.serviceWorker.getRegistration();
+  if(reg&&"Notification" in window&&Notification.permission=="granted"){await reg.showNotification("تذكير بموعد قريب",{body:noteText(a),icon:"icons/icon-192.png",badge:"icons/icon-192.png",tag:"appt-"+a.id,lang:"ar",dir:"rtl"});return true}}catch(e){}return false}
+let remBusy=false;
+async function remindNow(){if(remBusy)return;remBusy=true;try{const now=Date.now();const A=await all();
+  for(const a of A){if(remDue(a,now)&&await showNote(a)){a.notified=true;await put(a)}}}catch(e){}remBusy=false}
+function ntUpdate(){const p="Notification" in window?Notification.permission:"none";
+  $("ntxt").textContent=p=="granted"?"✓ التنبيهات مفعّلة: هتوصلك رسالة قبل الموعد بـ 20 ساعة (والتطبيق قد لا يشغّلها لو الموبايل قافل التطبيق، فاستخدم كمان زرار التقويم).":p=="denied"?"التنبيهات محظورة. فعّلها من إعدادات الموبايل ← التطبيقات ← حالاتي ← الإشعارات.":p=="none"?"الإشعارات غير مدعومة على هذا الجهاز.":"التنبيهات غير مفعّلة بعد.";
+  $("nbtn").style.display=p=="default"?"":"none"}
+const askPerm=async()=>{try{if("Notification" in window&&Notification.permission=="default")await Notification.requestPermission()}catch(e){}ntUpdate();remindNow()};
+$("nbtn").onclick=askPerm;
+$("aics").onclick=()=>{const a=curA;if(!a)return;if(!a.date){alert("حدد تاريخًا للموعد أولًا (الموعد من غير تاريخ ما ينفعش يتضاف للتقويم).");return}
+  if(!confirm("هيتحفظ اسم المريض في تقويم جهازك، وممكن يتزامن مع حسابك على جوجل. تكمل؟"))return;
+  const [y,m,d]=a.date.split("-").map(Number),[h,n]=(a.time||"09:00").split(":").map(Number),p=x=>String(x).padStart(2,"0"),f=t=>`${t.getFullYear()}${p(t.getMonth()+1)}${p(t.getDate())}T${p(t.getHours())}${p(t.getMinutes())}00`,
+    st=new Date(y,m-1,d,h,n),en=new Date(st.getTime()+3600e3),e2=t=>String(t||"").replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\r?\n/g,"\\n");
+  const ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Halati//AR","BEGIN:VEVENT","UID:appt-"+a.id+"@halati","DTSTAMP:"+new Date().toISOString().replace(/[-:]/g,"").slice(0,15)+"Z","DTSTART:"+f(st),"DTEND:"+f(en),"SUMMARY:"+e2("موعد: "+a.t),"DESCRIPTION:"+e2((a.time?"":"(الساعة غير محددة، تم افتراض 9 صباحًا) ")+(a.n||"")),"BEGIN:VALARM","TRIGGER:-PT20H","ACTION:DISPLAY","DESCRIPTION:"+e2("تذكير بموعد: "+a.t),"END:VALARM","END:VEVENT","END:VCALENDAR"].join("\r\n");
+  const u=URL.createObjectURL(new Blob([ics],{type:"text/calendar"})),l=document.createElement("a");l.href=u;l.download="halati-appointment.ics";document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)};
 function maybeTour(){let seen="";try{seen=localStorage.getItem("tour")}catch(e){}
-  if(seen!="2")tourStart(cases.length||appts.length||logo?TS.upd:TS.new)}
-open().then(render).then(maybeTour);
+  if(seen=="3")return;tourStart(seen=="2"?TS.v3:(cases.length||appts.length||logo?TS.upd:TS.new))}
+open().then(render).then(maybeTour).then(()=>{ntUpdate();remindNow();setInterval(remindNow,60000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)remindNow()});
+  try{navigator.serviceWorker.ready.then(r=>{if(r.periodicSync)r.periodicSync.register("appt-rem",{minInterval:3600000}).catch(()=>{})}).catch(()=>{})}catch(e){}});
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>
