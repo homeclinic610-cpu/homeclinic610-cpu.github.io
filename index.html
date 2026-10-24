@@ -65,6 +65,37 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--bl);outline-offs
 .vs .dt,.vsh .dt{display:inline-block;width:9px;height:9px;border-radius:50%;margin-inline-end:6px}
 .ses{border-top:1px solid var(--bd);padding:12px 0;margin-top:6px}
 .ses>b{display:block;margin-bottom:4px}
+.tc.p1{width:72%;margin:6px auto 2px}
+.tc.p2{width:64%;margin:6px auto 2px}
+.dtl{font-size:11px;color:var(--mu);text-align:center;direction:ltr;margin:8px 0 0}
+#list,#view,#aview{padding-bottom:104px}
+#bar{position:fixed;left:0;right:0;bottom:0;max-width:640px;margin:auto;display:flex;align-items:flex-end;justify-content:space-around;padding:6px 14px calc(8px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--bd);box-shadow:0 -4px 16px #0002}
+#bar.hide{display:none}
+#bar button{border:0;background:transparent;color:var(--bl);width:58px;height:48px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:16px}
+#bar button:active{opacity:.7}
+#bar .home{width:70px;height:70px;border-radius:50%;background:var(--gold);color:var(--ink);margin-top:-26px;box-shadow:0 4px 14px #0005;border:4px solid var(--bg)}
+.ap{display:none}
+body.am label.ap{display:block}
+body.am input.ap{display:block}
+.sec{font-weight:700;color:var(--gd);margin:10px 0 6px}
+.apc{border-inline-start:4px solid var(--bl)}
+.od{color:#d9534f;font-size:12px;font-weight:700}
+#tour{position:fixed;inset:0;background:#000b;z-index:100;display:none;justify-content:center;padding:16px}
+#tour.on{display:flex}
+#tour[data-pos="mid"]{align-items:center}
+#tour[data-pos="bot"]{align-items:flex-end;padding-bottom:calc(122px + env(safe-area-inset-bottom,0px))}
+#tour[data-pos="top"]{align-items:flex-start;padding-top:calc(86px + env(safe-area-inset-top,0px))}
+.tcard{background:var(--card);border-radius:18px;padding:18px;width:100%;max-width:420px;text-align:center;align-self:auto}
+.tic{width:56px;height:56px;margin:0 auto 8px;border-radius:50%;background:var(--sky);color:#fff;display:flex;align-items:center;justify-content:center}
+.tic svg{width:28px;height:28px}
+.tcard b{font-size:18px;color:var(--gd)}
+.tcard p{margin:8px 0 12px;line-height:1.7}
+.tdots{display:flex;gap:5px;justify-content:center;margin-bottom:12px}
+.tdots i{width:7px;height:7px;border-radius:50%;background:var(--bd)}
+.tdots i.on{background:var(--gd);width:18px;border-radius:4px}
+#bar button.tgt:not(.home){background:var(--card)}
+.tgt{position:relative;z-index:101;box-shadow:0 0 0 4px #fff,0 0 0 8px var(--bl)!important;animation:pls 1.3s infinite}
+@keyframes pls{50%{transform:scale(1.08)}}
 .appmark{width:36px;height:36px;border-radius:10px;vertical-align:middle;margin-inline-end:8px}
 .hd h1 .appmark{height:36px;margin-bottom:0}
 .ic{display:inline-flex;align-items:center;justify-content:center;padding:8px;color:var(--bl);border-color:var(--bl)}
@@ -86,7 +117,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--bl);outline-offs
 .sheet textarea{margin:8px 0}
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.sg div{font-size:13px;color:var(--mu)}.sg img{width:100%;border-radius:10px;display:block}
 #pr{display:none}
-@media print{.wm,.add,.tb i,button,.fbb,.ov{display:none!important}body>*:not(#pr){display:none!important}#pr{display:block;color:#000;background:#fff;padding:8px}#pr img.lg{height:50px}#pr .sg div{color:#333}#pr .sg>div{break-inside:avoid}@page{margin:12mm}}
+@media print{#bar,#tour,.wm,.add,.tb i,button,.fbb,.ov{display:none!important}body>*:not(#pr){display:none!important}#pr{display:block;color:#000;background:#fff;padding:8px}#pr img.lg{height:50px}#pr .sg div{color:#333}#pr .sg>div{break-inside:avoid}@page{margin:12mm}}
 label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
 .note{font-size:12px;color:var(--mu);margin-top:6px}
 </style>
@@ -94,13 +125,12 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
 <body>
 <div id="list">
   <div class="wm" aria-hidden="true"></div>
-  <div class="hd"><img id="lg" class="hide" alt=""><h1><img class="appmark" src="icons/icon-192.png" alt="">حالاتي</h1><button id="gear" class="ic" aria-label="الإعدادات"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
-  <div id="set" class="card hide"><b>لوجو خاص بك (اختياري)</b><div class="mu" style="margin:4px 0 8px">يظهر في التطبيق وفي ملف الـ PDF.</div><div class="row"><label class="pri" style="margin:0;padding:10px;border-radius:10px;color:#fff">اختر لوجو<input id="lf" type="file" accept="image/*" hidden></label><button id="lrm">حذف اللوجو</button></div></div>
+  <div class="hd"><img id="lg" class="hide" alt=""><h1><img class="appmark" src="icons/icon-192.png" alt="">حالاتي</h1><button id="fbo" class="ic" aria-label="شكاوي واقتراحات"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.3A8 8 0 1 1 21 12z"/></svg></button><button id="gear" class="ic" aria-label="الإعدادات"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div id="set" class="card hide"><b>لوجو خاص بك (اختياري)</b><div class="mu" style="margin:4px 0 8px">يظهر في التطبيق وفي ملف الـ PDF.</div><div class="row"><label class="pri" style="margin:0;padding:10px;border-radius:10px;color:#fff">اختر لوجو<input id="lf" type="file" accept="image/*" hidden></label><button id="lrm">حذف اللوجو</button></div><button id="tourbtn" style="margin-top:8px;width:100%">إعادة الجولة التعريفية</button></div>
   <input id="q" placeholder="ابحث في الحالات...">
   <div class="chips" id="chips" style="margin-top:8px"></div>
+  <div id="appts"></div>
   <div id="cards"></div>
-  <button class="fab pri" id="add" aria-label="إضافة حالة">+</button>
-  <button class="fbb" id="fbo" aria-label="شكاوي واقتراحات"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.3A8 8 0 1 1 21 12z"/></svg></button>
   <div class="ov" id="fbm"><div class="sheet">
     <b>شكاوي واقتراحات</b>
     <div class="mu" style="margin:4px 0 8px">تُرسل إلينا عبر واتساب فقط.</div>
@@ -116,6 +146,7 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
   <div class="two pf"><div><label>العمر (بالسنوات)</label><input id="ag" type="number" inputmode="numeric" min="0" max="120" placeholder="مثال: 35"></div>
   <div><label>النوع</label><div class="spc" id="sx"></div></div></div>
   <label>التخصص (يمكنك اختيار أكثر من تخصص)</label><div class="spc" id="sps"></div>
+  <label>مرحلة الأسنان (Dentition)</label><div class="spc" id="dn"></div>
   <label>الأسنان (اضغط على السن لتحديد ما تم عليه)</label>
   <div id="tc"></div>
   <div class="ov" id="tm"><div class="sheet">
@@ -124,7 +155,8 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
     <div class="spc" id="tmo"></div>
     <div class="row" style="margin:8px 0 0"><button class="pri" id="tmd" style="flex:1">تم</button><button id="tmc">مسح العلامة</button></div>
   </div></div>
-  <label>التاريخ</label><input id="d" type="date">
+  <label id="dl2">التاريخ</label><input id="d" type="date">
+  <label class="ap">الساعة (اختيارية)</label><input id="ti" type="time" class="ap">
   <label class="pf">رقم هاتف المريض (اختياري)</label><div class="ph pf"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><input id="ph" type="tel" inputmode="tel" dir="ltr" placeholder="01xxxxxxxxx" autocomplete="off"></div>
   <label>الصور (داخل الفم فقط) – يمكنك إضافة أكثر من صورة لكل مرحلة (بدون حد أقصى)</label>
   <div class="cnt" id="cnt"></div>
@@ -149,6 +181,23 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
 </div>
 
 <div id="pr"></div>
+<div id="aview" class="hide">
+  <div class="row"><button id="aback">← رجوع</button><button id="adel" style="margin-inline-start:auto">حذف الموعد</button></div>
+  <button id="adone" class="pri" style="width:100%;margin-top:8px">✓ تم الموعد — حوّله لحالة / جلسة</button>
+  <div class="card" id="avc" style="margin-top:8px"></div>
+</div>
+
+<nav id="bar">
+  <button id="add" aria-label="إضافة حالة"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 12v6M9 15h6"/></svg></button>
+  <button id="nvH" class="home" aria-label="الصفحة الرئيسية"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button>
+  <button id="nvP" aria-label="إضافة موعد"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M12 13v5M9.5 15.5h5"/></svg></button>
+</nav>
+
+<div id="tour" data-pos="mid"><div class="tcard">
+  <div class="tic" id="tic"></div><b id="ttl"></b><p id="ttx"></p><div class="tdots" id="tdots"></div>
+  <div class="row" style="margin:0"><button id="tskip">تخطي</button><button id="tprev">السابق</button><button class="pri" id="tnext" style="flex:1">التالي</button></div>
+</div></div>
+
 <script>
 const SP=["الكل","Operative","Fixed","Endo","Prosthesis","Surgery","Perio","Ortho","Pedo"];
 const WA="201224080401";/* ضع رقم واتساب هنا بالصيغة الدولية بدون + أو أصفار، مثال: 201001234567 */
@@ -157,18 +206,24 @@ const arr=v=>Array.isArray(v)?v:(v?[v]:[]);
 const tot=o=>stagesFor(sel).reduce((n,k)=>n+arr(o[k]).length,0);
 const ST={Operative:["Before","Cavity","After"],Fixed:["Before","Preparation","After"],Endo:["Before","X-ray Master Cone","X-ray Obturation","After"],Prosthesis:["Before","Try-in","After"]};
 const stg=sp=>ST[sp]||["Before","After"];
-let sel=[],teeth={},tcur=0,sex="",spAuto=true;
+let sel=[],teeth={},tcur=0,sex="",spAuto=true,dent="permanent";
 const TC={Operative:"#40a4d5",Fixed:"#d4b574",Endo:"#e0626f",Prosthesis:"#9b7be0",Surgery:"#e0884a",Perio:"#4fb286",Ortho:"#27c4d8",Pedo:"#e08fbc"};
 const UP=[18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28],LO=[48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38];
+const UPp=[55,54,53,52,51,61,62,63,64,65],LOp=[85,84,83,82,81,71,72,73,74,75];
+const DN={primary:"Primary dentition",permanent:"Permanent dentition",mixed:"Mixed dentition"};
+const dl=x=>DN[x.dent||"permanent"]||DN.permanent;
+const vis=(n,d)=>d=="mixed"||(d=="primary"?[...UPp,...LOp]:[...UP,...LO]).includes(+n);
 const TOOTH="M6 2C3 2 2 5 2 9c0 5 2 8 3 13 .5 4 1.5 8 3.5 8s2-6 3.5-6 1.5 6 3.5 6 3-4 3.5-8c1-5 3-8 3-13 0-4-1-7-4-7-2.5 0-4 1.5-6 1.5S8.5 2 6 2z";
 const col=x=>TC[x]||"#999";
 function legend(t){const u=[...new Set(Object.values(t).flat())];return u.length?`<div class="lgd">${u.map(x=>`<span><span class="dt" style="display:inline-block;width:9px;height:9px;border-radius:50%;margin-inline-end:5px;background:${col(x)}"></span>${esc(x)}</span>`).join("")}</div>`:""}
-function chart(t,edit){const mk=n=>{const a=t[n]||[],c=a.length?col(a[0]):"",up=UP.includes(n);
+function chart(t,edit,dn){dn=dn||"permanent";const mk=n=>{const a=t[n]||[],c=a.length?col(a[0]):"",up=UP.includes(n)||UPp.includes(n);
     const sv=`<svg viewBox="0 0 24 32" style="${up?"transform:scaleY(-1)":""}"><path d="${TOOTH}"${c?` style="fill:${c};stroke:${c}"`:""}/></svg>`;
     const dots=`<i>${a.map(x=>`<span class="d" style="background:${col(x)}"></span>`).join("")}</i>`,num=`<b>${n}</b>`;
     return `<button type="button" class="tt${edit?"":" ro"}" data-t="${n}" aria-label="سن ${n}">${up?num+dots+sv:sv+dots+num}</button>`};
-  const row=l=>`<div class="tr2"><div class="h">${l.slice(0,8).map(mk).join("")}</div><div class="h">${l.slice(8).map(mk).join("")}</div></div>`;
-  return `<div class="tc">${row(UP)}${row(LO)}</div>`+legend(t)}
+  const row=(l,h)=>`<div class="tr2"><div class="h">${l.slice(0,h).map(mk).join("")}</div><div class="h">${l.slice(h).map(mk).join("")}</div></div>`;
+  const perm=`<div class="tc">${row(UP,8)}${row(LO,8)}</div>`,pri=c=>`<div class="tc ${c}">${row(UPp,5)}${row(LOp,5)}</div>`;
+  const h=dn=="primary"?pri("p1"):dn=="mixed"?`<div class="dtl">Permanent teeth</div>${perm}<div class="dtl">Primary teeth</div>${pri("p2")}`:perm;
+  return h+legend(Object.fromEntries(Object.entries(t).filter(([k])=>vis(k,dn))))}
 const tkeys=t=>Object.keys(t||{}).filter(k=>(t[k]||[]).length).sort((a,b)=>a-b);
 const teethLine=c=>tkeys(c.teeth).map(k=>`${k} (${c.teeth[k].join(" + ")})`).join(" · ");
 const demo=c=>{const a=[c.sex,c.age?c.age+" سنة":""].filter(Boolean);return a.length?`<div class="mu">${esc(a.join(" · "))}</div>`:""};
@@ -188,15 +243,20 @@ function summary(c){const k=x=>String(x.t||"").trim().toLowerCase();
 $("sm").onclick=()=>{if(!cur)return;$("svb").innerHTML=summary(cur);$("sv").classList.add("on")};
 $("svc").onclick=()=>$("sv").classList.remove("on");
 $("sv").onclick=e=>{if(e.target===$("sv"))$("sv").classList.remove("on")};
-function drawTeeth(){$("tc").innerHTML=chart(teeth,true)}
+function drawTeeth(){$("tc").innerHTML=chart(teeth,true,dent)}
+function dentChips(){$("dn").innerHTML=Object.keys(DN).map(x=>`<button type="button" class="chip ${dent==x?"on":""}" data-d="${x}">${DN[x]}</button>`).join("")}
+$("dn").onclick=e=>{const x=e.target.dataset.d;if(!x)return;dent=x;dentChips();drawTeeth()};
 const spsOf=c=>Array.isArray(c.sps)&&c.sps.length?c.sps:[c.sp];
 const spl=c=>spsOf(c).join(" + ");
-const sessOf=c=>[{date:c.date||"",sps:spsOf(c),teeth:c.teeth||{},im:c.im||{},n:c.n||""}].concat((c.ss||[]).map(x=>({id:x.id,date:x.date||"",sps:x.sps&&x.sps.length?x.sps:[c.sp],teeth:x.teeth||{},im:x.im||{},n:x.n||""}))).map((x,i)=>({...x,o:i})).sort((a,b)=>(a.date||"").localeCompare(b.date||"")||a.o-b.o);
+const sessOf=c=>[{date:c.date||"",dent:c.dent||"permanent",sps:spsOf(c),teeth:c.teeth||{},im:c.im||{},n:c.n||""}].concat((c.ss||[]).map(x=>({id:x.id,date:x.date||"",dent:x.dent||"permanent",sps:x.sps&&x.sps.length?x.sps:[c.sp],teeth:x.teeth||{},im:x.im||{},n:x.n||""}))).map((x,i)=>({...x,o:i})).sort((a,b)=>(a.date||"").localeCompare(b.date||"")||a.o-b.o);
 const allSps=c=>{const u=new Set(sessOf(c).flatMap(x=>x.sps));return SP.slice(1).filter(x=>u.has(x))};
 const allImgs=c=>sessOf(c).flatMap(x=>Object.values(x.im).flatMap(arr));
 const lastDate=c=>sessOf(c).map(x=>x.date).sort().pop()||"";
 const allTeeth=c=>[...new Set(sessOf(c).flatMap(x=>tkeys(x.teeth)))].sort((a,b)=>a-b);
-let addTo=null;
+let addTo=null,apptMode=false,appts=[],curA=null;
+const when=a=>[a.date?fd(a.date):"",a.time?ft12(a.time):""].filter(Boolean).join(" · ")||"بدون موعد محدد";
+const overdue=a=>!!a.date&&new Date(a.date+"T"+(a.time||"23:59"))<new Date();
+const ft12=t=>{if(!t)return"";const h=+t.slice(0,2),m=t.slice(3,5);return `<bdi>${h%12||12}:${m} ${h<12?"ص":"م"}</bdi>`};
 const fd=d=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d||"");return m?`<bdi dir="ltr">${m[3]}/${m[2]}/${m[1]}</bdi>`:esc(d||"")};
 const stagesFor=l=>{const mid=[];l.forEach(sp=>stg(sp).forEach(k=>{if(k!="Before"&&k!="After"&&!mid.includes(k))mid.push(k)}));return["Before",...mid,"After"]};
 let db,cases=[],flt="الكل",imgs={},cur=null,mem=[],logo="";
@@ -215,31 +275,50 @@ function slots(){const full=false;
   $("slots").innerHTML=stagesFor(sel).map(k=>`<div class="stage" data-k="${k}"><div class="sh">${k}</div><div class="tr">${arr(imgs[k]).map((x,i)=>`<div class="tb"><img src="${x}" alt=""><i data-x="${k}" data-i="${i}">×</i></div>`).join("")}${full?"":`<label class="add"><span style="font-size:30px;line-height:1">+</span>إضافة صورة<input type="file" accept="image/*" multiple></label>`}</div></div>`).join("")}
 function phoneRow(p){if(!p)return"";const d=String(p).replace(/[^\d+]/g,""),n=d.replace(/\D/g,""),w=n.startsWith("00")?n.slice(2):n.startsWith("0")?"20"+n.slice(1):n;
   return `<div class="pv"><span dir="ltr">${esc(p)}</span><a href="tel:${esc(d)}">اتصال</a><a href="https://wa.me/${esc(w)}" target="_blank" rel="noopener">واتساب</a></div>`}
-function show(p){["list","form","view"].forEach(x=>$(x).classList.toggle("hide",x!=p));window.scrollTo(0,0)}
+function show(p){["list","form","view","aview"].forEach(x=>$(x).classList.toggle("hide",x!=p));$("bar").classList.toggle("hide",p=="form");window.scrollTo(0,0)}
 
 async function render(){
   const A=await all();const lr=A.find(x=>x.id=="logo");logo=lr?lr.d:"";$("lg").src=logo;$("lg").classList.toggle("hide",!logo);
-  cases=A.filter(x=>x.id!="logo").sort((a,b)=>lastDate(b).localeCompare(lastDate(a)));
+  cases=A.filter(x=>x.id!="logo"&&x.kind!="appt").sort((a,b)=>lastDate(b).localeCompare(lastDate(a)));
   $("chips").innerHTML=SP.map(s=>`<button class="chip ${s==flt?"on":""}" data-s="${s}">${s}</button>`).join("");
+  appts=A.filter(x=>x.kind=="appt").sort((a,b)=>((a.date||"9999")+" "+(a.time||"")).localeCompare((b.date||"9999")+" "+(b.time||"")));
   const q=$("q").value.trim().toLowerCase();
+  const al=appts.filter(a=>(flt=="الكل"||spsOf(a).includes(flt))&&(!q||(a.t+" "+(a.ph||"")+" "+(a.n||"")+" "+tkeys(a.teeth).join(" ")).toLowerCase().includes(q)));
+  $("appts").innerHTML=al.length?`<div class="sec">المواعيد القادمة (${al.length})</div>`+al.map(a=>{const od=overdue(a);return `<div class="card apc" data-aid="${a.id}"><h3>${esc(a.t)}</h3><div class="mu">${when(a)}${od?` · <span class="od">فات موعده</span>`:""}</div><div class="mu">${esc(spl(a))}${tkeys(a.teeth).length?` · الأسنان: ${tkeys(a.teeth).join(" · ")}`:""}</div></div>`}).join("")+`<div class="sec">الحالات</div>`:"";
   const l=cases.filter(c=>(flt=="الكل"||allSps(c).includes(flt))&&(!q||(c.t+" "+sessOf(c).map(x=>x.n).join(" ")+" "+(c.ph||"")+" "+allTeeth(c).join(" ")).toLowerCase().includes(q)));
-  $("cards").innerHTML=l.length?l.map(c=>{const n=sessOf(c).length,tt=allTeeth(c),im=allImgs(c);return `<div class="card" data-id="${c.id}"><h3>${esc(c.t)}</h3><div class="mu">${esc(allSps(c).join(" + "))} · ${fd(lastDate(c))}${n>1?` · ${n} جلسات`:""}</div>${tt.length?`<div class="mu">الأسنان: ${tt.join(" · ")}</div>`:""}${im.length?`<div class="th">${im.map(x=>`<img src="${x}" alt="">`).join("")}</div>`:""}</div>`}).join(""):`<p class="mu" style="text-align:center;margin-top:40px">لا توجد حالات بعد. اضغط + لإضافة أول حالة.</p>`;
+  $("cards").innerHTML=l.length?l.map(c=>{const n=sessOf(c).length,tt=allTeeth(c),im=allImgs(c);return `<div class="card" data-id="${c.id}"><h3>${esc(c.t)}</h3><div class="mu">${esc(allSps(c).join(" + "))} · ${fd(lastDate(c))}${n>1?` · ${n} جلسات`:""}</div>${tt.length?`<div class="mu">الأسنان: ${tt.join(" · ")}</div>`:""}${im.length?`<div class="th">${im.map(x=>`<img src="${x}" alt="">`).join("")}</div>`:""}</div>`}).join(""):`<p class="mu" style="text-align:center;margin-top:40px">لا توجد حالات بعد. اضغط زر إضافة حالة في الشريط السفلي لإضافة أول حالة.</p>`;
 }
 
 $("chips").onclick=e=>{const s=e.target.dataset.s;if(s){flt=s;render()}};
 $("q").oninput=render;
 function openView(c){cur=c;
-  $("vc").innerHTML=`<h3>${esc(c.t)}</h3>${demo(c)}${phoneRow(c.ph)}`+sessOf(c).map((x,i,A)=>`<div class="ses"><b>${A.length>1?`الجلسة ${i+1} · `:""}${fd(x.date)}</b>${x.id?`<button type="button" class="ic" data-ds="${x.id}" style="float:left;padding:2px 10px;font-size:12px">حذف الجلسة</button>`:""}<div class="mu">${esc(spl(x))}</div>${tkeys(x.teeth).length?chart(x.teeth,false)+`<div class="mu" dir="ltr" style="margin-bottom:8px;text-align:right">${esc(teethLine(x))}</div>`:""}${grid(x)}${x.n?`<p style="white-space:pre-wrap">${esc(x.n)}</p>`:""}</div>`).join("");show("view")}
+  $("vc").innerHTML=`<h3>${esc(c.t)}</h3>${demo(c)}${phoneRow(c.ph)}`+sessOf(c).map((x,i,A)=>`<div class="ses"><b>${A.length>1?`الجلسة ${i+1} · `:""}${fd(x.date)}</b>${x.id?`<button type="button" class="ic" data-ds="${x.id}" style="float:left;padding:2px 10px;font-size:12px">حذف الجلسة</button>`:""}<div class="mu">${esc(spl(x))} · ${dl(x)}</div>${tkeys(x.teeth).length?chart(x.teeth,false,x.dent)+`<div class="mu" dir="ltr" style="margin-bottom:8px;text-align:right">${esc(teethLine(x))}</div>`:""}${grid(x)}${x.n?`<p style="white-space:pre-wrap">${esc(x.n)}</p>`:""}</div>`).join("");show("view")}
 $("cards").onclick=e=>{const el=e.target.closest(".card");if(!el)return;openView(cases.find(c=>c.id==el.dataset.id))};
 $("vc").onclick=async e=>{const id=e.target.dataset.ds;if(!id||!cur)return;if(!confirm("حذف هذه الجلسة نهائيًا؟"))return;
   cur.ss=(cur.ss||[]).filter(x=>x.id!=id);await put(cur);await render();openView(cases.find(c=>c.id==cur.id))};
 $("addss").onclick=()=>{if(!cur)return;addTo=cur.id;imgs={};teeth={};spAuto=true;$("n").value="";$("d").value=new Date().toISOString().slice(0,10);
-  const last=sessOf(cur).slice(-1)[0];sel=[(last.sps[0])||SP[1]];$("ft").textContent="جلسة جديدة — "+cur.t;
+  const last=sessOf(cur).slice(-1)[0];sel=[(last.sps[0])||SP[1]];dent=last.dent||"permanent";dentChips();apptMode=false;document.body.classList.remove("am");$("dl2").textContent="التاريخ";$("save").textContent="حفظ";$("ft").textContent="جلسة جديدة — "+cur.t;
   document.querySelectorAll(".pf").forEach(x=>x.style.display="none");drawTeeth();spchips();slots();show("form")};
 $("back").onclick=()=>show("list");
+$("appts").onclick=e=>{const el=e.target.closest(".apc");if(!el)return;openA(appts.find(a=>a.id==el.dataset.aid))};
+function openA(a){curA=a;const od=overdue(a);
+  $("avc").innerHTML=`<h3>${esc(a.t)}</h3>${demo(a)}${phoneRow(a.ph)}<div class="ses"><b>الموعد: ${when(a)}${od?` · <span class="od">فات موعده</span>`:""}</b><div class="mu">${esc(spl(a))} · ${dl(a)}</div>${tkeys(a.teeth).length?chart(a.teeth,false,a.dent)+`<div class="mu" dir="ltr" style="margin-bottom:8px;text-align:right">${esc(teethLine(a))}</div>`:""}${grid(a)}${a.n?`<p style="white-space:pre-wrap">${esc(a.n)}</p>`:""}</div>`;show("aview")}
+$("aback").onclick=()=>show("list");
+$("adel").onclick=async()=>{if(curA&&confirm("حذف الموعد نهائيًا؟")){await rm(curA.id);curA=null;await render();show("list")}};
+$("adone").onclick=async()=>{const a=curA;if(!a)return;const k=x=>String(x.t||"").trim().toLowerCase();const ex=cases.find(c=>k(c)==k(a));let tid;
+  if(ex){ex.ss=(ex.ss||[]).concat({id:Date.now(),date:a.date||new Date().toISOString().slice(0,10),dent:a.dent,sps:a.sps,teeth:a.teeth,n:a.n,im:a.im});
+    if(!ex.ph&&a.ph)ex.ph=a.ph;if(!ex.age&&a.age)ex.age=a.age;if(!ex.sex&&a.sex)ex.sex=a.sex;await put(ex);tid=ex.id}
+  else{tid=Date.now()+1;await put({id:tid,t:a.t,sp:a.sps[0],sps:a.sps,dent:a.dent,teeth:a.teeth,date:a.date||new Date().toISOString().slice(0,10),ph:a.ph,age:a.age,sex:a.sex,n:a.n,im:a.im})}
+  await rm(a.id);curA=null;await render();openView(cases.find(c=>c.id==tid))};
 $("del").onclick=async()=>{if(cur&&confirm("حذف الحالة نهائيًا؟")){await rm(cur.id);await render();show("list")}};
-$("add").onclick=()=>{addTo=null;$("ft").textContent="حالة جديدة";document.querySelectorAll(".pf").forEach(x=>x.style.display="");imgs={};$("t").value="";$("ph").value="";$("n").value="";$("d").value=new Date().toISOString().slice(0,10);$("ag").value="";sex="";spAuto=true;sxChips();teeth={};drawTeeth();sel=[flt!="الكل"?flt:SP[1]];spchips();slots();show("form")};
-$("cancel").onclick=()=>{const v=addTo;addTo=null;show(v?"view":"list")};
+function startForm(appt){apptMode=!!appt;document.body.classList.toggle("am",apptMode);dent="permanent";dentChips();addTo=null;
+  $("ft").textContent=appt?"موعد جديد":"حالة جديدة";$("dl2").textContent=appt?"تاريخ الموعد (اختياري)":"التاريخ";$("save").textContent=appt?"حفظ الموعد":"حفظ";
+  document.querySelectorAll(".pf").forEach(x=>x.style.display="");imgs={};$("t").value="";$("ph").value="";$("n").value="";$("ti").value="";
+  $("d").value=appt?"":new Date().toISOString().slice(0,10);$("ag").value="";sex="";spAuto=true;sxChips();teeth={};drawTeeth();sel=[flt!="الكل"?flt:SP[1]];spchips();slots();show("form")}
+$("add").onclick=()=>startForm(false);
+$("nvP").onclick=()=>startForm(true);
+$("nvH").onclick=()=>{addTo=null;show("list")};
+$("cancel").onclick=()=>{const v=addTo;addTo=null;apptMode=false;document.body.classList.remove("am");show(v?"view":"list")};
 function tmChips(){$("tmo").innerHTML=SP.slice(1).map(x=>`<button type="button" class="chip ${(teeth[tcur]||[]).includes(x)?"on":""}" data-s="${x}"><span class="dt" style="background:${col(x)}"></span>${x}</button>`).join("")}
 $("tc").onclick=e=>{const b=e.target.closest(".tt");if(!b)return;tcur=+b.dataset.t;$("tmt").textContent="سن رقم "+tcur;tmChips();$("tm").classList.add("on")};
 $("tmo").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;const x=b.dataset.s,a=teeth[tcur]||[];
@@ -261,13 +340,16 @@ $("gear").onclick=()=>$("set").classList.toggle("hide");
 $("lf").onchange=async e=>{const f=e.target.files[0];if(f){await put({id:"logo",d:await shrink(f,true)});render()}};
 $("lrm").onclick=async()=>{await rm("logo");render()};
 $("pdf").onclick=()=>{if(!cur)return;const A=sessOf(cur);
-  $("pr").innerHTML=`${logo?`<img class="lg" src="${logo}" alt="">`:""}<h2 style="margin:6px 0">${esc(cur.t)}</h2>${demo(cur)}`+A.map((x,i)=>`<div style="margin-top:${i?16:0}px">${A.length>1?`<b>الجلسة ${i+1} · ${fd(x.date)}</b><div>${esc(spl(x))}</div>`:`<div>${esc(spl(x))} · ${fd(x.date)}</div>`}${tkeys(x.teeth).length?`<div dir="ltr" style="text-align:right">${esc(teethLine(x))}</div>`:""}${grid(x)}${x.n?`<p style="white-space:pre-wrap">${esc(x.n)}</p>`:""}</div>`).join("");setTimeout(()=>window.print(),200)};
+  $("pr").innerHTML=`${logo?`<img class="lg" src="${logo}" alt="">`:""}<h2 style="margin:6px 0">${esc(cur.t)}</h2>${demo(cur)}`+A.map((x,i)=>`<div style="margin-top:${i?16:0}px">${A.length>1?`<b>الجلسة ${i+1} · ${fd(x.date)}</b><div>${esc(spl(x))} · ${dl(x)}</div>`:`<div>${esc(spl(x))} · ${fd(x.date)} · ${dl(x)}</div>`}${tkeys(x.teeth).length?`<div dir="ltr" style="text-align:right">${esc(teethLine(x))}</div>`:""}${grid(x)}${x.n?`<p style="white-space:pre-wrap">${esc(x.n)}</p>`:""}</div>`).join("");setTimeout(()=>window.print(),200)};
 $("save").onclick=async()=>{
+  if(apptMode){if(!$("t").value.trim()){alert("اكتب اسم المريض");return}
+    await put({id:Date.now(),kind:"appt",t:$("t").value.trim(),sp:sel[0],sps:sel.slice(),dent:dent,teeth:Object.fromEntries(tkeys(teeth).filter(k=>vis(k,dent)).map(k=>[k,teeth[k]])),date:$("d").value,time:$("ti").value,ph:$("ph").value.trim(),age:$("ag").value.trim(),sex:sex,n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
+    apptMode=false;document.body.classList.remove("am");await render();show("list");return}
   if(addTo){const c=cases.find(x=>x.id==addTo);if(!c){addTo=null;show("list");return}
-    c.ss=(c.ss||[]).concat({id:Date.now(),date:$("d").value,sps:sel.slice(),teeth:Object.fromEntries(tkeys(teeth).map(k=>[k,teeth[k]])),n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
+    c.ss=(c.ss||[]).concat({id:Date.now(),date:$("d").value,sps:sel.slice(),dent:dent,teeth:Object.fromEntries(tkeys(teeth).filter(k=>vis(k,dent)).map(k=>[k,teeth[k]])),n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
     await put(c);addTo=null;await render();openView(cases.find(x=>x.id==c.id));return}
   if(!$("t").value.trim()){alert("اكتب اسم المريض");return}
-  await put({id:Date.now(),t:$("t").value.trim(),sp:sel[0],sps:sel.slice(),teeth:Object.fromEntries(tkeys(teeth).map(k=>[k,teeth[k]])),date:$("d").value,ph:$("ph").value.trim(),age:$("ag").value.trim(),sex:sex,n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
+  await put({id:Date.now(),t:$("t").value.trim(),sp:sel[0],sps:sel.slice(),dent:dent,teeth:Object.fromEntries(tkeys(teeth).filter(k=>vis(k,dent)).map(k=>[k,teeth[k]])),date:$("d").value,ph:$("ph").value.trim(),age:$("ag").value.trim(),sex:sex,n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
   await render();show("list")};
 
 $("fbo").onclick=()=>$("fbm").classList.add("on");
@@ -277,7 +359,49 @@ $("fbs").onclick=()=>{const t=$("fbt").value.trim();if(!t){alert("اكتب رس�
   if(!WA){alert("رقم الواتساب غير مضبوط بعد");return}
   const a=document.createElement("a");a.href="https://wa.me/"+WA+"?text="+encodeURIComponent("["+$("fbk").value+"] حالاتي:\n"+t);a.target="_blank";a.rel="noopener";a.click();$("fbt").value="";$("fbm").classList.remove("on")};
 
-open().then(render);
+const I=(p,w)=>`<svg width="${w||28}" height="${w||28}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const IC={tooth:`<svg width="28" height="28" viewBox="0 0 24 32" fill="none" stroke="currentColor" stroke-width="1.8"><path d="${TOOTH}"/></svg>`,
+ doc:I('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 12v6M9 15h6"/>'),
+ home:I('<path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h5v-6h4v6h5V10"/>'),
+ cal:I('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M12 13v5M9.5 15.5h5"/>'),
+ clip:I('<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/>'),
+ phone:I('<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>'),
+ img:I('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>'),
+ chat:I('<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.3A8 8 0 1 1 21 12z"/>'),
+ gear:I('<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>'),
+ plus:I('<path d="M12 5v14M5 12h14"/>')};
+const TS={
+ new:[{ic:IC.tooth,ti:"أهلاً بك في حالاتي",tx:"أرشيف حالاتك السنية في جيبك. هنعرّفك على كل زر في ثواني."},
+  {ic:IC.doc,t:"add",pos:"bot",ti:"إضافة حالة",tx:"الزر اللي على اليمين: سجّل مريض جديد بصوره وأسنانه وتفاصيله."},
+  {ic:IC.home,t:"nvH",pos:"bot",ti:"الصفحة الرئيسية",tx:"الزر الكبير في النص: يرجّعك لكل حالاتك ومواعيدك القادمة."},
+  {ic:IC.cal,t:"nvP",pos:"bot",ti:"إضافة موعد",tx:"الزر اللي على الشمال: حدد يوم وساعة موعد المريض، وإيه اللي هتعمله وعلى أنهي سن."},
+  {ic:IC.gear,t:"gear",pos:"top",ti:"الإعدادات",tx:"أضف لوجو خاص بيك يظهر في التطبيق وفي ملف الـ PDF، وأعد الجولة من هنا في أي وقت."},
+  {ic:IC.chat,t:"fbo",pos:"top",ti:"شكاوي واقتراحات",tx:"ابعتلنا رأيك مباشرة على واتساب."}],
+ upd:[{ic:IC.tooth,ti:"حالاتي اتحدّث! ما الجديد؟",tx:"في تحديثات كتير: شريط سفلي جديد، مواعيد، أسنان لبنية، جلسات متعددة وأكتر. تعالى نشوفهم."},
+  {ic:IC.doc,t:"add",pos:"bot",ti:"إضافة حالة",tx:"الزر اللي على اليمين في الشريط السفلي لإضافة مريض جديد."},
+  {ic:IC.home,t:"nvH",pos:"bot",ti:"الصفحة الرئيسية",tx:"الزر الكبير في النص: كل حالاتك ومواعيدك القادمة."},
+  {ic:IC.cal,t:"nvP",pos:"bot",ti:"إضافة موعد",tx:"الزر اللي على الشمال: حدد يوم وساعة الموعد، وإيه اللي هتعمله وعلى أنهي سن. الموعد بيظهر في الرئيسية، وزرار \"تم\" بيحوّله لحالة أو جلسة."},
+  {ic:IC.tooth,ti:"رسمة الأسنان",tx:"اضغط على أي سن واختر اللي اشتغلته عليه (Operative أو Endo أو Fixed...) وهيتلوّن، والتخصص بيتضاف تلقائي."},
+  {ic:IC.tooth,ti:"مرحلة الأسنان",tx:"اختر Primary أو Permanent أو Mixed dentition، وتظهر لك رسمة الأسنان اللبنية أو الدائمة أو الاتنين مع بعض."},
+  {ic:IC.plus,ti:"جلسات متعددة",tx:"افتح أي حالة محفوظة واضغط \"إضافة جلسة جديدة\" بتاريخ مختلف، وسجّل اللي عملته في كل زيارة."},
+  {ic:IC.clip,ti:"ملخص الحالة",tx:"في صفحة الحالة، زرار \"ملخص الحالة\" بيعرض كل جلسات المريض: عملتله إيه وعلى أنهي سن وامتى."},
+  {ic:IC.phone,ti:"بيانات المريض",tx:"سجّل العمر والنوع ورقم الهاتف، وبضغطة تتصل بالمريض أو تبعتله على واتساب."},
+  {ic:IC.img,ti:"صور بلا حد وPDF",tx:"أضف أي عدد من الصور في كل مرحلة، واحفظ الحالة كلها كملف PDF."},
+  {ic:IC.chat,t:"fbo",pos:"top",ti:"شكاوي واقتراحات",tx:"الأيقونة دي بتبعتلنا رأيك مباشرة على واتساب."}]};
+let tsteps=[],tix=0;
+function tourShow(){const s=tsteps[tix];document.querySelectorAll(".tgt").forEach(x=>x.classList.remove("tgt"));
+  if(s.t&&$(s.t))$(s.t).classList.add("tgt");$("tour").dataset.pos=s.pos||"mid";$("tic").innerHTML=s.ic||"";$("ttl").textContent=s.ti;$("ttx").textContent=s.tx;
+  $("tdots").innerHTML=tsteps.map((_,i)=>`<i class="${i==tix?"on":""}"></i>`).join("");$("tprev").style.visibility=tix?"visible":"hidden";
+  $("tnext").textContent=tix==tsteps.length-1?"ابدأ الاستخدام":"التالي"}
+function tourStart(l){show("list");tsteps=l;tix=0;$("tour").classList.add("on");tourShow()}
+function tourEnd(){$("tour").classList.remove("on");document.querySelectorAll(".tgt").forEach(x=>x.classList.remove("tgt"));try{localStorage.setItem("tour","2")}catch(e){}}
+$("tnext").onclick=()=>{if(tix>=tsteps.length-1)tourEnd();else{tix++;tourShow()}};
+$("tprev").onclick=()=>{if(tix>0){tix--;tourShow()}};
+$("tskip").onclick=tourEnd;
+$("tourbtn").onclick=()=>{$("set").classList.add("hide");tourStart(TS.upd)};
+function maybeTour(){let seen="";try{seen=localStorage.getItem("tour")}catch(e){}
+  if(seen!="2")tourStart(cases.length||appts.length||logo?TS.upd:TS.new)}
+open().then(render).then(maybeTour);
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>
