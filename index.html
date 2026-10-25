@@ -139,9 +139,14 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
 <div id="list">
   <div class="wm" aria-hidden="true"></div>
   <div class="hd"><img id="lg" class="hide" alt=""><h1><img class="appmark" src="icons/icon-192.png" alt="">حالاتي</h1><button id="apb" class="ic" aria-label="المواعيد المحجوزة" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h8M8 17h5"/></svg><span id="apn" class="bdg"></span></button><button id="fbo" class="ic" aria-label="شكاوي واقتراحات"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.3A8 8 0 1 1 21 12z"/></svg></button><button id="gear" class="ic" aria-label="الإعدادات"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
-  <div id="set" class="card hide"><b>لوجو خاص بك (اختياري)</b><div class="mu" style="margin:4px 0 8px">يظهر في التطبيق وفي ملف الـ PDF.</div><div class="row"><label class="pri" style="margin:0;padding:10px;border-radius:10px;color:#fff">اختر لوجو<input id="lf" type="file" accept="image/*" hidden></label><button id="lrm">حذف اللوجو</button></div><button id="tourbtn" style="margin-top:8px;width:100%">إعادة الجولة التعريفية</button></div>
+  <div id="set" class="card hide"><b>لوجو خاص بك (اختياري)</b><div class="mu" style="margin:4px 0 8px">يظهر في التطبيق وفي ملف الـ PDF.</div><div class="row"><label class="pri" style="margin:0;padding:10px;border-radius:10px;color:#fff">اختر لوجو<input id="lf" type="file" accept="image/*" hidden></label><button id="lrm">حذف اللوجو</button></div><div style="border-top:1px solid var(--bd);margin-top:12px;padding-top:10px"><b>حفظ الحالات بحساب جوجل</b>
+    <div class="mu" id="gst" style="margin:4px 0 8px"></div>
+    <button id="gin" class="pri" style="width:100%">تسجيل الدخول بجوجل</button>
+    <div id="gon" class="row hide" style="margin:0"><button id="gnow" class="pri" style="flex:1">حفظ ومزامنة الآن</button><button id="gout">تسجيل الخروج</button></div></div>
+    <button id="tourbtn" style="margin-top:8px;width:100%">إعادة الجولة التعريفية</button></div>
   <input id="q" placeholder="ابحث في الحالات...">
   <div class="chips" id="chips" style="margin-top:8px"></div>
+  <div id="gb"></div>
   <div id="appts"></div>
   <div id="cards"></div>
   <div class="ov" id="fbm"><div class="sheet">
@@ -176,7 +181,7 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
   <div class="cnt np" id="cnt"></div>
   <div class="slots np" id="slots"></div>
   <label>التفاصيل (التشخيص، خطوات العلاج، الخامات...)</label><textarea id="n"></textarea>
-  <div class="note">ملحوظة: الاسم ورقم الهاتف يُحفظان على جهازك فقط. رقم الهاتف لا يظهر في ملف PDF، أما الاسم فيظهر في عنوان الملف.</div>
+  <div class="note">ملحوظة: الاسم ورقم الهاتف يُحفظان على جهازك (وعلى Google Drive الخاص بك لو ربطت حسابك). رقم الهاتف لا يظهر في ملف PDF، أما الاسم فيظهر في عنوان الملف.</div>
   <div class="row" style="margin-top:12px">
     <button class="pri" id="save" style="flex:1">حفظ</button>
     <button id="cancel">إلغاء</button>
@@ -328,8 +333,10 @@ const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&g
 
 function open(){return new Promise(r=>{try{const q=indexedDB.open("cases",1);q.onupgradeneeded=()=>q.result.createObjectStore("c",{keyPath:"id"});q.onsuccess=()=>{db=q.result;r()};q.onerror=()=>r()}catch(e){r()}})}
 function all(){return new Promise(r=>{if(!db)return r(mem);const q=db.transaction("c").objectStore("c").getAll();q.onsuccess=()=>r(q.result);q.onerror=()=>r(mem)})}
-function put(c){return new Promise(r=>{if(!db){mem=mem.filter(x=>x.id!=c.id).concat(c);return r()}const t=db.transaction("c","readwrite");t.objectStore("c").put(c);t.oncomplete=r;t.onerror=r})}
-function rm(id){return new Promise(r=>{if(!db){mem=mem.filter(x=>x.id!=id);return r()}const t=db.transaction("c","readwrite");t.objectStore("c").delete(id);t.oncomplete=r;t.onerror=r})}
+function put(c){c.mt=Date.now();return putRaw(c).then(()=>{gChanged()})}
+function putRaw(c){return new Promise(r=>{if(!db){mem=mem.filter(x=>x.id!=c.id).concat(c);return r()}const t=db.transaction("c","readwrite");t.objectStore("c").put(c);t.oncomplete=r;t.onerror=r})}
+function rm(id){return rmRaw(id).then(()=>{gDeleted(id)})}
+function rmRaw(id){return new Promise(r=>{if(!db){mem=mem.filter(x=>x.id!=id);return r()}const t=db.transaction("c","readwrite");t.objectStore("c").delete(id);t.oncomplete=r;t.onerror=r})}
 
 function shrink(file,png){return new Promise(r=>{const fr=new FileReader();fr.onload=()=>{const i=new Image();i.onload=()=>{const m=png?400:1280,k=Math.min(1,m/Math.max(i.width,i.height)),c=document.createElement("canvas");c.width=i.width*k;c.height=i.height*k;c.getContext("2d").drawImage(i,0,0,c.width,c.height);r(png?c.toDataURL("image/png"):c.toDataURL("image/jpeg",.8))};i.src=fr.result};fr.readAsDataURL(file)})}
 
@@ -350,7 +357,7 @@ async function render(){
   const q=$("q").value.trim().toLowerCase();
   const al=appts.filter(a=>(flt=="الكل"||flt=="المواعيد"||spsOf(a).includes(flt))&&(!q||(a.t+" "+(a.ph||"")+" "+(a.n||"")+" "+tkeys(a.teeth).join(" ")).toLowerCase().includes(q)));
   $("appts").innerHTML=al.length?`<div class="sec">المواعيد القادمة (${al.length})</div>`+al.map(a=>{const od=overdue(a);return `<div class="card apc" data-aid="${a.id}"><h3>${esc(a.t)}</h3><div class="mu">${when(a)}${od?` · <span class="od">فات موعده</span>`:""}</div><div class="mu">${esc(spl(a))}${tkeys(a.teeth).length?` · الأسنان: ${tkeys(a.teeth).join(" · ")}`:""}</div></div>`}).join("")+(flt=="المواعيد"?"":`<div class="sec">الحالات</div>`):flt=="المواعيد"?`<p class="mu" style="text-align:center;margin-top:40px">لا توجد مواعيد محددة بعد. اضغط زر التقويم بالأسفل لحجز موعد.</p>`:"";
-  $("apn").textContent=appts.length;$("apn").classList.toggle("on",appts.length>0);if(!$("apw").classList.contains("hide"))renderApw();
+  gBanner();$("apn").textContent=appts.length;$("apn").classList.toggle("on",appts.length>0);if(!$("apw").classList.contains("hide"))renderApw();
   const l=flt=="المواعيد"?[]:cases.filter(c=>(flt=="الكل"||allSps(c).includes(flt))&&(!q||(c.t+" "+sessOf(c).map(x=>x.n).join(" ")+" "+(c.ph||"")+" "+allTeeth(c).join(" ")).toLowerCase().includes(q)));
   $("cards").innerHTML=flt=="المواعيد"?"":l.length?l.map(c=>{const n=sessOf(c).length,tt=allTeeth(c),im=allImgs(c);return `<div class="card" data-id="${c.id}"><h3>${esc(c.t)}</h3><div class="mu">${esc(allSps(c).join(" + "))} · ${fd(lastDate(c))}${n>1?` · ${n} جلسات`:""}</div>${tt.length?`<div class="mu">الأسنان: ${tt.join(" · ")}</div>`:""}${im.length?`<div class="th">${im.map(x=>`<img src="${x}" alt="">`).join("")}</div>`:""}</div>`}).join(""):`<p class="mu" style="text-align:center;margin-top:40px">لا توجد حالات بعد. اضغط زر إضافة حالة في الشريط السفلي لإضافة أول حالة.</p>`;
 }
@@ -467,6 +474,8 @@ const IC={tooth:`<svg width="28" height="28" viewBox="0 0 24 32" fill="none" str
  bell:I('<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>'),
 
  flask:I('<path d="M9 3h6"/><path d="M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2.2h12.4a1.5 1.5 0 0 0 1.3-2.2L14 9V3"/><path d="M7.5 15h9"/>'),
+
+ cloud:I('<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>'),
  plus:I('<path d="M12 5v14M5 12h14"/>')};
 const NEW3=[{ic:IC.cal,t:"apb",pos:"top",ti:"المواعيد المحجوزة",tx:"الأيقونة دي في الأعلى بتفتح نافذة بكل مواعيدك المحجوزة مقسّمة: اليوم، القادمة، وفات موعدها. والرقم الأحمر عليها هو عدد المواعيد."},
   {ic:IC.cal,ti:"فلتر المواعيد",tx:"في الصفحة الرئيسية اضغط فلتر \"المواعيد\" لتشوف المواعيد المحجوزة بس، مرتبة بالأقرب."},
@@ -476,6 +485,7 @@ const NEW4=[{ic:IC.flask,t:"nvL",pos:"bot",ti:"المعمل",tx:"زرار الم
   {ic:IC.tooth,ti:"تفاصيل الـ Endo",tx:"اضغط على سن واختر Endo: هتلاقي عدد القنوات (1 إلى 4)، واسم وطول كل قناة، وعداد الـ M.C بيبدأ من 20 ويزيد 5، ومراحل Ac وCl&Sh وOb."},
   {ic:IC.img,ti:"حفظ صور الحالة",tx:"لو الصور اتمسحت من المعرض، في صفحة الحالة زرار \"حفظ صور الحالة على الموبايل\" بينزّلها تاني."},
   {ic:IC.clip,ti:"تحويل لـ PowerPoint",tx:"في صفحة الحالة زرار \"تحويل الحالة لملف PowerPoint\" بيطلع لك عرض جاهز بالجلسات والصور، وتقدر تخفي اسم المريض."}];
+const NEW5=[{ic:IC.cloud,t:"gear",pos:"top",ti:"حفظ الحالات بحساب جوجل",tx:"من الإعدادات سجّل دخول بحساب جوجل، وحالاتك وصورها بتتحفظ في Google Drive بتاعك. لو غيّرت الموبايل، ثبّت التطبيق وسجّل بنفس الحساب وكل حالاتك ترجع."}];
 const TS={
  new:[{ic:IC.tooth,ti:"أهلاً بك في حالاتي",tx:"أرشيف حالاتك السنية في جيبك. هنعرّفك على كل زر في ثواني."},
   {ic:IC.doc,t:"add",pos:"bot",ti:"إضافة حالة",tx:"الزر اللي على اليمين: سجّل مريض جديد بصوره وأسنانه وتفاصيله."},
@@ -497,16 +507,18 @@ const TS={
   {ic:IC.img,ti:"صور بلا حد وPDF",tx:"أضف أي عدد من الصور في كل مرحلة، واحفظ الحالة كلها كملف PDF."},
   ...NEW3,
   ...NEW4,
+  ...NEW5,
   {ic:IC.chat,t:"fbo",pos:"top",ti:"شكاوي واقتراحات",tx:"الأيقونة دي بتبعتلنا رأيك مباشرة على واتساب."}]};
-TS.v3=[{ic:IC.tooth,ti:"جديد في حالاتي",tx:"في حاجات جديدة كتير: المواعيد والمعمل وتفاصيل الـ Endo وغيرها. تعالى نشوفها."},...NEW3,...NEW4];
-TS.v4=[{ic:IC.tooth,ti:"جديد في حالاتي",tx:"في تحديثات جديدة: المعمل، وتفاصيل الـ Endo، وحفظ الصور، وتحويل الحالة لـ PowerPoint. تعالى نشوفها."},...NEW4];
+TS.v3=[{ic:IC.tooth,ti:"جديد في حالاتي",tx:"في حاجات جديدة كتير: المواعيد والمعمل وتفاصيل الـ Endo وغيرها. تعالى نشوفها."},...NEW3,...NEW4,...NEW5];
+TS.v4=[{ic:IC.tooth,ti:"جديد في حالاتي",tx:"في تحديثات جديدة: المعمل، وتفاصيل الـ Endo، وحفظ الصور، وتحويل الحالة لـ PowerPoint. تعالى نشوفها."},...NEW4,...NEW5];
+TS.v5=[{ic:IC.cloud,ti:"جديد في حالاتي",tx:"بقى تقدر تحفظ حالاتك بحساب جوجل وترجّعها على أي موبايل جديد."},...NEW5];
 let tsteps=[],tix=0;
 function tourShow(){const s=tsteps[tix];document.querySelectorAll(".tgt").forEach(x=>x.classList.remove("tgt"));
   if(s.t&&$(s.t))$(s.t).classList.add("tgt");$("tour").dataset.pos=s.pos||"mid";$("tic").innerHTML=s.ic||"";$("ttl").textContent=s.ti;$("ttx").textContent=s.tx;
   $("tdots").innerHTML=tsteps.map((_,i)=>`<i class="${i==tix?"on":""}"></i>`).join("");$("tprev").style.visibility=tix?"visible":"hidden";
   $("tnext").textContent=tix==tsteps.length-1?"ابدأ الاستخدام":"التالي"}
 function tourStart(l){show("list");tsteps=l;tix=0;$("tour").classList.add("on");tourShow()}
-function tourEnd(){$("tour").classList.remove("on");document.querySelectorAll(".tgt").forEach(x=>x.classList.remove("tgt"));try{localStorage.setItem("tour","4")}catch(e){}}
+function tourEnd(){$("tour").classList.remove("on");document.querySelectorAll(".tgt").forEach(x=>x.classList.remove("tgt"));try{localStorage.setItem("tour","5")}catch(e){}}
 $("tnext").onclick=()=>{if(tix>=tsteps.length-1)tourEnd();else{tix++;tourShow()}};
 $("tprev").onclick=()=>{if(tix>0){tix--;tourShow()}};
 $("tskip").onclick=tourEnd;
@@ -639,9 +651,66 @@ $("ppt").onclick=async()=>{if(!cur)return;const hide=!confirm("إضافة اسم
   try{const blob=await buildPptx(cur,hide),u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=(hide?"حالة":String(cur.t).replace(/[^\w\u0600-\u06FF]+/g,"_").slice(0,30))+".pptx";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),6000)}
   catch(e){alert("حصلت مشكلة في تجهيز ملف الباوربوينت.")}
   b.innerHTML=h;b.disabled=false};
+
+// ================= حفظ الحالات بحساب جوجل (Google Drive – فولدر التطبيق المخفي) =================
+const GCID="";
+const GU="https://www.googleapis.com/drive/v3",GUP="https://www.googleapis.com/upload/drive/v3",GSC="https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/userinfo.email",GDEB=45000;
+let gTok=null,gExp=0,gBusy=false,gTimer=null;
+const gLS=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}return null};
+const gLinked=()=>!!gLS("g_em");
+const gSay=t=>{const e=$("gst");if(e)e.textContent=t};
+const gz=async t=>{const b=new Blob([t]);return typeof CompressionStream=="undefined"?b:new Response(b.stream().pipeThrough(new CompressionStream("gzip"))).blob()};
+const ungz=async b=>{const u=new Uint8Array(await b.slice(0,2).arrayBuffer());return(u[0]==0x1f&&u[1]==0x8b&&typeof DecompressionStream!="undefined")?new Response(b.stream().pipeThrough(new DecompressionStream("gzip"))).text():b.text()};
+function gisLoad(){return new Promise((res,rej)=>{if(window.google&&google.accounts&&google.accounts.oauth2)return res();const s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.async=true;s.onload=()=>res();s.onerror=()=>rej(new Error("offline"));document.head.appendChild(s)})}
+function gToken(interactive){if(gTok&&Date.now()<gExp-60000)return Promise.resolve(gTok);if(!interactive)return Promise.resolve(null);
+  return new Promise(async(res,rej)=>{try{await gisLoad()}catch(e){return rej(e)}
+    try{google.accounts.oauth2.initTokenClient({client_id:GCID,scope:GSC,callback:r=>{if(r.error)return rej(new Error(r.error));gTok=r.access_token;gExp=Date.now()+(+r.expires_in||3600)*1000;res(gTok)},error_callback:e=>rej(new Error((e&&e.type)||"popup"))}).requestAccessToken({prompt:gLinked()?"":"select_account"})}catch(e){rej(e)}})}
+async function gApi(url,o){o=o||{};const r=await fetch(url,{...o,headers:{...(o.headers||{}),Authorization:"Bearer "+gTok}});if(r.status==401){gTok=null;throw new Error("auth")}if(!r.ok)throw new Error("http"+r.status);return r}
+async function gList(){const m={};let pt="";do{const r=await(await gApi(`${GU}/files?spaces=appDataFolder&pageSize=1000&fields=nextPageToken,files(id,name,appProperties)${pt?"&pageToken="+encodeURIComponent(pt):""}`)).json();(r.files||[]).forEach(f=>{m[f.name]={id:f.id,mt:+((f.appProperties||{}).mt||0)}});pt=r.nextPageToken||""}while(pt);return m}
+async function gUpload(rec,rem){const blob=await gz(JSON.stringify(rec)),name="r-"+rec.id,props={appProperties:{mt:String(rec.mt||0)}};
+  const meta=JSON.stringify(rem?props:{name,parents:["appDataFolder"],...props}),path=rem?`/files/${rem.id}`:"/files",method=rem?"PATCH":"POST";
+  if(blob.size<=4*1048576){const body=new Blob([`--gb\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n--gb\r\nContent-Type: application/octet-stream\r\n\r\n`,blob,"\r\n--gb--"]);
+    await gApi(`${GUP}${path}?uploadType=multipart&fields=id`,{method,headers:{"Content-Type":"multipart/related; boundary=gb"},body})}
+  else{const r1=await gApi(`${GUP}${path}?uploadType=resumable&fields=id`,{method,headers:{"Content-Type":"application/json; charset=UTF-8","X-Upload-Content-Type":"application/octet-stream","X-Upload-Content-Length":String(blob.size)},body:meta});
+    await gApi(r1.headers.get("Location"),{method:"PUT",body:blob})}}
+async function gSync(){if(gBusy)return;if(!GCID){gSay("الخدمة لسه ما اتفعّلتش.");return}gBusy=true;let dn=0,up=0,dl=0;
+  try{await gToken(true);gSay("جاري الاتصال بجوجل...");const remote=await gList(),local=(await all()).filter(x=>x&&x.id!=null);
+    const lm=new Map(local.map(x=>[String(x.id),x]));
+    // 1) حذف اللي اتمسح محليًا (الأول، عشان ما يتنزّلش تاني)
+    let pend=[];try{pend=JSON.parse(gLS("g_del")||"[]")}catch(e){}
+    const pset=new Set(pend.map(String));
+    for(const id of pend){const f=remote["r-"+id];if(f&&!lm.has(String(id))){await gApi(`${GU}/files/${f.id}`,{method:"DELETE"});delete remote["r-"+id];dl++}}
+    gLS("g_del",null);
+    // 2) تنزيل الجديد/الناقص
+    const D=Object.keys(remote).filter(n=>n.startsWith("r-")).filter(n=>{const id=n.slice(2),l=lm.get(id);return !pset.has(id)&&(!l||remote[n].mt>(l.mt||0))});
+    for(let i=0;i<D.length;i++){gSay(`جاري التنزيل ${i+1}/${D.length}...`);const rec=JSON.parse(await ungz(await(await gApi(`${GU}/files/${remote[D[i]].id}?alt=media`)).blob()));rec.mt=remote[D[i]].mt;await putRaw(rec);lm.set(String(rec.id),rec);dn++}
+    // 3) رفع الجديد
+    const U=[...lm.values()].filter(x=>{const f=remote["r-"+x.id];return !f||(x.mt||0)>f.mt});
+    for(let i=0;i<U.length;i++){gSay(`جاري الرفع ${i+1}/${U.length}...`);if(!U[i].mt){U[i].mt=Date.now();await putRaw(U[i])}await gUpload(U[i],remote["r-"+U[i].id]);up++}
+    gLS("g_dirty",null);gLS("g_last",String(Date.now()));gSay(`✓ تمت المزامنة: نزّلت ${dn}، رفعت ${up}${dl?`، حذفت ${dl}`:""}.`);
+    if(dn){await render()}}
+  catch(e){gSay(e.message=="auth"?"انتهت جلسة جوجل. اضغط حفظ ومزامنة تاني.":e.message=="offline"||e instanceof TypeError?"مفيش اتصال بالإنترنت. جرّب لما يبقى فيه نت.":/popup|access_denied|closed/i.test(e.message)?"نافذة جوجل ما فتحتش أو اتقفلت. جرّب تاني، أو افتح الموقع من متصفح Chrome.":"حصلت مشكلة في المزامنة ("+e.message+"). جرّب تاني.")}
+  gBusy=false;gUI()}
+async function gLogin(){if(!GCID||gBusy)return;try{await gToken(true);const u=await(await gApi("https://www.googleapis.com/oauth2/v3/userinfo")).json();gLS("g_em",u.email||"حساب جوجل");gLS("g_dirty","1")}
+  catch(e){gSay(/popup|access_denied|closed/i.test(e.message)?"نافذة جوجل ما فتحتش أو اتقفلت. جرّب تاني، أو افتح الموقع من متصفح Chrome.":e.message=="offline"?"مفيش اتصال بالإنترنت.":"ما قدرتش أسجّل الدخول ("+e.message+").");return}
+  gUI();await gSync()}
+function gChanged(){if(!gLinked())return;gLS("g_dirty","1");clearTimeout(gTimer);gTimer=setTimeout(gAuto,GDEB);gBanner()}
+function gDeleted(id){if(!gLinked())return;let p=[];try{p=JSON.parse(gLS("g_del")||"[]")}catch(e){}p.push(id);gLS("g_del",JSON.stringify(p));gChanged()}
+async function gAuto(){if(!gLinked()||gBusy||gLS("g_auto")=="0")return;if(await gToken(false))gSync();else gBanner()}
+function gBanner(){const e=$("gb");if(!e)return;const need=gLinked()&&gLS("g_dirty")=="1"&&!gBusy&&!(gTok&&Date.now()<gExp-60000);
+  e.innerHTML=need?`<div class="card" style="border:2px solid var(--bl);margin-bottom:10px"><b style="color:var(--bl)">فيه تغييرات لسه ما اتحفظتش على حساب جوجل</b><button id="gbb" class="pri" style="width:100%;margin-top:8px">احفظها دلوقتي</button></div>`:"";
+  if(need)$("gbb").onclick=gSync}
+function gUI(){const on=gLinked(),last=+gLS("g_last")||0;
+  $("gin").classList.toggle("hide",on);$("gon").classList.toggle("hide",!on);$("gin").disabled=!GCID;
+  if(!gBusy){const base=!GCID?"الخدمة دي لسه بتتجهز.":on?`✓ مربوط بـ ${gLS("g_em")}${last?` — آخر مزامنة: ${new Date(last).toLocaleString("ar-EG")}`:""}`:"سجّل دخول بحساب جوجل وحالاتك تتحفظ في Google Drive بتاعك (فولدر مخفي مخصوص للتطبيق)، وترجّعها على أي موبايل جديد بنفس الحساب. البيانات في حسابك أنت بس، مش عندنا.";
+    const cur=$("gst").textContent;if(!cur||/^✓ مربوط|^سجّل دخول|^الخدمة دي لسه/.test(cur)||!on)gSay(base)}
+  gBanner()}
+$("gin").onclick=gLogin;$("gnow").onclick=gSync;
+$("gout").onclick=()=>{if(!confirm("تسجيل الخروج من جوجل؟ الحالات هتفضل على موبايلك ونسختك على Drive متتمسحش."))return;try{if(gTok&&window.google&&google.accounts)google.accounts.oauth2.revoke(gTok,()=>{})}catch(e){}gTok=null;gLS("g_em",null);gLS("g_dirty",null);gLS("g_del",null);$("gst").textContent="";gUI()};
+$("gear").addEventListener("click",()=>{if(GCID)gisLoad().catch(()=>{});gUI()});
 function maybeTour(){let seen="";try{seen=localStorage.getItem("tour")}catch(e){}
-  if(seen=="4")return;tourStart(seen=="3"?TS.v4:seen=="2"?TS.v3:(cases.length||appts.length||labs.length||logo?TS.upd:TS.new))}
-open().then(render).then(maybeTour);
+  if(seen=="5")return;tourStart(seen=="4"?TS.v5:seen=="3"?TS.v4:seen=="2"?TS.v3:(cases.length||appts.length||labs.length||logo?TS.upd:TS.new))}
+open().then(render).then(maybeTour).then(()=>{gUI();if(GCID&&gLinked())gisLoad().catch(()=>{})});
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>
