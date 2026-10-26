@@ -662,6 +662,13 @@ const gLinked=()=>!!gLS("g_em");
 const gSay=t=>{const e=$("gst");if(e)e.textContent=t};
 const gz=async t=>{const b=new Blob([t]);return typeof CompressionStream=="undefined"?b:new Response(b.stream().pipeThrough(new CompressionStream("gzip"))).blob()};
 const ungz=async b=>{const u=new Uint8Array(await b.slice(0,2).arrayBuffer());return(u[0]==0x1f&&u[1]==0x8b&&typeof DecompressionStream!="undefined")?new Response(b.stream().pipeThrough(new DecompressionStream("gzip"))).text():b.text()};
+function gErr(e){const m=String((e&&e.message)||e);try{console.warn("google-sync:",m)}catch(x){}
+  if(m=="offline"||e instanceof TypeError)return "مفيش اتصال بالإنترنت (أو جوجل مش واصلة). جرّب لما يبقى فيه نت. ["+m+"]";
+  if(m=="auth")return "انتهت جلسة جوجل. اضغط حفظ ومزامنة تاني.";
+  if(m=="popup_failed_to_open")return "المتصفح منع فتح نافذة جوجل. اسمح بالنوافذ المنبثقة (Pop-ups) للموقع وجرّب تاني. [popup_failed_to_open]";
+  if(m=="popup_closed")return "نافذة جوجل اتقفلت قبل ما تكمل. لو ظهر فيها رسالة خطأ ابعتلي صورتها. [popup_closed]";
+  if(m=="access_denied")return "اتلغى الإذن. لازم توافق على الصلاحيتين عشان الحفظ يشتغل. [access_denied]";
+  return "حصلت مشكلة ("+m+"). ابعتلي الكود اللي بين القوسين.";}
 function gisLoad(){return new Promise((res,rej)=>{if(window.google&&google.accounts&&google.accounts.oauth2)return res();const s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.async=true;s.onload=()=>res();s.onerror=()=>rej(new Error("offline"));document.head.appendChild(s)})}
 function gToken(interactive){if(gTok&&Date.now()<gExp-60000)return Promise.resolve(gTok);if(!interactive)return Promise.resolve(null);
   return new Promise(async(res,rej)=>{try{await gisLoad()}catch(e){return rej(e)}
@@ -690,10 +697,10 @@ async function gSync(){if(gBusy)return;if(!GCID){gSay("الخدمة لسه ما 
     for(let i=0;i<U.length;i++){gSay(`جاري الرفع ${i+1}/${U.length}...`);if(!U[i].mt){U[i].mt=Date.now();await putRaw(U[i])}await gUpload(U[i],remote["r-"+U[i].id]);up++}
     gLS("g_dirty",null);gLS("g_last",String(Date.now()));gSay(`✓ تمت المزامنة: نزّلت ${dn}، رفعت ${up}${dl?`، حذفت ${dl}`:""}.`);
     if(dn){await render()}}
-  catch(e){gSay(e.message=="auth"?"انتهت جلسة جوجل. اضغط حفظ ومزامنة تاني.":e.message=="offline"||e instanceof TypeError?"مفيش اتصال بالإنترنت. جرّب لما يبقى فيه نت.":/popup|access_denied|closed/i.test(e.message)?"نافذة جوجل ما فتحتش أو اتقفلت. جرّب تاني، أو افتح الموقع من متصفح Chrome.":"حصلت مشكلة في المزامنة ("+e.message+"). جرّب تاني.")}
+  catch(e){gSay(gErr(e))}
   gBusy=false;gUI()}
 async function gLogin(){if(!GCID||gBusy)return;try{await gToken(true);const u=await(await gApi("https://www.googleapis.com/oauth2/v3/userinfo")).json();gLS("g_em",u.email||"حساب جوجل");gLS("g_dirty","1")}
-  catch(e){gSay(/popup|access_denied|closed/i.test(e.message)?"نافذة جوجل ما فتحتش أو اتقفلت. جرّب تاني، أو افتح الموقع من متصفح Chrome.":e.message=="offline"?"مفيش اتصال بالإنترنت.":"ما قدرتش أسجّل الدخول ("+e.message+").");return}
+  catch(e){gSay(gErr(e));return}
   gUI();await gSync()}
 function gChanged(){if(!gLinked())return;gLS("g_dirty","1");clearTimeout(gTimer);gTimer=setTimeout(gAuto,GDEB);gBanner()}
 function gDeleted(id){if(!gLinked())return;let p=[];try{p=JSON.parse(gLS("g_del")||"[]")}catch(e){}p.push(id);gLS("g_del",JSON.stringify(p));gChanged()}
