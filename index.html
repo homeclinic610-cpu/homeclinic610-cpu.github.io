@@ -665,15 +665,24 @@ const ungz=async b=>{const u=new Uint8Array(await b.slice(0,2).arrayBuffer());re
 function gErr(e){const m=String((e&&e.message)||e);try{console.warn("google-sync:",m)}catch(x){}
   if(m=="offline"||e instanceof TypeError)return "مفيش اتصال بالإنترنت (أو جوجل مش واصلة). جرّب لما يبقى فيه نت. ["+m+"]";
   if(m=="auth")return "انتهت جلسة جوجل. اضغط حفظ ومزامنة تاني.";
-  if(m=="popup_failed_to_open")return "المتصفح منع فتح نافذة جوجل. اسمح بالنوافذ المنبثقة (Pop-ups) للموقع وجرّب تاني. [popup_failed_to_open]";
-  if(m=="popup_closed")return "نافذة جوجل اتقفلت قبل ما تكمل. لو ظهر فيها رسالة خطأ ابعتلي صورتها. [popup_closed]";
   if(m=="access_denied")return "اتلغى الإذن. لازم توافق على الصلاحيتين عشان الحفظ يشتغل. [access_denied]";
   return "حصلت مشكلة ("+m+"). ابعتلي الكود اللي بين القوسين.";}
-function gisLoad(){return new Promise((res,rej)=>{if(window.google&&google.accounts&&google.accounts.oauth2)return res();const s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.async=true;s.onload=()=>res();s.onerror=()=>rej(new Error("offline"));document.head.appendChild(s)})}
-function gToken(interactive){if(gTok&&Date.now()<gExp-60000)return Promise.resolve(gTok);if(!interactive)return Promise.resolve(null);
-  return new Promise(async(res,rej)=>{try{await gisLoad()}catch(e){return rej(e)}
-    try{google.accounts.oauth2.initTokenClient({client_id:GCID,scope:GSC,callback:r=>{if(r.error)return rej(new Error(r.error));gTok=r.access_token;gExp=Date.now()+(+r.expires_in||3600)*1000;res(gTok)},error_callback:e=>rej(new Error((e&&e.type)||"popup"))}).requestAccessToken({prompt:gLinked()?"":"select_account"})}catch(e){rej(e)}})}
-async function gApi(url,o){o=o||{};const r=await fetch(url,{...o,headers:{...(o.headers||{}),Authorization:"Bearer "+gTok}});if(r.status==401){gTok=null;throw new Error("auth")}if(!r.ok)throw new Error("http"+r.status);return r}
+const gRed=()=>location.origin+"/";
+function gSetTok(t,exp){gTok=t;gExp=exp;gLS("g_tok",t);gLS("g_exp",t?String(exp):null)}
+(()=>{const t=gLS("g_tok"),e=+gLS("g_exp")||0;if(t&&e>Date.now()+60000){gTok=t;gExp=e}})();
+function gGo(intent){const st=Math.random().toString(36).slice(2)+Date.now().toString(36);gLS("g_st",st);gLS("g_pend",intent);
+  const q=new URLSearchParams({client_id:GCID,redirect_uri:gRed(),response_type:"token",scope:GSC,include_granted_scopes:"true",state:st});
+  if(gLinked())q.set("login_hint",gLS("g_em"));else q.set("prompt","select_account");
+  location.href="https://accounts.google.com/o/oauth2/v2/auth?"+q;return new Promise(()=>{})}
+function gToken(interactive,intent){if(gTok&&Date.now()<gExp-60000)return Promise.resolve(gTok);if(!interactive)return Promise.resolve(null);return gGo(intent||"sync")}
+async function gInit(){const h=location.hash;if(!/state=/.test(h)||!/access_token=|error=/.test(h))return;
+  const p=new URLSearchParams(h.slice(1));if(p.get("state")!==gLS("g_st"))return;gLS("g_st",null);history.replaceState(null,"",location.pathname+location.search);
+  $("set").classList.remove("hide");
+  if(!p.get("access_token")){gLS("g_pend",null);gSay(gErr(new Error(p.get("error")||"unknown")));return}
+  gSetTok(p.get("access_token"),Date.now()+(+p.get("expires_in")||3600)*1000);const pend=gLS("g_pend");gLS("g_pend",null);
+  if(pend=="login"){try{const u=await(await gApi("https://www.googleapis.com/oauth2/v3/userinfo")).json();gLS("g_em",u.email||"حساب جوجل");gLS("g_dirty","1")}catch(e){gSay(gErr(e));return}}
+  gUI();await gSync()}
+async function gApi(url,o){o=o||{};const r=await fetch(url,{...o,headers:{...(o.headers||{}),Authorization:"Bearer "+gTok}});if(r.status==401){gSetTok(null,0);throw new Error("auth")}if(!r.ok)throw new Error("http"+r.status);return r}
 async function gList(){const m={};let pt="";do{const r=await(await gApi(`${GU}/files?spaces=appDataFolder&pageSize=1000&fields=nextPageToken,files(id,name,appProperties)${pt?"&pageToken="+encodeURIComponent(pt):""}`)).json();(r.files||[]).forEach(f=>{m[f.name]={id:f.id,mt:+((f.appProperties||{}).mt||0)}});pt=r.nextPageToken||""}while(pt);return m}
 async function gUpload(rec,rem){const blob=await gz(JSON.stringify(rec)),name="r-"+rec.id,props={appProperties:{mt:String(rec.mt||0)}};
   const meta=JSON.stringify(rem?props:{name,parents:["appDataFolder"],...props}),path=rem?`/files/${rem.id}`:"/files",method=rem?"PATCH":"POST";
@@ -682,7 +691,7 @@ async function gUpload(rec,rem){const blob=await gz(JSON.stringify(rec)),name="r
   else{const r1=await gApi(`${GUP}${path}?uploadType=resumable&fields=id`,{method,headers:{"Content-Type":"application/json; charset=UTF-8","X-Upload-Content-Type":"application/octet-stream","X-Upload-Content-Length":String(blob.size)},body:meta});
     await gApi(r1.headers.get("Location"),{method:"PUT",body:blob})}}
 async function gSync(){if(gBusy)return;if(!GCID){gSay("الخدمة لسه ما اتفعّلتش.");return}gBusy=true;let dn=0,up=0,dl=0;
-  try{await gToken(true);gSay("جاري الاتصال بجوجل...");const remote=await gList(),local=(await all()).filter(x=>x&&x.id!=null);
+  try{await gToken(true,"sync");gSay("جاري الاتصال بجوجل...");const remote=await gList(),local=(await all()).filter(x=>x&&x.id!=null);
     const lm=new Map(local.map(x=>[String(x.id),x]));
     // 1) حذف اللي اتمسح محليًا (الأول، عشان ما يتنزّلش تاني)
     let pend=[];try{pend=JSON.parse(gLS("g_del")||"[]")}catch(e){}
@@ -699,9 +708,7 @@ async function gSync(){if(gBusy)return;if(!GCID){gSay("الخدمة لسه ما 
     if(dn){await render()}}
   catch(e){gSay(gErr(e))}
   gBusy=false;gUI()}
-async function gLogin(){if(!GCID||gBusy)return;try{await gToken(true);const u=await(await gApi("https://www.googleapis.com/oauth2/v3/userinfo")).json();gLS("g_em",u.email||"حساب جوجل");gLS("g_dirty","1")}
-  catch(e){gSay(gErr(e));return}
-  gUI();await gSync()}
+async function gLogin(){if(!GCID||gBusy)return;gSay("جاري تحويلك لصفحة جوجل...");await gGo("login")}
 function gChanged(){if(!gLinked())return;gLS("g_dirty","1");clearTimeout(gTimer);gTimer=setTimeout(gAuto,GDEB);gBanner()}
 function gDeleted(id){if(!gLinked())return;let p=[];try{p=JSON.parse(gLS("g_del")||"[]")}catch(e){}p.push(id);gLS("g_del",JSON.stringify(p));gChanged()}
 async function gAuto(){if(!gLinked()||gBusy||gLS("g_auto")=="0")return;if(await gToken(false))gSync();else gBanner()}
@@ -714,11 +721,11 @@ function gUI(){const on=gLinked(),last=+gLS("g_last")||0;
     const cur=$("gst").textContent;if(!cur||/^✓ مربوط|^سجّل دخول|^الخدمة دي لسه/.test(cur)||!on)gSay(base)}
   gBanner()}
 $("gin").onclick=gLogin;$("gnow").onclick=gSync;
-$("gout").onclick=()=>{if(!confirm("تسجيل الخروج من جوجل؟ الحالات هتفضل على موبايلك ونسختك على Drive متتمسحش."))return;try{if(gTok&&window.google&&google.accounts)google.accounts.oauth2.revoke(gTok,()=>{})}catch(e){}gTok=null;gLS("g_em",null);gLS("g_dirty",null);gLS("g_del",null);$("gst").textContent="";gUI()};
-$("gear").addEventListener("click",()=>{if(GCID)gisLoad().catch(()=>{});gUI()});
+$("gout").onclick=()=>{if(!confirm("تسجيل الخروج من جوجل؟ الحالات هتفضل على موبايلك ونسختك على Drive متتمسحش."))return;gSetTok(null,0);gLS("g_em",null);gLS("g_dirty",null);gLS("g_del",null);$("gst").textContent="";gUI()};
+$("gear").addEventListener("click",()=>gUI());
 function maybeTour(){let seen="";try{seen=localStorage.getItem("tour")}catch(e){}
   if(seen=="5")return;tourStart(seen=="4"?TS.v5:seen=="3"?TS.v4:seen=="2"?TS.v3:(cases.length||appts.length||labs.length||logo?TS.upd:TS.new))}
-open().then(render).then(maybeTour).then(()=>{gUI();if(GCID&&gLinked())gisLoad().catch(()=>{})});
+open().then(render).then(maybeTour).then(()=>{gUI();gInit()});
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>
