@@ -189,6 +189,7 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
     <div class="mu" style="margin:4px 0 8px">اختر ما تم عمله على هذا السن (يمكن أكثر من اختيار)</div>
     <div class="spc" id="tmo"></div>
     <div id="endo"></div>
+    <div id="fxd"></div>
     <div class="row" style="margin:8px 0 0"><button class="pri" id="tmd" style="flex:1">تم</button><button id="tmc">مسح العلامة</button></div>
   </div></div>
   <label id="dl2">التاريخ</label><input id="d" type="date">
@@ -320,7 +321,7 @@ const arr=v=>Array.isArray(v)?v:(v?[v]:[]);
 const tot=o=>stagesFor(sel).reduce((n,k)=>n+arr(o[k]).length,0);
 const ST={Operative:["Before","Cavity","After"],Fixed:["Before","Preparation","After"],Endo:["Before","X-ray Master Cone","X-ray Obturation","After"],Prosthesis:["Before","Try-in","After"]};
 const stg=sp=>ST[sp]||["Before","After"];
-let sel=[],teeth={},endoD={},tcur=0,sex="",spAuto=true,dent="permanent";
+let sel=[],teeth={},endoD={},fixedD={},tcur=0,sex="",spAuto=true,dent="permanent";
 const TC={Operative:"#40a4d5",Fixed:"#d4b574",Endo:"#e0626f",Prosthesis:"#9b7be0",Surgery:"#e0884a",Perio:"#4fb286",Ortho:"#27c4d8",Pedo:"#e08fbc",Lab:"#d4b574"};
 const UP=[18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28],LO=[48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38];
 const UPp=[55,54,53,52,51,61,62,63,64,65],LOp=[85,84,83,82,81,71,72,73,74,75];
@@ -367,12 +368,12 @@ function dentChips(){$("dn").innerHTML=Object.keys(DN).map(x=>`<button type="but
 $("dn").onclick=e=>{const x=e.target.dataset.d;if(!x)return;dent=x;dentChips();drawTeeth()};
 const spsOf=c=>Array.isArray(c.sps)&&c.sps.length?c.sps:[c.sp];
 const spl=c=>spsOf(c).join(" + ");
-const sessOf=c=>[{date:c.date||"",dent:c.dent||"permanent",sps:spsOf(c),teeth:c.teeth||{},endo:c.endo||{},im:c.im||{},n:c.n||""}].concat((c.ss||[]).map(x=>({id:x.id,date:x.date||"",dent:x.dent||"permanent",sps:x.sps&&x.sps.length?x.sps:[c.sp],teeth:x.teeth||{},endo:x.endo||{},im:x.im||{},n:x.n||""}))).map((x,i)=>({...x,o:i})).sort((a,b)=>(a.date||"").localeCompare(b.date||"")||a.o-b.o);
+const sessOf=c=>[{date:c.date||"",dent:c.dent||"permanent",sps:spsOf(c),teeth:c.teeth||{},endo:c.endo||{},fixed:c.fixed||{},im:c.im||{},n:c.n||""}].concat((c.ss||[]).map(x=>({id:x.id,date:x.date||"",dent:x.dent||"permanent",sps:x.sps&&x.sps.length?x.sps:[c.sp],teeth:x.teeth||{},endo:x.endo||{},fixed:x.fixed||{},im:x.im||{},n:x.n||""}))).map((x,i)=>({...x,o:i})).sort((a,b)=>(a.date||"").localeCompare(b.date||"")||a.o-b.o);
 const allSps=c=>{const u=new Set(sessOf(c).flatMap(x=>x.sps));return SP.slice(1).filter(x=>u.has(x))};
 const allImgs=c=>sessOf(c).flatMap(x=>Object.values(x.im).flatMap(arr));
 const lastDate=c=>sessOf(c).map(x=>x.date).sort().pop()||"";
 const allTeeth=c=>[...new Set(sessOf(c).flatMap(x=>tkeys(x.teeth)))].sort((a,b)=>a-b);
-let addTo=null,apptMode=false,apFrom=null,appts=[],curA=null;
+let addTo=null,apptMode=false,apFrom=null,appts=[],curA=null;var editC=null,editS=null;
 const apptMs=a=>{if(!a.date)return null;const[y,m,d]=a.date.split("-").map(Number),[h,n]=(a.time||"09:00").split(":").map(Number);return new Date(y,m-1,d,h,n).getTime()};
 const when=a=>[a.date?fd(a.date):"",a.time?ft12(a.time):""].filter(Boolean).join(" · ")||"بدون موعد محدد";
 const overdue=a=>!!a.date&&new Date(a.date+"T"+(a.time||"23:59"))<new Date();
@@ -416,13 +417,21 @@ async function render(){
 $("chips").onclick=e=>{const s=e.target.dataset.s;if(s){flt=s;render()}};
 $("q").oninput=render;
 function openView(c){cur=c;
-  $("vc").innerHTML=`<h3>${esc(c.t)}</h3>${demo(c)}${phoneRow(c.ph)}`+sessOf(c).map((x,i,A)=>`<div class="ses"><b>${A.length>1?`الجلسة ${i+1} · `:""}${fd(x.date)}</b>${x.id?`<button type="button" class="ic" data-ds="${x.id}" style="float:left;padding:2px 10px;font-size:12px">حذف الجلسة</button>`:""}<div class="mu">${esc(spl(x))} · ${dl(x)}</div>${tkeys(x.teeth).length?chart(x.teeth,false,x.dent)+`<div class="mu" dir="ltr" style="margin-bottom:8px;text-align:right">${esc(teethLine(x))}</div>`:""}${endoHTML(x)}${grid(x)}${x.n?`<p style="white-space:pre-wrap">${esc(x.n)}</p>`:""}</div>`).join("");show("view")}
+  $("vc").innerHTML=`<h3>${esc(c.t)}</h3>${demo(c)}${phoneRow(c.ph)}`+sessOf(c).map((x,i,A)=>`<div class="ses"><b>${A.length>1?`الجلسة ${i+1} · `:""}${fd(x.date)}</b><button type="button" class="ic" data-es="${x.id||"base"}" style="float:left;padding:2px 10px;font-size:12px;margin-inline-start:6px">${A.length>1?"✏️ تعديل الجلسة":"✏️ تعديل الحالة"}</button>${x.id?`<button type="button" class="ic" data-ds="${x.id}" style="float:left;padding:2px 10px;font-size:12px">حذف الجلسة</button>`:""}<div class="mu">${esc(spl(x))} · ${dl(x)}</div>${tkeys(x.teeth).length?chart(x.teeth,false,x.dent)+`<div class="mu" dir="ltr" style="margin-bottom:8px;text-align:right">${esc(teethLine(x))}</div>`:""}${endoHTML(x)}${grid(x)}${x.n?`<p style="white-space:pre-wrap">${esc(x.n)}</p>`:""}</div>`).join("");show("view")}
 $("cards").onclick=e=>{const el=e.target.closest(".card");if(!el)return;openView(cases.find(c=>c.id==el.dataset.id))};
-$("vc").onclick=async e=>{const id=e.target.dataset.ds;if(!id||!cur)return;if(!confirm("حذف هذه الجلسة نهائيًا؟"))return;
+$("vc").onclick=async e=>{const es=e.target.dataset.es;if(es&&cur){startEdit(es);return}const id=e.target.dataset.ds;if(!id||!cur)return;if(!confirm("حذف هذه الجلسة نهائيًا؟"))return;
   cur.ss=(cur.ss||[]).filter(x=>x.id!=id);await put(cur);await render();openView(cases.find(c=>c.id==cur.id))};
-$("addss").onclick=()=>{if(!cur)return;addTo=cur.id;imgs={};teeth={};endoD={};spAuto=true;$("n").value="";$("d").value=new Date().toISOString().slice(0,10);
+$("addss").onclick=()=>{if(!cur)return;editC=null;editS=null;addTo=cur.id;imgs={};teeth={};endoD={},fixedD={};spAuto=true;$("n").value="";$("d").value=new Date().toISOString().slice(0,10);
   const last=sessOf(cur).slice(-1)[0];sel=[(last.sps[0])||SP[1]];dent=last.dent||"permanent";dentChips();apptMode=false;document.body.classList.remove("am");$("dl2").textContent="التاريخ";$("save").textContent="حفظ";$("ft").textContent="جلسة جديدة — "+cur.t;
   document.querySelectorAll(".pf").forEach(x=>x.style.display="none");drawTeeth();spchips();slots();show("form")};
+function startEdit(es){const c=cur;if(!c)return;const x=sessOf(c).find(z=>es=="base"?!z.id:String(z.id)==es);if(!x)return;
+  addTo=null;apFrom=null;apptMode=false;document.body.classList.remove("am");editC=c.id;editS=es=="base"?null:x.id;
+  document.querySelectorAll(".pf").forEach(e=>e.style.display="");
+  $("t").value=c.t||"";$("ph").value=c.ph||"";$("ag").value=c.age||"";sex=c.sex||"";sxChips();
+  sel=x.sps.slice();dent=x.dent||"permanent";dentChips();teeth=JSON.parse(JSON.stringify(x.teeth||{}));endoD=JSON.parse(JSON.stringify(x.endo||{}));fixedD=Object.assign({},x.fixed);
+  imgs={};Object.keys(x.im||{}).forEach(k=>{imgs[k]=arr(x.im[k]).slice()});spAuto=false;
+  $("d").value=x.date||"";$("n").value=x.n||"";$("ti").value="";$("dl2").textContent="التاريخ";$("save").textContent="حفظ التعديل";$("ft").textContent="تعديل الحالة";
+  drawTeeth();spchips();slots();show("form")}
 $("back").onclick=()=>show("list");
 $("appts").onclick=e=>{const el=e.target.closest("[data-aid]");if(!el)return;aBack="list";openA(appts.find(a=>a.id==el.dataset.aid))};
 function openA(a){curA=a;const od=overdue(a);
@@ -439,15 +448,15 @@ $("apwc").onclick=e=>{const el=e.target.closest("[data-aid]");if(!el)return;aBac
 $("aback").onclick=()=>{if(aBack=="apw"){renderApw();show("apw")}else show("list")};
 $("adel").onclick=async()=>{if(curA&&confirm("حذف الموعد نهائيًا؟")){await rm(curA.id);curA=null;await render();if(aBack=="apw"){renderApw();show("apw")}else show("list")}};
 $("adone").onclick=async()=>{const a=curA;if(!a)return;const k=x=>String(x.t||"").trim().toLowerCase();const ex=cases.find(c=>k(c)==k(a));let tid;
-  if(ex){ex.ss=(ex.ss||[]).concat({id:Date.now(),date:a.date||new Date().toISOString().slice(0,10),dent:a.dent,sps:a.sps,teeth:a.teeth,endo:a.endo||{},n:a.n,im:a.im});
+  if(ex){ex.ss=(ex.ss||[]).concat({id:Date.now(),date:a.date||new Date().toISOString().slice(0,10),dent:a.dent,sps:a.sps,teeth:a.teeth,endo:a.endo||{},fixed:a.fixed||{},n:a.n,im:a.im});
     if(!ex.ph&&a.ph)ex.ph=a.ph;if(!ex.age&&a.age)ex.age=a.age;if(!ex.sex&&a.sex)ex.sex=a.sex;await put(ex);tid=ex.id}
-  else{tid=Date.now()+1;await put({id:tid,t:a.t,sp:a.sps[0],sps:a.sps,dent:a.dent,teeth:a.teeth,endo:a.endo||{},date:a.date||new Date().toISOString().slice(0,10),ph:a.ph,age:a.age,sex:a.sex,n:a.n,im:a.im})}
+  else{tid=Date.now()+1;await put({id:tid,t:a.t,sp:a.sps[0],sps:a.sps,dent:a.dent,teeth:a.teeth,endo:a.endo||{},fixed:a.fixed||{},date:a.date||new Date().toISOString().slice(0,10),ph:a.ph,age:a.age,sex:a.sex,n:a.n,im:a.im})}
   await rm(a.id);curA=null;await render();openView(cases.find(c=>c.id==tid))};
 $("del").onclick=async()=>{if(cur&&confirm("حذف الحالة نهائيًا؟")){await rm(cur.id);await render();show("list")}};
-function startForm(appt){apFrom=null;apptMode=!!appt;document.body.classList.toggle("am",apptMode);dent="permanent";dentChips();addTo=null;
+function startForm(appt){editC=null;editS=null;apFrom=null;apptMode=!!appt;document.body.classList.toggle("am",apptMode);dent="permanent";dentChips();addTo=null;
   $("ft").textContent=appt?"حجز موعد":"حالة جديدة";$("dl2").textContent=appt?"تاريخ الموعد (اختياري)":"التاريخ";$("save").textContent=appt?"حفظ الموعد":"حفظ";
   document.querySelectorAll(".pf").forEach(x=>x.style.display="");imgs={};$("t").value="";$("ph").value="";$("n").value="";$("ti").value="";
-  $("d").value=appt?"":new Date().toISOString().slice(0,10);$("ag").value="";sex="";spAuto=true;sxChips();teeth={};endoD={};drawTeeth();sel=[SP.includes(flt)&&flt!="الكل"?flt:SP[1]];spchips();slots();show("form")}
+  $("d").value=appt?"":new Date().toISOString().slice(0,10);$("ag").value="";sex="";spAuto=true;sxChips();teeth={};endoD={},fixedD={};drawTeeth();sel=[SP.includes(flt)&&flt!="الكل"?flt:SP[1]];spchips();slots();show("form")}
 $("add").onclick=()=>{if(leaveOk())startForm(false)};
 $("nvP").onclick=()=>{if(leaveOk())startForm(true)};
 $("bkap").onclick=()=>{if(!cur)return;const c=cur,last=sessOf(c).slice(-1)[0]||{};startForm(true);apFrom=c.id;
@@ -455,10 +464,10 @@ $("bkap").onclick=()=>{if(!cur)return;const c=cur,last=sessOf(c).slice(-1)[0]||{
   sel=[(last.sps&&last.sps[0])||SP[1]];spchips();slots();$("ft").textContent="حجز موعد — "+c.t};
 $("nvH").onclick=()=>{
   if(!leaveOk())return;
-  addTo=null;apFrom=null;apptMode=false;lbEdit=null;lbMod=false;document.body.classList.remove("am");
+  editC=null;editS=null;addTo=null;apFrom=null;apptMode=false;lbEdit=null;lbMod=false;document.body.classList.remove("am");
   document.querySelectorAll(".ov.on").forEach(x=>x.classList.remove("on"));
   flt="الكل";$("q").value="";render();show("list")};
-$("cancel").onclick=()=>{const v=addTo||apFrom;addTo=null;apFrom=null;apptMode=false;document.body.classList.remove("am");show(v?"view":"list")};
+$("cancel").onclick=()=>{const v=addTo||apFrom||editC;editC=null;editS=null;addTo=null;apFrom=null;apptMode=false;document.body.classList.remove("am");show(v?"view":"list")};
 function endoUI(){const el=$("endo");if(!(teeth[tcur]||[]).includes("Endo")){el.innerHTML="";return}
   const d=endoD[tcur]=endoD[tcur]||{n:0,cn:[],ac:false,cs:false,ob:false};while(d.cn.length<4)d.cn.push({nm:"",ln:"",mc:0});
   el.innerHTML=`<div class="en"><h4>تفاصيل الـ Endo — سن ${tcur}</h4><div class="mu">عدد القنوات (Canals)</div><div class="spc" style="margin:6px 0">${[1,2,3,4].map(n=>`<button type="button" class="chip ${d.n==n?"on":""}" data-n="${n}">${n}</button>`).join("")}</div>`+
@@ -468,18 +477,29 @@ $("endo").onclick=e=>{const d=endoD[tcur];if(!d)return;const b=e.target.closest(
   if(b.dataset.n){d.n=+b.dataset.n}else if(b.dataset.k){d[b.dataset.k]=!d[b.dataset.k]}
   else if(b.dataset.m){const c=d.cn[+b.dataset.i];c.mc=b.dataset.m=="+"?(c.mc?Math.min(c.mc+5,140):20):(c.mc<=20?0:c.mc-5)}else return;endoUI()};
 $("endo").oninput=e=>{const d=endoD[tcur];if(!d)return;const i=+e.target.dataset.i;if(e.target.classList.contains("cnm"))d.cn[i].nm=e.target.value;else if(e.target.classList.contains("cln"))d.cn[i].ln=e.target.value};
+const fixedOut=()=>Object.fromEntries(Object.keys(fixedD).filter(k=>(teeth[k]||[]).includes("Fixed")&&vis(k,dent)&&fixedD[k]).map(k=>[k,fixedD[k]]));
 const endoOut=()=>Object.fromEntries(Object.keys(endoD).filter(k=>(teeth[k]||[]).includes("Endo")&&vis(k,dent)&&(endoD[k].n||endoD[k].ac||endoD[k].cs||endoD[k].ob)).map(k=>{const d=endoD[k];return[k,{n:d.n,cn:d.cn.slice(0,d.n),ac:d.ac,cs:d.cs,ob:d.ob}]}));
-const endoLine=s=>Object.keys(s.endo||{}).sort((a,b)=>a-b).map(k=>{const d=s.endo[k],cn=(d.cn||[]).map((c,i)=>[c.nm||(d.n>1?"C"+(i+1):""),c.ln?c.ln+"mm":"",c.mc?"MC"+c.mc:""].filter(Boolean).join(" ")).filter(Boolean).join(" | "),st=[d.ac?"Ac":"",d.cs?"Cl&Sh":"",d.ob?"Ob":""].filter(Boolean).join(", ");
+const endoLine0=s=>Object.keys(s.endo||{}).sort((a,b)=>a-b).map(k=>{const d=s.endo[k],cn=(d.cn||[]).map((c,i)=>[c.nm||(d.n>1?"C"+(i+1):""),c.ln?c.ln+"mm":"",c.mc?"MC"+c.mc:""].filter(Boolean).join(" ")).filter(Boolean).join(" | "),st=[d.ac?"Ac":"",d.cs?"Cl&Sh":"",d.ob?"Ob":""].filter(Boolean).join(", ");
   return `${k}: ${d.n?d.n+" canal"+(d.n>1?"s":""):"Endo"}${cn?" — "+cn:""}${st?" — "+st+" ✓":""}`});
+const fixedLine=s=>["Crown","Bridge"].map(t=>{const k=Object.keys(s.fixed||{}).filter(n=>s.fixed[n]==t).sort((a,b)=>a-b);return k.length?`${t}: ${k.join(" · ")}`:""}).filter(Boolean);
+const endoLine=s=>endoLine0(s).concat(fixedLine(s));
 const endoHTML=s=>endoLine(s).map(l=>`<div class="mu" dir="ltr" style="text-align:right">${esc(l)}</div>`).join("");
+function fixedUI(){const el=$("fxd");if(!(teeth[tcur]||[]).includes("Fixed")){el.innerHTML="";return}
+  const t=fixedD[tcur]||"",ALL=dent=="mixed"?[...UP,...LO,...UPp,...LOp]:dent=="primary"?[...UPp,...LOp]:[...UP,...LO];
+  el.innerHTML=`<div class="en"><h4>تفاصيل الـ Fixed — سن ${tcur}</h4><div class="mu">هتعمل إيه؟</div><div class="spc" style="margin:6px 0">${["Crown","Bridge"].map(x=>`<button type="button" class="chip ${t==x?"on":""}" data-f="${x}">${x}</button>`).join("")}</div><div class="mu">طبّق على أسنان تانية (اختيار أكتر من سن)</div><div class="spc" style="margin:6px 0">${ALL.filter(n=>n!=tcur).map(n=>`<button type="button" class="chip ${t&&(teeth[n]||[]).includes("Fixed")&&fixedD[n]==t?"on":""}" data-n="${n}">${n}</button>`).join("")}</div></div>`}
+$("fxd").onclick=e=>{const b=e.target.closest("button");if(!b)return;
+  if(b.dataset.f){fixedD[tcur]=fixedD[tcur]==b.dataset.f?"":b.dataset.f}
+  else if(b.dataset.n){const t=fixedD[tcur];if(!t){alert("اختار Crown أو Bridge الأول");return}const n=b.dataset.n,a=teeth[n]||[];
+    if(a.includes("Fixed")&&fixedD[n]==t){teeth[n]=a.filter(y=>y!="Fixed");if(!teeth[n].length)delete teeth[n];delete fixedD[n]}else{teeth[n]=a.includes("Fixed")?a:a.concat("Fixed");fixedD[n]=t}}
+  else return;fixedUI();drawTeeth()};
 function tmChips(){$("tmo").innerHTML=SP.slice(1).map(x=>`<button type="button" class="chip ${(teeth[tcur]||[]).includes(x)?"on":""}" data-s="${x}"><span class="dt" style="background:${col(x)}"></span>${x}</button>`).join("")}
-$("tc").onclick=e=>{const b=e.target.closest(".tt");if(!b)return;tcur=+b.dataset.t;$("tmt").textContent="سن رقم "+tcur;tmChips();endoUI();$("tm").classList.add("on")};
+$("tc").onclick=e=>{const b=e.target.closest(".tt");if(!b)return;tcur=+b.dataset.t;$("tmt").textContent="سن رقم "+tcur;tmChips();endoUI();fixedUI();$("tm").classList.add("on")};
 $("tmo").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;const x=b.dataset.s,a=teeth[tcur]||[];
-  if(a.includes(x)){teeth[tcur]=a.filter(y=>y!=x);if(!teeth[tcur].length)delete teeth[tcur];if(x=="Endo")delete endoD[tcur]}
+  if(a.includes(x)){teeth[tcur]=a.filter(y=>y!=x);if(!teeth[tcur].length)delete teeth[tcur];if(x=="Endo")delete endoD[tcur];if(x=="Fixed")delete fixedD[tcur]}
   else{teeth[tcur]=a.concat(x);if(spAuto){sel=[x];spAuto=false;spchips();slots()}else if(!sel.includes(x)){sel=SP.slice(1).filter(y=>sel.includes(y)||y==x);spchips();slots()}}
-  tmChips();endoUI();drawTeeth()};
+  tmChips();endoUI();fixedUI();drawTeeth()};
 $("tmd").onclick=()=>$("tm").classList.remove("on");
-$("tmc").onclick=()=>{delete teeth[tcur];delete endoD[tcur];drawTeeth();$("tm").classList.remove("on")};
+$("tmc").onclick=()=>{delete teeth[tcur];delete endoD[tcur];delete fixedD[tcur];drawTeeth();$("tm").classList.remove("on")};
 $("tm").onclick=e=>{if(e.target===$("tm"))$("tm").classList.remove("on")};
 function spchips(){$("sps").innerHTML=SP.slice(1).map(x=>`<button type="button" class="chip ${sel.includes(x)?"on":""}" data-s="${x}">${x}</button>`).join("")}
 $("sps").onclick=e=>{const x=e.target.dataset.s;if(!x)return;spAuto=false;
@@ -495,14 +515,20 @@ $("lrm").onclick=async()=>{await rm("logo");render()};
 $("pdf").onclick=()=>{if(!cur)return;const A=sessOf(cur);
   $("pr").innerHTML=`${logo?`<img class="lg" src="${logo}" alt="">`:""}<h2 style="margin:6px 0">${esc(cur.t)}</h2>${demo(cur)}`+A.map((x,i)=>`<div style="margin-top:${i?16:0}px">${A.length>1?`<b>الجلسة ${i+1} · ${fd(x.date)}</b><div>${esc(spl(x))} · ${dl(x)}</div>`:`<div>${esc(spl(x))} · ${fd(x.date)} · ${dl(x)}</div>`}${tkeys(x.teeth).length?`<div dir="ltr" style="text-align:right">${esc(teethLine(x))}</div>`:""}${endoHTML(x)}${grid(x)}${x.n?`<p style="white-space:pre-wrap">${esc(x.n)}</p>`:""}</div>`).join("");setTimeout(()=>window.print(),200)};
 $("save").onclick=async()=>{
+  if(editC){const c=cases.find(z=>z.id==editC);if(!c){editC=null;show("list");return}
+    if(!$("t").value.trim()){alert("اكتب اسم المريض");return}
+    c.t=$("t").value.trim();c.ph=$("ph").value.trim();c.age=$("ag").value.trim();c.sex=sex;
+    const D={date:$("d").value,sps:sel.slice(),dent:dent,teeth:Object.fromEntries(tkeys(teeth).filter(k=>vis(k,dent)).map(k=>[k,teeth[k]])),endo:endoOut(),fixed:fixedOut(),n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))};
+    if(editS==null){Object.assign(c,D);c.sp=sel[0]}else{const k=(c.ss||[]).findIndex(z=>z.id==editS);if(k>=0)c.ss[k]={...c.ss[k],...D}}
+    await put(c);editC=null;editS=null;await render();openView(cases.find(z=>z.id==c.id));return}
   if(apptMode){if(!$("t").value.trim()){alert("اكتب اسم المريض");return}
-    await put({id:Date.now(),kind:"appt",t:$("t").value.trim(),sp:sel[0],sps:sel.slice(),dent:dent,teeth:Object.fromEntries(tkeys(teeth).filter(k=>vis(k,dent)).map(k=>[k,teeth[k]])),endo:endoOut(),date:$("d").value,time:$("ti").value,ph:$("ph").value.trim(),age:$("ag").value.trim(),sex:sex,n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
+    await put({id:Date.now(),kind:"appt",t:$("t").value.trim(),sp:sel[0],sps:sel.slice(),dent:dent,teeth:Object.fromEntries(tkeys(teeth).filter(k=>vis(k,dent)).map(k=>[k,teeth[k]])),endo:endoOut(),fixed:fixedOut(),date:$("d").value,time:$("ti").value,ph:$("ph").value.trim(),age:$("ag").value.trim(),sex:sex,n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
     if(apFrom){apFrom=null;flt="المواعيد";$("q").value=""}apptMode=false;document.body.classList.remove("am");await render();show("list");return}
   if(addTo){const c=cases.find(x=>x.id==addTo);if(!c){addTo=null;show("list");return}
-    c.ss=(c.ss||[]).concat({id:Date.now(),date:$("d").value,sps:sel.slice(),dent:dent,teeth:Object.fromEntries(tkeys(teeth).filter(k=>vis(k,dent)).map(k=>[k,teeth[k]])),endo:endoOut(),n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
+    c.ss=(c.ss||[]).concat({id:Date.now(),date:$("d").value,sps:sel.slice(),dent:dent,teeth:Object.fromEntries(tkeys(teeth).filter(k=>vis(k,dent)).map(k=>[k,teeth[k]])),endo:endoOut(),fixed:fixedOut(),n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
     await put(c);addTo=null;await render();openView(cases.find(x=>x.id==c.id));return}
   if(!$("t").value.trim()){alert("اكتب اسم المريض");return}
-  await put({id:Date.now(),t:$("t").value.trim(),sp:sel[0],sps:sel.slice(),dent:dent,teeth:Object.fromEntries(tkeys(teeth).filter(k=>vis(k,dent)).map(k=>[k,teeth[k]])),endo:endoOut(),date:$("d").value,ph:$("ph").value.trim(),age:$("ag").value.trim(),sex:sex,n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
+  await put({id:Date.now(),t:$("t").value.trim(),sp:sel[0],sps:sel.slice(),dent:dent,teeth:Object.fromEntries(tkeys(teeth).filter(k=>vis(k,dent)).map(k=>[k,teeth[k]])),endo:endoOut(),fixed:fixedOut(),date:$("d").value,ph:$("ph").value.trim(),age:$("ag").value.trim(),sex:sex,n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
   await render();show("list")};
 
 $("sfb").onclick=()=>{_dc();$("fbm").classList.add("on")};
@@ -664,24 +690,19 @@ async function buildPptx(c,hideName){
   const foot=()=>tb(0.5*IN,H-0.6*IN,W-1*IN,0.4*IN,para("حالاتي — أرشيف الحالات السنية",1200,MUTE,false,"ctr"));
   const dt=d=>d?d.split("-").reverse().join("/"):"بدون تاريخ";
   const S=sessOf(c),info=[c.sex,c.age?c.age+" سنة":""].filter(Boolean).join(" · ");
-  // ---- slide 1: title ----
-  mk(bar(0,0,W,0.18*IN,GOLD)+tb(0.7*IN,1.5*IN,W-1.4*IN,1.6*IN,para(hideName?"حالة مريض":c.t,5400,WHITE,true,"ctr"),"ctr")+
-    tb(0.7*IN,3.2*IN,W-1.4*IN,2.2*IN,(info?para(info,2800,GOLD,false,"ctr"):"")+para("عدد الجلسات: "+S.length,2400,MUTE,false,"ctr")+para(allSps(c).join(" + "),2400,SKY,false,"ctr"))+foot());
-  // ---- per session ----
-  for(let i=0;i<S.length;i++){const x=S[i],head=S.length>1?`الجلسة ${i+1} · ${dt(x.date)}`:`تفاصيل الحالة · ${dt(x.date)}`;
-    let body=para(`${spl(x)} · ${dl(x)}`,2200,SKY,true);
-    if(tkeys(x.teeth).length)body+=para("الأسنان: "+teethLine(x),2000,WHITE,false);
-    endoLine(x).forEach(l=>{body+=para(l,1800,GOLD,false,"r",0)});
-    if(x.n)String(x.n).split(/\r?\n/).filter(Boolean).slice(0,8).forEach(l=>{body+=para(l,1800,MUTE,false)});
-    mk(bar(0,0,W,0.18*IN,GOLD)+tb(0.7*IN,0.5*IN,W-1.4*IN,1*IN,para(head,3600,GOLD,true),"ctr")+tb(0.7*IN,1.7*IN,W-1.4*IN,4.7*IN,body)+foot());
-    // images
-    const L=[];Object.keys(x.im).forEach(k=>arr(x.im[k]).forEach(u=>L.push({k,u})));
-    for(let p=0;p<L.length;p+=4){const grp=L.slice(p,p+4),cols=grp.length==1?1:2,rows=grp.length<=2?1:2;
-      const ax=0.6*IN,ay=1.5*IN,aw=W-1.2*IN,ah=H-2.3*IN,cw=aw/cols,chh=ah/rows;let sh=bar(0,0,W,0.18*IN,GOLD)+tb(0.7*IN,0.4*IN,W-1.4*IN,0.9*IN,para(`${head} — الصور${L.length>4?` (${p/4+1}/${Math.ceil(L.length/4)})`:""}`,2800,GOLD,true),"ctr");
-      const imgs=[];
-      for(let j=0;j<grp.length;j++){const im=await jpgOf(grp[j].u),col=j%cols,row=Math.floor(j/cols),bx=ax+col*cw+0.1*IN,by=ay+row*chh,bw=cw-0.2*IN,bh=chh-0.55*IN,sc=Math.min(bw/im.w,bh/im.h),w=im.w*sc,h=im.h*sc;
-        media.push(im.bytes);imgs.push(media.length);sh+=pic("rId"+(1+imgs.length),bx+(bw-w)/2,by+(bh-h)/2,w,h)+tb(bx,by+bh+0.02*IN,bw,0.4*IN,para(grp[j].k,1400,GOLD,false,"ctr"))}
-      mk(sh+foot(),imgs)}}
+  const LN=[[hideName?"حالة مريض":c.t,3200,WHITE,true,"ctr"]];if(info)LN.push([info,2000,GOLD,false,"ctr"]);LN.push([allSps(c).join(" + "),1800,SKY,false,"ctr"]);
+  S.forEach((x,i)=>{LN.push([S.length>1?`الجلسة ${i+1} · ${dt(x.date)}`:`تفاصيل الحالة · ${dt(x.date)}`,2000,GOLD,true,"r"]);LN.push([`${spl(x)} · ${dl(x)}`,1600,SKY,false,"r"]);
+    if(tkeys(x.teeth).length)LN.push(["الأسنان: "+teethLine(x),1500,WHITE,false,"r"]);
+    endoLine(x).forEach(l=>LN.push([l,1400,GOLD,false,"r",0]));
+    if(x.n)String(x.n).split(/\r?\n/).filter(Boolean).slice(0,6).forEach(l=>LN.push([l,1400,MUTE,false,"r"]))});
+  const kf=Math.max(.4,Math.min(1,20/LN.length));
+  mk(bar(0,0,W,0.18*IN,GOLD)+tb(0.6*IN,0.35*IN,W-1.2*IN,H-1.1*IN,LN.map(([t,sz,co,bo,al,rt])=>para(t,Math.round(sz*kf),co,bo,al,rt)).join(""))+foot());
+  const L=[];S.forEach(x=>Object.keys(x.im).forEach(k=>arr(x.im[k]).forEach(u=>L.push({k,u}))));
+  if(L.length){const n=L.length,cols=Math.ceil(Math.sqrt(n*1.3)),rows=Math.ceil(n/cols),ax=0.4*IN,ay=0.35*IN,aw=W-0.8*IN,ah=H-1.0*IN,cw=aw/cols,chh=ah/rows,cap=n<=12,imgs=[];
+    let sh=bar(0,0,W,0.18*IN,GOLD);
+    for(let j=0;j<n;j++){const im=await jpgOf(L[j].u),col=j%cols,row=Math.floor(j/cols),bx=ax+col*cw+0.05*IN,by=ay+row*chh,bw=cw-0.1*IN,bh=chh-(cap?0.4*IN:0.08*IN),sc=Math.min(bw/im.w,bh/im.h),w=im.w*sc,h=im.h*sc;
+      media.push(im.bytes);imgs.push(media.length);sh+=pic("rId"+(1+imgs.length),bx+(bw-w)/2,by+(bh-h)/2,w,h)+(cap?tb(bx,by+bh,bw,0.35*IN,para(L[j].k,1200,GOLD,false,"ctr")):"")}
+    mk(sh+foot(),imgs)}
   // ---- package ----
   const R='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',RT="http://schemas.openxmlformats.org/officeDocument/2006/relationships",RN='xmlns="http://schemas.openxmlformats.org/package/2006/relationships"';
   const enc=new TextEncoder(),F=[];const add=(n,t)=>F.push({n,d:typeof t=="string"?enc.encode(t):t});
@@ -780,8 +801,8 @@ function maybeTour(){let seen="";try{seen=localStorage.getItem("tour")}catch(e){
 
 // ================= القائمة الجانبية / الحسابات / اللغة / الوضع الداكن =================
 var _ch=_ls("acc_out")=="1";
-const _EN={"حساب جوجل":"Google account","حساب جديد":"New account","سجّل الدخول بحساب جوجل عشان تتحفظ حالاتك في حسابك وترجّعها على أي موبايل.":"Sign in with your Google account to save your cases and restore them on any phone.","رجوع للحساب الآخر":"Back to the other account","الحساب ده مضاف بالفعل":"This account is already added","القائمة":"Menu","المواعيد المحجوزة":"Booked appointments","الإعدادات":"Settings","حسابي":"My account","إضافة حساب":"Add account","إضافة":"Add","اسم الحساب":"Account name","اختر الحساب":"Choose account","ملفي الشخصي":"My profile","حفظ الاسم":"Save name","اللوجو":"Logo","لوجو خاص بك (اختياري)":"Your own logo (optional)","يظهر في التطبيق وفي ملف الـ PDF.":"Shown in the app and in the PDF file.","اختر لوجو":"Choose logo","حذف اللوجو":"Remove logo","إجمالي الحالات":"Total cases","إجمالي الجلسات":"Total sessions","حالات المعمل":"Lab cases","إجمالي الصور":"Total photos","عدد الحالات في كل قسم":"Cases per section","حالة جديدة":"New case","موعد جديد":"New appointment","حالة جديدة للمعمل":"New lab case","الأقسام":"Sections","اللغة":"Language","الوضع الداكن":"Dark mode","شكاوي واقتراحات":"Complaints & suggestions","إعادة الجولة التعريفية":"Replay intro tour","تسجيل الخروج":"Log out","الحد الأقصى ٣ حسابات":"Maximum 3 accounts","اكتب اسم الحساب":"Enter the account name","تم الحفظ":"Saved","تسجيل الخروج من هذا الحساب؟ بياناتك هتفضل محفوظة على الجهاز.":"Log out of this account? Your data stays saved on this device.","الكل":"All","المواعيد":"Appointments","الحالات":"Cases","ابحث في الحالات...":"Search cases...","لا توجد حالات بعد. اضغط زر إضافة حالة في الشريط السفلي لإضافة أول حالة.":"No cases yet. Tap the add button in the bottom bar to add your first case.","حفظ الحالات بحساب جوجل":"Save cases with Google account","تسجيل الدخول بجوجل":"Sign in with Google","حفظ ومزامنة الآن":"Save & sync now","سياسة الخصوصية":"Privacy policy","اسم المريض":"Patient name","مثال: مصطفى أحمد":"e.g. Mustafa Ahmed","العمر (بالسنوات)":"Age (years)","النوع":"Gender","ذكر":"Male","أنثى":"Female","التخصص (يمكنك اختيار أكثر من تخصص)":"Specialty (you can pick more than one)","مرحلة الأسنان (Dentition)":"Dentition stage","الأسنان (اضغط على السن لتحديد ما تم عليه)":"Teeth (tap a tooth to mark what was done)","التاريخ":"Date","الساعة (اختيارية)":"Time (optional)","رقم هاتف المريض (اختياري)":"Patient phone (optional)","التفاصيل (التشخيص، خطوات العلاج، الخامات...)":"Details (diagnosis, treatment steps, materials...)","حفظ":"Save","إلغاء":"Cancel","إضافة صورة":"Add photo","حجز موعد":"Book appointment","تاريخ الموعد (اختياري)":"Appointment date (optional)","حفظ الموعد":"Save appointment","← رجوع":"← Back","📄 حفظ PDF / طباعة":"📄 Save PDF / Print","حذف":"Delete","＋ إضافة جلسة جديدة لهذه الحالة":"+ Add a new session to this case","حجز موعد لهذه الحالة":"Book an appointment for this case","تحويل الحالة لملف PowerPoint":"Export case to PowerPoint","حفظ صور الحالة على الموبايل":"Save case photos to phone","ملخص الحالة":"Case summary","إغلاق":"Close","حذف الجلسة":"Delete session","حذف الموعد":"Delete appointment","✓ تم الموعد — حوّله لحالة / جلسة":"✓ Done — convert to case / session","اليوم":"Today","القادمة":"Upcoming","بدون موعد محدد":"No set time","فات موعدها":"Overdue","فات موعده":"Overdue","المعمل":"Lab","＋ إضافة حالة للمعمل":"+ Add lab case","حالة معمل جديدة":"New lab case","لم يُسلَّم":"Not delivered","عند المعمل":"At the lab","تم الاستلام":"Received","تم التسليم للمعمل":"Delivered to lab","تم الاستلام من المعمل":"Received from lab","تعديل":"Edit","عايز المعمل يعمل إيه (يمكن أكثر من اختيار)":"What the lab should make (multiple allowed)","وديت إيه للمعمل (يمكن أكثر من اختيار)":"What you sent to the lab (multiple allowed)","الأسنان (اضغط على أكتر من سن لتحديدهم)":"Teeth (tap several)","تحديد كل الفك العلوي":"Select whole upper jaw","تحديد كل الفك السفلي":"Select whole lower jaw","مسح التحديد":"Clear selection","تاريخ التسليم للمعمل":"Delivery date to lab","تاريخ الاستلام من المعمل":"Receive date from lab","المدفوع للمعمل (جنيه)":"Paid to lab (EGP)","حالة الشغل":"Work status","ملاحظات":"Notes","اختر ما تم عمله على هذا السن (يمكن أكثر من اختيار)":"Choose what was done on this tooth (multiple allowed)","تم":"Done","مسح العلامة":"Clear mark","تُرسل إلينا عبر واتساب فقط.":"Sent to us via WhatsApp only.","اقتراح":"Suggestion","شكوى":"Complaint","إرسال عبر واتساب":"Send via WhatsApp","اكتب رسالتك هنا... (بدون أي بيانات مرضى)":"Write your message here... (no patient data)","اكتب اسم المريض":"Enter the patient name","تخطي":"Skip","السابق":"Previous","التالي":"Next","ابدأ الاستخدام":"Get started"};
-const _PF=[["عدد الجلسات: ","Sessions: "],["عدد الصور: ","Photos: "],["الأسنان: ","Teeth: "],["المواعيد القادمة (","Upcoming appointments ("],["المطلوب: ","Requested: "],["جلسة جديدة — ","New session — "],["حجز موعد — ","Book appointment — "]];
+const _EN={"هتعمل إيه؟":"What will you do?","طبّق على أسنان تانية (اختيار أكتر من سن)":"Apply to other teeth (select several)","اختار Crown أو Bridge الأول":"Choose Crown or Bridge first","✏️ تعديل الحالة":"✏️ Edit case","✏️ تعديل الجلسة":"✏️ Edit session","تعديل الحالة":"Edit case","حفظ التعديل":"Save changes","حساب جوجل":"Google account","حساب جديد":"New account","سجّل الدخول بحساب جوجل عشان تتحفظ حالاتك في حسابك وترجّعها على أي موبايل.":"Sign in with your Google account to save your cases and restore them on any phone.","رجوع للحساب الآخر":"Back to the other account","الحساب ده مضاف بالفعل":"This account is already added","القائمة":"Menu","المواعيد المحجوزة":"Booked appointments","الإعدادات":"Settings","حسابي":"My account","إضافة حساب":"Add account","إضافة":"Add","اسم الحساب":"Account name","اختر الحساب":"Choose account","ملفي الشخصي":"My profile","حفظ الاسم":"Save name","اللوجو":"Logo","لوجو خاص بك (اختياري)":"Your own logo (optional)","يظهر في التطبيق وفي ملف الـ PDF.":"Shown in the app and in the PDF file.","اختر لوجو":"Choose logo","حذف اللوجو":"Remove logo","إجمالي الحالات":"Total cases","إجمالي الجلسات":"Total sessions","حالات المعمل":"Lab cases","إجمالي الصور":"Total photos","عدد الحالات في كل قسم":"Cases per section","حالة جديدة":"New case","موعد جديد":"New appointment","حالة جديدة للمعمل":"New lab case","الأقسام":"Sections","اللغة":"Language","الوضع الداكن":"Dark mode","شكاوي واقتراحات":"Complaints & suggestions","إعادة الجولة التعريفية":"Replay intro tour","تسجيل الخروج":"Log out","الحد الأقصى ٣ حسابات":"Maximum 3 accounts","اكتب اسم الحساب":"Enter the account name","تم الحفظ":"Saved","تسجيل الخروج من هذا الحساب؟ بياناتك هتفضل محفوظة على الجهاز.":"Log out of this account? Your data stays saved on this device.","الكل":"All","المواعيد":"Appointments","الحالات":"Cases","ابحث في الحالات...":"Search cases...","لا توجد حالات بعد. اضغط زر إضافة حالة في الشريط السفلي لإضافة أول حالة.":"No cases yet. Tap the add button in the bottom bar to add your first case.","حفظ الحالات بحساب جوجل":"Save cases with Google account","تسجيل الدخول بجوجل":"Sign in with Google","حفظ ومزامنة الآن":"Save & sync now","سياسة الخصوصية":"Privacy policy","اسم المريض":"Patient name","مثال: مصطفى أحمد":"e.g. Mustafa Ahmed","العمر (بالسنوات)":"Age (years)","النوع":"Gender","ذكر":"Male","أنثى":"Female","التخصص (يمكنك اختيار أكثر من تخصص)":"Specialty (you can pick more than one)","مرحلة الأسنان (Dentition)":"Dentition stage","الأسنان (اضغط على السن لتحديد ما تم عليه)":"Teeth (tap a tooth to mark what was done)","التاريخ":"Date","الساعة (اختيارية)":"Time (optional)","رقم هاتف المريض (اختياري)":"Patient phone (optional)","التفاصيل (التشخيص، خطوات العلاج، الخامات...)":"Details (diagnosis, treatment steps, materials...)","حفظ":"Save","إلغاء":"Cancel","إضافة صورة":"Add photo","حجز موعد":"Book appointment","تاريخ الموعد (اختياري)":"Appointment date (optional)","حفظ الموعد":"Save appointment","← رجوع":"← Back","📄 حفظ PDF / طباعة":"📄 Save PDF / Print","حذف":"Delete","＋ إضافة جلسة جديدة لهذه الحالة":"+ Add a new session to this case","حجز موعد لهذه الحالة":"Book an appointment for this case","تحويل الحالة لملف PowerPoint":"Export case to PowerPoint","حفظ صور الحالة على الموبايل":"Save case photos to phone","ملخص الحالة":"Case summary","إغلاق":"Close","حذف الجلسة":"Delete session","حذف الموعد":"Delete appointment","✓ تم الموعد — حوّله لحالة / جلسة":"✓ Done — convert to case / session","اليوم":"Today","القادمة":"Upcoming","بدون موعد محدد":"No set time","فات موعدها":"Overdue","فات موعده":"Overdue","المعمل":"Lab","＋ إضافة حالة للمعمل":"+ Add lab case","حالة معمل جديدة":"New lab case","لم يُسلَّم":"Not delivered","عند المعمل":"At the lab","تم الاستلام":"Received","تم التسليم للمعمل":"Delivered to lab","تم الاستلام من المعمل":"Received from lab","تعديل":"Edit","عايز المعمل يعمل إيه (يمكن أكثر من اختيار)":"What the lab should make (multiple allowed)","وديت إيه للمعمل (يمكن أكثر من اختيار)":"What you sent to the lab (multiple allowed)","الأسنان (اضغط على أكتر من سن لتحديدهم)":"Teeth (tap several)","تحديد كل الفك العلوي":"Select whole upper jaw","تحديد كل الفك السفلي":"Select whole lower jaw","مسح التحديد":"Clear selection","تاريخ التسليم للمعمل":"Delivery date to lab","تاريخ الاستلام من المعمل":"Receive date from lab","المدفوع للمعمل (جنيه)":"Paid to lab (EGP)","حالة الشغل":"Work status","ملاحظات":"Notes","اختر ما تم عمله على هذا السن (يمكن أكثر من اختيار)":"Choose what was done on this tooth (multiple allowed)","تم":"Done","مسح العلامة":"Clear mark","تُرسل إلينا عبر واتساب فقط.":"Sent to us via WhatsApp only.","اقتراح":"Suggestion","شكوى":"Complaint","إرسال عبر واتساب":"Send via WhatsApp","اكتب رسالتك هنا... (بدون أي بيانات مرضى)":"Write your message here... (no patient data)","اكتب اسم المريض":"Enter the patient name","تخطي":"Skip","السابق":"Previous","التالي":"Next","ابدأ الاستخدام":"Get started"};
+const _PF=[["تفاصيل الـ Fixed — سن ","Fixed details — tooth "],["عدد الجلسات: ","Sessions: "],["عدد الصور: ","Photos: "],["الأسنان: ","Teeth: "],["المواعيد القادمة (","Upcoming appointments ("],["المطلوب: ","Requested: "],["جلسة جديدة — ","New session — "],["حجز موعد — ","Book appointment — "]];
 const _T=k=>{if(_EN[k])return _EN[k];const p=_PF.find(p=>k.startsWith(p[0]));return p?p[1]+k.slice(p[0].length):null};
 const _og=new WeakMap(),_AT=[["placeholder","oph"],["aria-label","oal"]];let _td=false;
 function _tn(n){if(n.nodeType==3){const m=_og.get(n),o=m&&n.nodeValue==m.e?m.o:n.nodeValue,k=o.trim(),t=LG=="en"&&k?_T(k):null,v=t?o.replace(k,()=>t):o;if(t||m){_og.set(n,{o,e:v});if(n.nodeValue!=v)n.nodeValue=v}}
