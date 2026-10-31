@@ -149,6 +149,8 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
 #acs{position:fixed;inset:0;background:var(--bg);z-index:40;display:none;align-items:center;justify-content:center;padding:20px}#acs.on{display:flex}
 .acb{width:100%;max-width:360px;text-align:center}.acb .di{border:1px solid var(--bd);border-radius:12px;margin:8px 0;justify-content:center;background:var(--card);padding:14px}
 #gate{position:fixed;inset:0;background:var(--bg);z-index:45;display:none;align-items:center;justify-content:center;padding:20px}#gate.on{display:flex}#gout{display:none!important}
+@media (min-width:900px){body{max-width:960px}#bar{max-width:960px}#cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}#cards .card{margin-bottom:0}}
+#dinst[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -298,6 +300,7 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
   <button class="di" id="dth">الوضع الداكن <span class="sw" id="dsw"></span></button>
   <button class="di" id="sfb">شكاوي واقتراحات</button>
   <button class="di" id="dtour">إعادة الجولة التعريفية</button>
+  <button class="di" id="dinst" hidden>تثبيت التطبيق على الكمبيوتر</button>
   <button class="di" id="dout">تسجيل الخروج</button>
 </aside>
 <div id="gate"><div class="acb"><img src="icons/icon-192.png" class="appmark" alt=""><h2 style="color:var(--gd)">حالاتي</h2><p class="mu" style="line-height:1.8">سجّل الدخول بحساب جوجل عشان تتحفظ حالاتك في حسابك وترجّعها على أي موبايل.</p><div id="gmsg" class="mu" style="margin:8px 0"></div><button class="pri" id="gsign" style="width:100%">تسجيل الدخول بجوجل</button><button id="gback" class="hide" style="width:100%;margin-top:8px">رجوع للحساب الآخر</button></div></div>
@@ -485,11 +488,11 @@ const fixedLine=s=>["Crown","Bridge"].map(t=>{const k=Object.keys(s.fixed||{}).f
 const endoLine=s=>endoLine0(s).concat(fixedLine(s));
 const endoHTML=s=>endoLine(s).map(l=>`<div class="mu" dir="ltr" style="text-align:right">${esc(l)}</div>`).join("");
 function fixedUI(){const el=$("fxd");if(!(teeth[tcur]||[]).includes("Fixed")){el.innerHTML="";return}
-  const t=fixedD[tcur]||"",ALL=dent=="mixed"?[...UP,...LO,...UPp,...LOp]:dent=="primary"?[...UPp,...LOp]:[...UP,...LO];
-  el.innerHTML=`<div class="en"><h4>تفاصيل الـ Fixed — سن ${tcur}</h4><div class="mu">هتعمل إيه؟</div><div class="spc" style="margin:6px 0">${["Crown","Bridge"].map(x=>`<button type="button" class="chip ${t==x?"on":""}" data-f="${x}">${x}</button>`).join("")}</div><div class="mu">طبّق على أسنان تانية (اختيار أكتر من سن)</div><div class="spc" style="margin:6px 0">${ALL.filter(n=>n!=tcur).map(n=>`<button type="button" class="chip ${t&&(teeth[n]||[]).includes("Fixed")&&fixedD[n]==t?"on":""}" data-n="${n}">${n}</button>`).join("")}</div></div>`}
+  const t=fixedD[tcur]||"",m={};Object.keys(teeth).forEach(n=>{if((teeth[n]||[]).includes("Fixed")&&(n==tcur||(fixedD[n]&&fixedD[n]==t)))m[n]=["Fixed"]});
+  el.innerHTML=`<div class="en"><h4>تفاصيل الـ Fixed — سن ${tcur}</h4><div class="mu">هتعمل إيه؟</div><div class="spc" style="margin:6px 0">${["Crown","Bridge"].map(x=>`<button type="button" class="chip ${t==x?"on":""}" data-f="${x}">${x}</button>`).join("")}</div><div class="mu">اختار الأسنان اللي هتتطبّق عليها (اضغط على السن)</div>${chart(m,true,dent,true)}</div>`}
 $("fxd").onclick=e=>{const b=e.target.closest("button");if(!b)return;
   if(b.dataset.f){fixedD[tcur]=fixedD[tcur]==b.dataset.f?"":b.dataset.f}
-  else if(b.dataset.n){const t=fixedD[tcur];if(!t){alert("اختار Crown أو Bridge الأول");return}const n=b.dataset.n,a=teeth[n]||[];
+  else if(b.dataset.t){const n=b.dataset.t;if(n==tcur)return;const t=fixedD[tcur];if(!t){alert("اختار Crown أو Bridge الأول");return}const a=teeth[n]||[];
     if(a.includes("Fixed")&&fixedD[n]==t){teeth[n]=a.filter(y=>y!="Fixed");if(!teeth[n].length)delete teeth[n];delete fixedD[n]}else{teeth[n]=a.includes("Fixed")?a:a.concat("Fixed");fixedD[n]=t}}
   else return;fixedUI();drawTeeth()};
 function tmChips(){$("tmo").innerHTML=SP.slice(1).map(x=>`<button type="button" class="chip ${(teeth[tcur]||[]).includes(x)?"on":""}" data-s="${x}"><span class="dt" style="background:${col(x)}"></span>${x}</button>`).join("")}
@@ -697,12 +700,19 @@ async function buildPptx(c,hideName){
     if(x.n)String(x.n).split(/\r?\n/).filter(Boolean).slice(0,6).forEach(l=>LN.push([l,1400,MUTE,false,"r"]))});
   const kf=Math.max(.4,Math.min(1,20/LN.length));
   mk(bar(0,0,W,0.18*IN,GOLD)+tb(0.6*IN,0.35*IN,W-1.2*IN,H-1.1*IN,LN.map(([t,sz,co,bo,al,rt])=>para(t,Math.round(sz*kf),co,bo,al,rt)).join(""))+foot());
-  const L=[];S.forEach(x=>Object.keys(x.im).forEach(k=>arr(x.im[k]).forEach(u=>L.push({k,u}))));
-  if(L.length){const n=L.length,cols=Math.ceil(Math.sqrt(n*1.3)),rows=Math.ceil(n/cols),ax=0.4*IN,ay=0.35*IN,aw=W-0.8*IN,ah=H-1.0*IN,cw=aw/cols,chh=ah/rows,cap=n<=12,imgs=[];
-    let sh=bar(0,0,W,0.18*IN,GOLD);
-    for(let j=0;j<n;j++){const im=await jpgOf(L[j].u),col=j%cols,row=Math.floor(j/cols),bx=ax+col*cw+0.05*IN,by=ay+row*chh,bw=cw-0.1*IN,bh=chh-(cap?0.4*IN:0.08*IN),sc=Math.min(bw/im.w,bh/im.h),w=im.w*sc,h=im.h*sc;
-      media.push(im.bytes);imgs.push(media.length);sh+=pic("rId"+(1+imgs.length),bx+(bw-w)/2,by+(bh-h)/2,w,h)+(cap?tb(bx,by+bh,bw,0.35*IN,para(L[j].k,1200,GOLD,false,"ctr")):"")}
-    mk(sh+foot(),imgs)}
+  const CM={};S.forEach(x=>Object.keys(x.im).forEach(k=>{const u=arr(x.im[k]);if(u.length)CM[k]=(CM[k]||[]).concat(u)}));
+  const order=[...stagesFor(allSps(c)),...Object.keys(CM)].filter((k,i,A)=>A.indexOf(k)==i&&CM[k]&&k!="After");
+  const cellsOf=n=>n==1?[[0,0,1,1]]:n==2?[[0,0,.5,1],[.5,0,.5,1]]:n==3?[[.25,0,.5,.5],[0,.5,.5,.5],[.5,.5,.5,.5]]:n==4?[[0,0,.5,.5],[.5,0,.5,.5],[0,.5,.5,.5],[.5,.5,.5,.5]]:Array.from({length:n},(_,j)=>{const q=Math.ceil(Math.sqrt(n)),r=Math.ceil(n/q);return[(j%q)/q,Math.floor(j/q)/r,1/q,1/r]});
+  const imSlide=async bands=>{const imgs=[],ax=0.4*IN,ay=0.35*IN,aw=W-0.8*IN,ah=H-1.0*IN,bh=ah/bands.length,lw=1.5*IN,pd=0.05*IN;let sh=bar(0,0,W,0.18*IN,GOLD);
+    for(let q=0;q<bands.length;q++){const [lab,us]=bands[q],y=ay+q*bh,x0=ax+lw,w0=aw-lw;
+      if(q)sh+=bar(ax,y-0.02*IN,aw,0.02*IN,MUTE);
+      sh+=tb(ax,y+bh/2-0.25*IN,lw-0.1*IN,0.5*IN,para(lab,1600,GOLD,true,"ctr"));
+      const cs=cellsOf(us.length),wr=us.length>4?w0:Math.min(w0,bh*(us.length==2?2.8:1.4)),xs=x0+(w0-wr)/2;
+      for(let j=0;j<us.length;j++){const im=await jpgOf(us[j]),[cx,cy,cw,ch]=cs[j],rx=xs+cx*wr+pd,ry=y+cy*bh+pd,rw=cw*wr-2*pd,rh=ch*bh-2*pd,sc=Math.min(rw/im.w,rh/im.h),w=im.w*sc,h=im.h*sc;
+        media.push(im.bytes);imgs.push(media.length);sh+=pic("rId"+(1+imgs.length),rx+(rw-w)/2,ry+(rh-h)/2,w,h)}}
+    mk(sh+foot(),imgs)};
+  let pend=[];for(const k of order){if(CM[k].length>2){if(pend.length){await imSlide(pend);pend=[]}await imSlide([[k,CM[k]]])}else{pend.push([k,CM[k]]);if(pend.length==3){await imSlide(pend);pend=[]}}}if(pend.length)await imSlide(pend);
+  if(CM.After)await imSlide([["After",CM.After]]);
   // ---- package ----
   const R='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',RT="http://schemas.openxmlformats.org/officeDocument/2006/relationships",RN='xmlns="http://schemas.openxmlformats.org/package/2006/relationships"';
   const enc=new TextEncoder(),F=[];const add=(n,t)=>F.push({n,d:typeof t=="string"?enc.encode(t):t});
@@ -728,7 +738,7 @@ $("ppt").onclick=async()=>{if(!cur)return;const hide=!confirm("إضافة اسم
 
 // ================= حفظ الحالات بحساب جوجل (Google Drive – فولدر التطبيق المخفي) =================
 const GCID="837046658718-ca0mrea02or59sr2djnsh8hn582sv2t1.apps.googleusercontent.com";
-const GU="https://www.googleapis.com/drive/v3",GUP="https://www.googleapis.com/upload/drive/v3",GSC="https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/userinfo.email",GDEB=45000;
+const GU="https://www.googleapis.com/drive/v3",GUP="https://www.googleapis.com/upload/drive/v3",GSC="https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/userinfo.email",GDEB=3000;
 let gTok=null,gExp=0,gBusy=false,gTimer=null;
 const gLS=(k,v)=>{k=k+(ACC.id=="a1"?"":"_"+ACC.id);try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}return null};
 const gLinked=()=>!!gLS("g_em");
@@ -743,15 +753,15 @@ function gErr(e){const m=String((e&&e.message)||e);try{console.warn("google-sync
 const gRed=()=>location.origin+"/";
 function gSetTok(t,exp){gTok=t;gExp=exp;gLS("g_tok",t);gLS("g_exp",t?String(exp):null)}
 (()=>{const t=gLS("g_tok"),e=+gLS("g_exp")||0;if(t&&e>Date.now()+60000){gTok=t;gExp=e}})();
-function gGo(intent){const st=Math.random().toString(36).slice(2)+Date.now().toString(36);gLS("g_st",st);gLS("g_pend",intent);
+function gGo(intent,silent){const st=Math.random().toString(36).slice(2)+Date.now().toString(36);gLS("g_st",st);gLS("g_pend",intent);
   const q=new URLSearchParams({client_id:GCID,redirect_uri:gRed(),response_type:"token",scope:GSC,include_granted_scopes:"true",state:st});
-  if(gLinked())q.set("login_hint",gLS("g_em"));else q.set("prompt","select_account");
+  if(silent)q.set("prompt","none");if(gLinked())q.set("login_hint",gLS("g_em"));else if(!silent)q.set("prompt","select_account");
   location.href="https://accounts.google.com/o/oauth2/v2/auth?"+q;return new Promise(()=>{})}
 function gToken(interactive,intent){if(gTok&&Date.now()<gExp-60000)return Promise.resolve(gTok);if(!interactive)return Promise.resolve(null);return gGo(intent||"sync")}
 async function gInit(){const h=location.hash;if(!/state=/.test(h)||!/access_token=|error=/.test(h))return;
   const p=new URLSearchParams(h.slice(1));if(p.get("state")!==gLS("g_st"))return;gLS("g_st",null);history.replaceState(null,"",location.pathname+location.search);
-  $("set").classList.remove("hide");
-  if(!p.get("access_token")){gLS("g_pend",null);gSay(gErr(new Error(p.get("error")||"unknown")));return}
+  const sil=gLS("g_pend")=="silent";if(!sil)$("set").classList.remove("hide");
+  if(!p.get("access_token")){gLS("g_pend",null);if(sil)gBanner();else gSay(gErr(new Error(p.get("error")||"unknown")));return}
   gSetTok(p.get("access_token"),Date.now()+(+p.get("expires_in")||3600)*1000);const pend=gLS("g_pend");gLS("g_pend",null);
   if(pend=="login"){try{const u=await(await gApi("https://www.googleapis.com/oauth2/v3/userinfo")).json();gLS("g_em",u.email||"حساب جوجل");if(_dupChk(u.email||"حساب جوجل"))throw new Error("dup");gLS("g_dirty","1")}catch(e){gSay(gErr(e));return}}
   gUI();await gSync()}
@@ -801,7 +811,7 @@ function maybeTour(){let seen="";try{seen=localStorage.getItem("tour")}catch(e){
 
 // ================= القائمة الجانبية / الحسابات / اللغة / الوضع الداكن =================
 var _ch=_ls("acc_out")=="1";
-const _EN={"هتعمل إيه؟":"What will you do?","طبّق على أسنان تانية (اختيار أكتر من سن)":"Apply to other teeth (select several)","اختار Crown أو Bridge الأول":"Choose Crown or Bridge first","✏️ تعديل الحالة":"✏️ Edit case","✏️ تعديل الجلسة":"✏️ Edit session","تعديل الحالة":"Edit case","حفظ التعديل":"Save changes","حساب جوجل":"Google account","حساب جديد":"New account","سجّل الدخول بحساب جوجل عشان تتحفظ حالاتك في حسابك وترجّعها على أي موبايل.":"Sign in with your Google account to save your cases and restore them on any phone.","رجوع للحساب الآخر":"Back to the other account","الحساب ده مضاف بالفعل":"This account is already added","القائمة":"Menu","المواعيد المحجوزة":"Booked appointments","الإعدادات":"Settings","حسابي":"My account","إضافة حساب":"Add account","إضافة":"Add","اسم الحساب":"Account name","اختر الحساب":"Choose account","ملفي الشخصي":"My profile","حفظ الاسم":"Save name","اللوجو":"Logo","لوجو خاص بك (اختياري)":"Your own logo (optional)","يظهر في التطبيق وفي ملف الـ PDF.":"Shown in the app and in the PDF file.","اختر لوجو":"Choose logo","حذف اللوجو":"Remove logo","إجمالي الحالات":"Total cases","إجمالي الجلسات":"Total sessions","حالات المعمل":"Lab cases","إجمالي الصور":"Total photos","عدد الحالات في كل قسم":"Cases per section","حالة جديدة":"New case","موعد جديد":"New appointment","حالة جديدة للمعمل":"New lab case","الأقسام":"Sections","اللغة":"Language","الوضع الداكن":"Dark mode","شكاوي واقتراحات":"Complaints & suggestions","إعادة الجولة التعريفية":"Replay intro tour","تسجيل الخروج":"Log out","الحد الأقصى ٣ حسابات":"Maximum 3 accounts","اكتب اسم الحساب":"Enter the account name","تم الحفظ":"Saved","تسجيل الخروج من هذا الحساب؟ بياناتك هتفضل محفوظة على الجهاز.":"Log out of this account? Your data stays saved on this device.","الكل":"All","المواعيد":"Appointments","الحالات":"Cases","ابحث في الحالات...":"Search cases...","لا توجد حالات بعد. اضغط زر إضافة حالة في الشريط السفلي لإضافة أول حالة.":"No cases yet. Tap the add button in the bottom bar to add your first case.","حفظ الحالات بحساب جوجل":"Save cases with Google account","تسجيل الدخول بجوجل":"Sign in with Google","حفظ ومزامنة الآن":"Save & sync now","سياسة الخصوصية":"Privacy policy","اسم المريض":"Patient name","مثال: مصطفى أحمد":"e.g. Mustafa Ahmed","العمر (بالسنوات)":"Age (years)","النوع":"Gender","ذكر":"Male","أنثى":"Female","التخصص (يمكنك اختيار أكثر من تخصص)":"Specialty (you can pick more than one)","مرحلة الأسنان (Dentition)":"Dentition stage","الأسنان (اضغط على السن لتحديد ما تم عليه)":"Teeth (tap a tooth to mark what was done)","التاريخ":"Date","الساعة (اختيارية)":"Time (optional)","رقم هاتف المريض (اختياري)":"Patient phone (optional)","التفاصيل (التشخيص، خطوات العلاج، الخامات...)":"Details (diagnosis, treatment steps, materials...)","حفظ":"Save","إلغاء":"Cancel","إضافة صورة":"Add photo","حجز موعد":"Book appointment","تاريخ الموعد (اختياري)":"Appointment date (optional)","حفظ الموعد":"Save appointment","← رجوع":"← Back","📄 حفظ PDF / طباعة":"📄 Save PDF / Print","حذف":"Delete","＋ إضافة جلسة جديدة لهذه الحالة":"+ Add a new session to this case","حجز موعد لهذه الحالة":"Book an appointment for this case","تحويل الحالة لملف PowerPoint":"Export case to PowerPoint","حفظ صور الحالة على الموبايل":"Save case photos to phone","ملخص الحالة":"Case summary","إغلاق":"Close","حذف الجلسة":"Delete session","حذف الموعد":"Delete appointment","✓ تم الموعد — حوّله لحالة / جلسة":"✓ Done — convert to case / session","اليوم":"Today","القادمة":"Upcoming","بدون موعد محدد":"No set time","فات موعدها":"Overdue","فات موعده":"Overdue","المعمل":"Lab","＋ إضافة حالة للمعمل":"+ Add lab case","حالة معمل جديدة":"New lab case","لم يُسلَّم":"Not delivered","عند المعمل":"At the lab","تم الاستلام":"Received","تم التسليم للمعمل":"Delivered to lab","تم الاستلام من المعمل":"Received from lab","تعديل":"Edit","عايز المعمل يعمل إيه (يمكن أكثر من اختيار)":"What the lab should make (multiple allowed)","وديت إيه للمعمل (يمكن أكثر من اختيار)":"What you sent to the lab (multiple allowed)","الأسنان (اضغط على أكتر من سن لتحديدهم)":"Teeth (tap several)","تحديد كل الفك العلوي":"Select whole upper jaw","تحديد كل الفك السفلي":"Select whole lower jaw","مسح التحديد":"Clear selection","تاريخ التسليم للمعمل":"Delivery date to lab","تاريخ الاستلام من المعمل":"Receive date from lab","المدفوع للمعمل (جنيه)":"Paid to lab (EGP)","حالة الشغل":"Work status","ملاحظات":"Notes","اختر ما تم عمله على هذا السن (يمكن أكثر من اختيار)":"Choose what was done on this tooth (multiple allowed)","تم":"Done","مسح العلامة":"Clear mark","تُرسل إلينا عبر واتساب فقط.":"Sent to us via WhatsApp only.","اقتراح":"Suggestion","شكوى":"Complaint","إرسال عبر واتساب":"Send via WhatsApp","اكتب رسالتك هنا... (بدون أي بيانات مرضى)":"Write your message here... (no patient data)","اكتب اسم المريض":"Enter the patient name","تخطي":"Skip","السابق":"Previous","التالي":"Next","ابدأ الاستخدام":"Get started"};
+const _EN={"اختار الأسنان اللي هتتطبّق عليها (اضغط على السن)":"Choose the teeth to apply to (tap a tooth)","تثبيت التطبيق على الكمبيوتر":"Install app on computer","هتعمل إيه؟":"What will you do?","طبّق على أسنان تانية (اختيار أكتر من سن)":"Apply to other teeth (select several)","اختار Crown أو Bridge الأول":"Choose Crown or Bridge first","✏️ تعديل الحالة":"✏️ Edit case","✏️ تعديل الجلسة":"✏️ Edit session","تعديل الحالة":"Edit case","حفظ التعديل":"Save changes","حساب جوجل":"Google account","حساب جديد":"New account","سجّل الدخول بحساب جوجل عشان تتحفظ حالاتك في حسابك وترجّعها على أي موبايل.":"Sign in with your Google account to save your cases and restore them on any phone.","رجوع للحساب الآخر":"Back to the other account","الحساب ده مضاف بالفعل":"This account is already added","القائمة":"Menu","المواعيد المحجوزة":"Booked appointments","الإعدادات":"Settings","حسابي":"My account","إضافة حساب":"Add account","إضافة":"Add","اسم الحساب":"Account name","اختر الحساب":"Choose account","ملفي الشخصي":"My profile","حفظ الاسم":"Save name","اللوجو":"Logo","لوجو خاص بك (اختياري)":"Your own logo (optional)","يظهر في التطبيق وفي ملف الـ PDF.":"Shown in the app and in the PDF file.","اختر لوجو":"Choose logo","حذف اللوجو":"Remove logo","إجمالي الحالات":"Total cases","إجمالي الجلسات":"Total sessions","حالات المعمل":"Lab cases","إجمالي الصور":"Total photos","عدد الحالات في كل قسم":"Cases per section","حالة جديدة":"New case","موعد جديد":"New appointment","حالة جديدة للمعمل":"New lab case","الأقسام":"Sections","اللغة":"Language","الوضع الداكن":"Dark mode","شكاوي واقتراحات":"Complaints & suggestions","إعادة الجولة التعريفية":"Replay intro tour","تسجيل الخروج":"Log out","الحد الأقصى ٣ حسابات":"Maximum 3 accounts","اكتب اسم الحساب":"Enter the account name","تم الحفظ":"Saved","تسجيل الخروج من هذا الحساب؟ بياناتك هتفضل محفوظة على الجهاز.":"Log out of this account? Your data stays saved on this device.","الكل":"All","المواعيد":"Appointments","الحالات":"Cases","ابحث في الحالات...":"Search cases...","لا توجد حالات بعد. اضغط زر إضافة حالة في الشريط السفلي لإضافة أول حالة.":"No cases yet. Tap the add button in the bottom bar to add your first case.","حفظ الحالات بحساب جوجل":"Save cases with Google account","تسجيل الدخول بجوجل":"Sign in with Google","حفظ ومزامنة الآن":"Save & sync now","سياسة الخصوصية":"Privacy policy","اسم المريض":"Patient name","مثال: مصطفى أحمد":"e.g. Mustafa Ahmed","العمر (بالسنوات)":"Age (years)","النوع":"Gender","ذكر":"Male","أنثى":"Female","التخصص (يمكنك اختيار أكثر من تخصص)":"Specialty (you can pick more than one)","مرحلة الأسنان (Dentition)":"Dentition stage","الأسنان (اضغط على السن لتحديد ما تم عليه)":"Teeth (tap a tooth to mark what was done)","التاريخ":"Date","الساعة (اختيارية)":"Time (optional)","رقم هاتف المريض (اختياري)":"Patient phone (optional)","التفاصيل (التشخيص، خطوات العلاج، الخامات...)":"Details (diagnosis, treatment steps, materials...)","حفظ":"Save","إلغاء":"Cancel","إضافة صورة":"Add photo","حجز موعد":"Book appointment","تاريخ الموعد (اختياري)":"Appointment date (optional)","حفظ الموعد":"Save appointment","← رجوع":"← Back","📄 حفظ PDF / طباعة":"📄 Save PDF / Print","حذف":"Delete","＋ إضافة جلسة جديدة لهذه الحالة":"+ Add a new session to this case","حجز موعد لهذه الحالة":"Book an appointment for this case","تحويل الحالة لملف PowerPoint":"Export case to PowerPoint","حفظ صور الحالة على الموبايل":"Save case photos to phone","ملخص الحالة":"Case summary","إغلاق":"Close","حذف الجلسة":"Delete session","حذف الموعد":"Delete appointment","✓ تم الموعد — حوّله لحالة / جلسة":"✓ Done — convert to case / session","اليوم":"Today","القادمة":"Upcoming","بدون موعد محدد":"No set time","فات موعدها":"Overdue","فات موعده":"Overdue","المعمل":"Lab","＋ إضافة حالة للمعمل":"+ Add lab case","حالة معمل جديدة":"New lab case","لم يُسلَّم":"Not delivered","عند المعمل":"At the lab","تم الاستلام":"Received","تم التسليم للمعمل":"Delivered to lab","تم الاستلام من المعمل":"Received from lab","تعديل":"Edit","عايز المعمل يعمل إيه (يمكن أكثر من اختيار)":"What the lab should make (multiple allowed)","وديت إيه للمعمل (يمكن أكثر من اختيار)":"What you sent to the lab (multiple allowed)","الأسنان (اضغط على أكتر من سن لتحديدهم)":"Teeth (tap several)","تحديد كل الفك العلوي":"Select whole upper jaw","تحديد كل الفك السفلي":"Select whole lower jaw","مسح التحديد":"Clear selection","تاريخ التسليم للمعمل":"Delivery date to lab","تاريخ الاستلام من المعمل":"Receive date from lab","المدفوع للمعمل (جنيه)":"Paid to lab (EGP)","حالة الشغل":"Work status","ملاحظات":"Notes","اختر ما تم عمله على هذا السن (يمكن أكثر من اختيار)":"Choose what was done on this tooth (multiple allowed)","تم":"Done","مسح العلامة":"Clear mark","تُرسل إلينا عبر واتساب فقط.":"Sent to us via WhatsApp only.","اقتراح":"Suggestion","شكوى":"Complaint","إرسال عبر واتساب":"Send via WhatsApp","اكتب رسالتك هنا... (بدون أي بيانات مرضى)":"Write your message here... (no patient data)","اكتب اسم المريض":"Enter the patient name","تخطي":"Skip","السابق":"Previous","التالي":"Next","ابدأ الاستخدام":"Get started"};
 const _PF=[["تفاصيل الـ Fixed — سن ","Fixed details — tooth "],["عدد الجلسات: ","Sessions: "],["عدد الصور: ","Photos: "],["الأسنان: ","Teeth: "],["المواعيد القادمة (","Upcoming appointments ("],["المطلوب: ","Requested: "],["جلسة جديدة — ","New session — "],["حجز موعد — ","Book appointment — "]];
 const _T=k=>{if(_EN[k])return _EN[k];const p=_PF.find(p=>k.startsWith(p[0]));return p?p[1]+k.slice(p[0].length):null};
 const _og=new WeakMap(),_AT=[["placeholder","oph"],["aria-label","oal"]];let _td=false;
@@ -842,7 +852,17 @@ $("dout").onclick=()=>{if(!leaveOk())return;if(!confirm("تسجيل الخروج
 $("acl").onclick=e=>{const id=e.target.dataset.a;if(id)_sw(id)};
 if(_ch){$("acl").innerHTML=ACCS.map(a=>`<button class="di" data-a="${a.id}">${esc(_an(a))}</button>`).join("");$("acs").classList.add("on")}
 _ui();if(LG=="en"){_td=true;_tn(document.body)}
-open().then(render).then(maybeTour).then(()=>{gUI();gInit()});
+// ===== مزامنة فورية بين الأجهزة + تثبيت على الكمبيوتر =====
+function gPoll(){if(!gLinked()||gBusy||document.hidden||!navigator.onLine)return;if(gTok&&Date.now()<gExp-60000)gSync()}
+function _silent(){if(!gLinked()||gBusy||!navigator.onLine||/access_token|error=/.test(location.hash))return;if(gTok&&Date.now()<gExp-60000)return;
+  const last=+gLS("g_sil")||0;if(Date.now()-last<120000)return;gLS("g_sil",String(Date.now()));gGo("silent",true)}
+setInterval(gPoll,20000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden){gPoll();_silent()}});
+addEventListener("focus",gPoll);addEventListener("online",()=>{gPoll();_silent()});
+let _ip=null;addEventListener("beforeinstallprompt",e=>{e.preventDefault();_ip=e;$("dinst").hidden=false});
+addEventListener("appinstalled",()=>{_ip=null;$("dinst").hidden=true});
+$("dinst").onclick=async()=>{if(!_ip)return;_dc();_ip.prompt();try{await _ip.userChoice}catch(e){}_ip=null;$("dinst").hidden=true};
+open().then(render).then(maybeTour).then(()=>{gUI();gInit()}).then(()=>setTimeout(_silent,300));
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>
