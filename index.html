@@ -8,6 +8,7 @@
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<script>try{var _t=localStorage.getItem("theme");if(_t)document.documentElement.dataset.theme=_t;if(localStorage.getItem("lang")=="en"){document.documentElement.lang="en";document.documentElement.dir="ltr"}}catch(e){}</script>
 <title>حالاتي – Dental Cases</title>
 <style>
 :root{--bg:#eef3f8;--card:#fff;--tx:#0f2238;--mu:#5b6f84;--gd:#9c7220;--bl:#2a7ebc;--bd:#d3dfeb;--gold:linear-gradient(135deg,#f0d98a,#d4b574 50%,#b98f42);--sky:linear-gradient(135deg,#5fd6f6,#40a4d5 55%,#2a7ebc);--ink:#0c1a34;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -68,7 +69,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--bl);outline-offs
 .tc.p1{width:72%;margin:6px auto 2px}
 .tc.p2{width:64%;margin:6px auto 2px}
 .dtl{font-size:11px;color:var(--mu);text-align:center;direction:ltr;margin:8px 0 0}
-#list,#view,#aview,#form,#apw,#lbl,#lbv,#lbf{padding-bottom:104px}
+#list,#view,#aview,#form,#apw,#lbl,#lbv,#lbf,#prf{padding-bottom:104px}
 .bdg{position:absolute;top:-7px;left:-7px;min-width:19px;height:19px;border-radius:10px;background:#d9534f;color:#fff;font-size:11px;font-weight:700;display:none;align-items:center;justify-content:center;padding:0 4px}
 .bdg.on{display:flex}
 body.am .np{display:none!important}
@@ -133,18 +134,32 @@ body.am input.ap{display:block}
 @media print{#bar,#tour,.wm,.add,.tb i,button,.fbb,.ov{display:none!important}body>*:not(#pr){display:none!important}#pr{display:block;color:#000;background:#fff;padding:8px}#pr img.lg{height:50px}#pr .sg div{color:#333}#pr .sg>div{break-inside:avoid}@page{margin:12mm}}
 label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
 .note{font-size:12px;color:var(--mu);margin-top:6px}
+.hd{direction:rtl}
+#prf{padding-bottom:104px}
+#dov{position:fixed;inset:0;background:#0007;z-index:60;display:none}#dov.on{display:block}
+#drw{position:fixed;top:0;bottom:0;right:0;width:min(84vw,320px);background:var(--card);color:var(--tx);z-index:61;transform:translateX(110%);transition:transform .22s;overflow:auto;box-shadow:-6px 0 24px #0006;padding:calc(10px + env(safe-area-inset-top,0px)) 0 calc(10px + env(safe-area-inset-bottom,0px))}
+#drw.on{transform:none}
+.di{width:100%;border:0;border-radius:0;background:transparent;text-align:start;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 18px;font-size:16px}
+.di:active,.di.on{background:#8882}
+.di.sub{padding-block:10px;padding-inline-start:34px;font-size:15px;color:var(--mu)}.di.sub.on{color:var(--gd);font-weight:700}
+.dh b{flex:1}.av{width:38px;height:38px;border-radius:50%;background:var(--gold);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+#drw hr{border:0;border-top:1px solid var(--bd);margin:6px 0}
+.sw{width:42px;height:22px;border-radius:12px;background:var(--bd);position:relative;flex:none}.sw::after{content:"";position:absolute;top:2px;inset-inline-start:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}.sw.on{background:var(--bl)}.sw.on::after{inset-inline-start:22px}
+.sr{display:flex;justify-content:space-between;padding:9px 0;border-top:1px solid var(--bd)}
+#acs{position:fixed;inset:0;background:var(--bg);z-index:40;display:none;align-items:center;justify-content:center;padding:20px}#acs.on{display:flex}
+.acb{width:100%;max-width:360px;text-align:center}.acb .di{border:1px solid var(--bd);border-radius:12px;margin:8px 0;justify-content:center;background:var(--card);padding:14px}
 </style>
 </head>
 <body>
 <div id="list">
   <div class="wm" aria-hidden="true"></div>
-  <div class="hd"><img id="lg" class="hide" alt=""><h1><img class="appmark" src="icons/icon-192.png" alt="">حالاتي</h1><button id="apb" class="ic" aria-label="المواعيد المحجوزة" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h8M8 17h5"/></svg><span id="apn" class="bdg"></span></button><button id="fbo" class="ic" aria-label="شكاوي واقتراحات"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.3A8 8 0 1 1 21 12z"/></svg></button><button id="gear" class="ic" aria-label="الإعدادات"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
-  <div id="set" class="card hide"><b>لوجو خاص بك (اختياري)</b><div class="mu" style="margin:4px 0 8px">يظهر في التطبيق وفي ملف الـ PDF.</div><div class="row"><label class="pri" style="margin:0;padding:10px;border-radius:10px;color:#fff">اختر لوجو<input id="lf" type="file" accept="image/*" hidden></label><button id="lrm">حذف اللوجو</button></div><div style="border-top:1px solid var(--bd);margin-top:12px;padding-top:10px"><b>حفظ الحالات بحساب جوجل</b>
+  <div class="hd"><button id="menub" class="ic" aria-label="القائمة"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><img id="lg" class="hide" alt=""><h1><img class="appmark" src="icons/icon-192.png" alt="">حالاتي</h1><button id="apb" class="ic" aria-label="المواعيد المحجوزة" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h8M8 17h5"/></svg><span id="apn" class="bdg"></span></button><button id="gear" class="ic" aria-label="الإعدادات"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div id="set" class="card hide"><div><b>حفظ الحالات بحساب جوجل</b>
     <div class="mu" id="gst" style="margin:4px 0 8px"></div>
     <button id="gin" class="pri" style="width:100%">تسجيل الدخول بجوجل</button>
     <div id="gon" class="row hide" style="margin:0"><button id="gnow" class="pri" style="flex:1">حفظ ومزامنة الآن</button><button id="gout">تسجيل الخروج</button></div></div>
     <div style="text-align:center;margin-top:8px"><a href="privacy.html" target="_blank" rel="noopener" style="color:var(--bl);font-size:13px">سياسة الخصوصية</a></div>
-    <button id="tourbtn" style="margin-top:8px;width:100%">إعادة الجولة التعريفية</button></div>
+    </div>
   <input id="q" placeholder="ابحث في الحالات...">
   <div class="chips" id="chips" style="margin-top:8px"></div>
   <div id="gb"></div>
@@ -250,12 +265,41 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
   </div>
 </div>
 
+<div id="prf" class="hide">
+  <h2 style="color:var(--gd);margin:8px 0 10px">ملفي الشخصي</h2>
+  <div class="card"><label style="margin-top:0">اسم الحساب</label><input id="pnm"><button class="pri" id="pns" style="width:100%;margin-top:8px">حفظ الاسم</button></div>
+  <div class="card"><b>لوجو خاص بك (اختياري)</b><div class="mu" style="margin:4px 0 8px">يظهر في التطبيق وفي ملف الـ PDF.</div><div class="row"><label class="pri" style="margin:0;padding:10px;border-radius:10px;color:#fff">اختر لوجو<input id="lf" type="file" accept="image/*" hidden></label><button id="lrm">حذف اللوجو</button></div></div>
+  <div class="card" id="pst"></div>
+</div>
+
 <nav id="bar">
   <button id="add" aria-label="إضافة حالة"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 12v6M9 15h6"/></svg></button>
-  <button id="nvL" aria-label="المعمل"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2.2h12.4a1.5 1.5 0 0 0 1.3-2.2L14 9V3"/><path d="M7.5 15h9"/></svg></button>
+  
   <button id="nvH" class="home" aria-label="الصفحة الرئيسية"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button>
   <button id="nvP" aria-label="حجز موعد"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M12 13v5M9.5 15.5h5"/></svg></button>
 </nav>
+
+<div id="dov"></div>
+<aside id="drw" aria-label="القائمة">
+  <button class="di dh" id="dacc"><span class="av" id="dav"></span><b id="dnm"></b><span>▾</span></button>
+  <div id="dal" class="hide"></div>
+  <button class="di" id="dadd">إضافة حساب</button>
+  <button class="di" id="dprf">ملفي الشخصي</button>
+  <hr>
+  <button class="di" id="dnc">حالة جديدة</button>
+  <button class="di" id="dnp">موعد جديد</button>
+  <button class="di" id="dnl">حالة جديدة للمعمل</button>
+  <button class="di" id="dsec">الأقسام <span>▾</span></button>
+  <div id="dsl" class="hide"></div>
+  <hr>
+  <button class="di" id="dlang">اللغة <span class="mu" id="dlv"></span></button>
+  <button class="di" id="dth">الوضع الداكن <span class="sw" id="dsw"></span></button>
+  <button class="di" id="sfb">شكاوي واقتراحات</button>
+  <button class="di" id="dtour">إعادة الجولة التعريفية</button>
+  <button class="di" id="dout">تسجيل الخروج</button>
+</aside>
+<div class="ov" id="anm"><div class="sheet"><b>إضافة حساب</b><input id="ani" placeholder="اسم الحساب" style="margin:8px 0"><div class="row" style="margin:0"><button class="pri" id="anok" style="flex:1">إضافة</button><button id="anx">إلغاء</button></div></div></div>
+<div id="acs"><div class="acb"><img src="icons/icon-192.png" class="appmark" alt=""><h2 style="color:var(--gd)">اختر الحساب</h2><div id="acl"></div><button class="pri" id="acn" style="width:100%;margin-top:10px">إضافة حساب</button></div></div>
 
 <div id="tour" data-pos="mid"><div class="tcard">
   <div class="tic" id="tic"></div><b id="ttl"></b><p id="ttx"></p><div class="tdots" id="tdots"></div>
@@ -266,6 +310,10 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
 const SP=["الكل","Operative","Fixed","Endo","Prosthesis","Surgery","Perio","Ortho","Pedo"];
 const WA="201224080401";/* ضع رقم واتساب هنا بالصيغة الدولية بدون + أو أصفار، مثال: 201001234567 */
 const $=id=>document.getElementById(id);
+const _ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){}return null};
+let ACCS=[];try{ACCS=JSON.parse(_ls("accs")||"[]")}catch(e){}
+if(!Array.isArray(ACCS)||!ACCS.length){ACCS=[{id:"a1",name:""}];_ls("accs",JSON.stringify(ACCS))}
+const ACC=ACCS.find(a=>a.id==_ls("acc_on"))||ACCS[0],GP=()=>ACC.id=="a1"?"r-":"r"+ACC.id+"-";let LG=_ls("lang")||"ar";
 const arr=v=>Array.isArray(v)?v:(v?[v]:[]);
 const tot=o=>stagesFor(sel).reduce((n,k)=>n+arr(o[k]).length,0);
 const ST={Operative:["Before","Cavity","After"],Fixed:["Before","Preparation","After"],Endo:["Before","X-ray Master Cone","X-ray Obturation","After"],Prosthesis:["Before","Try-in","After"]};
@@ -332,7 +380,7 @@ const stagesFor=l=>{const mid=[];l.forEach(sp=>stg(sp).forEach(k=>{if(k!="Before
 let db,cases=[],flt="الكل",imgs={},cur=null,mem=[],logo="";
 const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-function open(){return new Promise(r=>{try{const q=indexedDB.open("cases",1);q.onupgradeneeded=()=>q.result.createObjectStore("c",{keyPath:"id"});q.onsuccess=()=>{db=q.result;r()};q.onerror=()=>r()}catch(e){r()}})}
+function open(){return new Promise(r=>{try{const q=indexedDB.open(ACC.id=="a1"?"cases":"cases_"+ACC.id,1);q.onupgradeneeded=()=>q.result.createObjectStore("c",{keyPath:"id"});q.onsuccess=()=>{db=q.result;r()};q.onerror=()=>r()}catch(e){r()}})}
 function all(){return new Promise(r=>{if(!db)return r(mem);const q=db.transaction("c").objectStore("c").getAll();q.onsuccess=()=>r(q.result);q.onerror=()=>r(mem)})}
 function put(c){c.mt=Date.now();return putRaw(c).then(()=>{gChanged()})}
 function putRaw(c){return new Promise(r=>{if(!db){mem=mem.filter(x=>x.id!=c.id).concat(c);return r()}const t=db.transaction("c","readwrite");t.objectStore("c").put(c);t.oncomplete=r;t.onerror=r})}
@@ -347,13 +395,13 @@ function slots(){const full=false;
   $("slots").innerHTML=stagesFor(sel).map(k=>`<div class="stage" data-k="${k}"><div class="sh">${k}</div><div class="tr">${arr(imgs[k]).map((x,i)=>`<div class="tb"><img src="${x}" alt=""><i data-x="${k}" data-i="${i}">×</i></div>`).join("")}${full?"":`<label class="add"><span style="font-size:30px;line-height:1">+</span>إضافة صورة<input type="file" accept="image/*" multiple></label>`}</div></div>`).join("")}
 function phoneRow(p){if(!p)return"";const d=String(p).replace(/[^\d+]/g,""),n=d.replace(/\D/g,""),w=n.startsWith("00")?n.slice(2):n.startsWith("0")?"20"+n.slice(1):n;
   return `<div class="pv"><span dir="ltr">${esc(p)}</span><a href="tel:${esc(d)}">اتصال</a><a href="https://wa.me/${esc(w)}" target="_blank" rel="noopener">واتساب</a></div>`}
-function show(p){["list","form","view","aview","apw","lbl","lbv","lbf"].forEach(x=>$(x).classList.toggle("hide",x!=p));window.scrollTo(0,0)}
+function show(p){["list","form","view","aview","apw","lbl","lbv","lbf","prf"].forEach(x=>$(x).classList.toggle("hide",x!=p));window.scrollTo(0,0)}
 
 async function render(){
   const A=await all();const lr=A.find(x=>x.id=="logo");logo=lr?lr.d:"";$("lg").src=logo;$("lg").classList.toggle("hide",!logo);
   labs=A.filter(x=>x.kind=="lab");if(!$("lbl").classList.contains("hide"))renderLab();
   cases=A.filter(x=>x.id!="logo"&&x.kind!="appt"&&x.kind!="lab").sort((a,b)=>lastDate(b).localeCompare(lastDate(a)));
-  $("chips").innerHTML=["الكل","المواعيد",...SP.slice(1)].map(s=>`<button class="chip ${s==flt?"on":""}" data-s="${s}">${s}</button>`).join("");
+  $("chips").innerHTML=flt=="الكل"?"":`<button class="chip on" data-s="الكل">${flt} ✕</button>`;
   appts=A.filter(x=>x.kind=="appt").sort((a,b)=>((a.date||"9999")+" "+(a.time||"")).localeCompare((b.date||"9999")+" "+(b.time||"")));
   const q=$("q").value.trim().toLowerCase();
   const al=appts.filter(a=>(flt=="الكل"||flt=="المواعيد"||spsOf(a).includes(flt))&&(!q||(a.t+" "+(a.ph||"")+" "+(a.n||"")+" "+tkeys(a.teeth).join(" ")).toLowerCase().includes(q)));
@@ -455,7 +503,7 @@ $("save").onclick=async()=>{
   await put({id:Date.now(),t:$("t").value.trim(),sp:sel[0],sps:sel.slice(),dent:dent,teeth:Object.fromEntries(tkeys(teeth).filter(k=>vis(k,dent)).map(k=>[k,teeth[k]])),endo:endoOut(),date:$("d").value,ph:$("ph").value.trim(),age:$("ag").value.trim(),sex:sex,n:$("n").value,im:Object.fromEntries(stagesFor(sel).filter(k=>arr(imgs[k]).length).map(k=>[k,imgs[k]]))});
   await render();show("list")};
 
-$("fbo").onclick=()=>$("fbm").classList.add("on");
+$("sfb").onclick=()=>{_dc();$("fbm").classList.add("on")};
 $("fbc").onclick=()=>$("fbm").classList.remove("on");
 $("fbm").onclick=e=>{if(e.target===$("fbm"))$("fbm").classList.remove("on")};
 $("fbs").onclick=()=>{const t=$("fbt").value.trim();if(!t){alert("اكتب رسالتك أولًا");return}
@@ -481,21 +529,22 @@ const IC={tooth:`<svg width="28" height="28" viewBox="0 0 24 32" fill="none" str
 const NEW3=[{ic:IC.cal,t:"apb",pos:"top",ti:"المواعيد المحجوزة",tx:"الأيقونة دي في الأعلى بتفتح نافذة بكل مواعيدك المحجوزة مقسّمة: اليوم، القادمة، وفات موعدها. والرقم الأحمر عليها هو عدد المواعيد."},
   {ic:IC.cal,ti:"فلتر المواعيد",tx:"في الصفحة الرئيسية اضغط فلتر \"المواعيد\" لتشوف المواعيد المحجوزة بس، مرتبة بالأقرب."},
   {ic:IC.cal,ti:"حجز موعد لحالة موجودة",tx:"افتح أي حالة واضغط \"حجز موعد لهذه الحالة\"، وبيانات المريض بتتكتب لوحدها."}];
-const NEW4=[{ic:IC.flask,t:"nvL",pos:"bot",ti:"المعمل",tx:"زرار المعمل في الشريط السفلي: سجّل شغل المعمل (المطلوب، اللي اتبعت، الأسنان، تاريخ التسليم والاستلام، والمدفوع)، وعلّم بـ ✓ لما تسلّمه ولما تستلمه."},
+const NEW4=[{ic:IC.flask,t:"menub",pos:"top",ti:"المعمل",tx:"المعمل من القائمة الجانبية ☰ (حالة جديدة للمعمل): سجّل شغل المعمل (المطلوب، اللي اتبعت، الأسنان، تاريخ التسليم والاستلام، والمدفوع)، وعلّم بـ ✓ لما تسلّمه ولما تستلمه."},
   {ic:IC.tooth,ti:"اختيار أكتر من سن",tx:"في نافذة المعمل اضغط على كذا سن مرة واحدة، أو حدّد الفك العلوي أو السفلي كله بضغطة. ورسمة الأسنان فيها اللبنية والدائمة والمختلطة."},
   {ic:IC.tooth,ti:"تفاصيل الـ Endo",tx:"اضغط على سن واختر Endo: هتلاقي عدد القنوات (1 إلى 4)، واسم وطول كل قناة، وعداد الـ M.C بيبدأ من 20 ويزيد 5، ومراحل Ac وCl&Sh وOb."},
   {ic:IC.img,ti:"حفظ صور الحالة",tx:"لو الصور اتمسحت من المعرض، في صفحة الحالة زرار \"حفظ صور الحالة على الموبايل\" بينزّلها تاني."},
   {ic:IC.clip,ti:"تحويل لـ PowerPoint",tx:"في صفحة الحالة زرار \"تحويل الحالة لملف PowerPoint\" بيطلع لك عرض جاهز بالجلسات والصور، وتقدر تخفي اسم المريض."}];
 const NEW5=[{ic:IC.cloud,t:"gear",pos:"top",ti:"حفظ الحالات بحساب جوجل",tx:"من الإعدادات سجّل دخول بحساب جوجل، وحالاتك وصورها بتتحفظ في Google Drive بتاعك. لو غيّرت الموبايل، ثبّت التطبيق وسجّل بنفس الحساب وكل حالاتك ترجع."}];
+const NEW6=[{ic:IC.gear,t:"menub",pos:"top",ti:"القائمة الجانبية",tx:"زرار ☰ في الأعلى: حسابك وملفك الشخصي (وتقدر تضيف لحد ٣ حسابات)، حالة جديدة وموعد جديد وحالة للمعمل، الأقسام، اللغة، الوضع الداكن، وإعادة الجولة وتسجيل الخروج."}];
 const TS={
  new:[{ic:IC.tooth,ti:"أهلاً بك في حالاتي",tx:"أرشيف حالاتك السنية في جيبك. هنعرّفك على كل زر في ثواني."},
   {ic:IC.doc,t:"add",pos:"bot",ti:"إضافة حالة",tx:"الزر اللي على اليمين: سجّل مريض جديد بصوره وأسنانه وتفاصيله."},
   {ic:IC.home,t:"nvH",pos:"bot",ti:"الصفحة الرئيسية",tx:"الزر الكبير في النص: يرجّعك لكل حالاتك ومواعيدك القادمة."},
   {ic:IC.cal,t:"nvP",pos:"bot",ti:"حجز موعد",tx:"الزر اللي على الشمال: حدد يوم وساعة موعد المريض، وإيه اللي هتعمله وعلى أنهي سن."},
   {ic:IC.cal,t:"apb",pos:"top",ti:"المواعيد المحجوزة",tx:"الأيقونة دي بتفتح نافذة بكل مواعيدك المحجوزة، والرقم الأحمر عليها هو عدد المواعيد."},
-  {ic:IC.flask,t:"nvL",pos:"bot",ti:"المعمل",tx:"زرار المعمل: سجّل شغل المعمل ومواعيد التسليم والاستلام والمدفوع."},
-  {ic:IC.gear,t:"gear",pos:"top",ti:"الإعدادات",tx:"أضف لوجو خاص بيك يظهر في التطبيق وفي ملف الـ PDF، وأعد الجولة من هنا في أي وقت."},
-  {ic:IC.chat,t:"fbo",pos:"top",ti:"شكاوي واقتراحات",tx:"ابعتلنا رأيك مباشرة على واتساب."}],
+  {ic:IC.flask,t:"menub",pos:"top",ti:"المعمل",tx:"المعمل من القائمة ☰: سجّل شغل المعمل ومواعيد التسليم والاستلام والمدفوع."},
+  {ic:IC.gear,t:"gear",pos:"top",ti:"الإعدادات",tx:"احفظ حالاتك بحساب جوجل واقرأ سياسة الخصوصية من هنا."},
+  {ic:IC.chat,t:"menub",pos:"top",ti:"شكاوي واقتراحات",tx:"من القائمة ☰ ابعتلنا رأيك مباشرة على واتساب."}],
  upd:[{ic:IC.tooth,ti:"حالاتي اتحدّث! ما الجديد؟",tx:"في تحديثات كتير: شريط سفلي جديد، مواعيد، أسنان لبنية، جلسات متعددة وأكتر. تعالى نشوفهم."},
   {ic:IC.doc,t:"add",pos:"bot",ti:"إضافة حالة",tx:"الزر اللي على اليمين في الشريط السفلي لإضافة مريض جديد."},
   {ic:IC.home,t:"nvH",pos:"bot",ti:"الصفحة الرئيسية",tx:"الزر الكبير في النص: كل حالاتك ومواعيدك القادمة."},
@@ -508,22 +557,23 @@ const TS={
   {ic:IC.img,ti:"صور بلا حد وPDF",tx:"أضف أي عدد من الصور في كل مرحلة، واحفظ الحالة كلها كملف PDF."},
   ...NEW3,
   ...NEW4,
-  ...NEW5,
-  {ic:IC.chat,t:"fbo",pos:"top",ti:"شكاوي واقتراحات",tx:"الأيقونة دي بتبعتلنا رأيك مباشرة على واتساب."}]};
-TS.v3=[{ic:IC.tooth,ti:"جديد في حالاتي",tx:"في حاجات جديدة كتير: المواعيد والمعمل وتفاصيل الـ Endo وغيرها. تعالى نشوفها."},...NEW3,...NEW4,...NEW5];
-TS.v4=[{ic:IC.tooth,ti:"جديد في حالاتي",tx:"في تحديثات جديدة: المعمل، وتفاصيل الـ Endo، وحفظ الصور، وتحويل الحالة لـ PowerPoint. تعالى نشوفها."},...NEW4,...NEW5];
-TS.v5=[{ic:IC.cloud,ti:"جديد في حالاتي",tx:"بقى تقدر تحفظ حالاتك بحساب جوجل وترجّعها على أي موبايل جديد."},...NEW5];
+  ...NEW5,...NEW6,
+  {ic:IC.chat,t:"menub",pos:"top",ti:"شكاوي واقتراحات",tx:"من القائمة ☰ بتبعتلنا رأيك مباشرة على واتساب."}]};
+TS.v3=[{ic:IC.tooth,ti:"جديد في حالاتي",tx:"في حاجات جديدة كتير: المواعيد والمعمل وتفاصيل الـ Endo وغيرها. تعالى نشوفها."},...NEW3,...NEW4,...NEW5,...NEW6];
+TS.v4=[{ic:IC.tooth,ti:"جديد في حالاتي",tx:"في تحديثات جديدة: المعمل، وتفاصيل الـ Endo، وحفظ الصور، وتحويل الحالة لـ PowerPoint. تعالى نشوفها."},...NEW4,...NEW5,...NEW6];
+TS.v6=[{ic:IC.tooth,ti:"جديد في حالاتي",tx:"في قائمة جانبية جديدة بحسابات متعددة ولغة إنجليزية ووضع داكن."},...NEW6];
+TS.v5=[{ic:IC.cloud,ti:"جديد في حالاتي",tx:"بقى تقدر تحفظ حالاتك بحساب جوجل وترجّعها على أي موبايل جديد."},...NEW5,...NEW6];
 let tsteps=[],tix=0;
 function tourShow(){const s=tsteps[tix];document.querySelectorAll(".tgt").forEach(x=>x.classList.remove("tgt"));
   if(s.t&&$(s.t))$(s.t).classList.add("tgt");$("tour").dataset.pos=s.pos||"mid";$("tic").innerHTML=s.ic||"";$("ttl").textContent=s.ti;$("ttx").textContent=s.tx;
   $("tdots").innerHTML=tsteps.map((_,i)=>`<i class="${i==tix?"on":""}"></i>`).join("");$("tprev").style.visibility=tix?"visible":"hidden";
   $("tnext").textContent=tix==tsteps.length-1?"ابدأ الاستخدام":"التالي"}
 function tourStart(l){show("list");tsteps=l;tix=0;$("tour").classList.add("on");tourShow()}
-function tourEnd(){$("tour").classList.remove("on");document.querySelectorAll(".tgt").forEach(x=>x.classList.remove("tgt"));try{localStorage.setItem("tour","5")}catch(e){}}
+function tourEnd(){$("tour").classList.remove("on");document.querySelectorAll(".tgt").forEach(x=>x.classList.remove("tgt"));try{localStorage.setItem("tour","6")}catch(e){}}
 $("tnext").onclick=()=>{if(tix>=tsteps.length-1)tourEnd();else{tix++;tourShow()}};
 $("tprev").onclick=()=>{if(tix>0){tix--;tourShow()}};
 $("tskip").onclick=tourEnd;
-$("tourbtn").onclick=()=>{$("set").classList.add("hide");tourStart(TS.upd)};
+$("dtour").onclick=()=>{_dc();$("set").classList.add("hide");tourStart(TS.upd)};
 
 // ================= المعمل =================
 const LW=["Partial upper","Partial lower","Complete","Over denture","Bridge PFM","Bridge Zircon","Crown PFM","Crown Zircon","Space maintainer"];
@@ -579,7 +629,7 @@ $("lbn").onclick=()=>lbStart(null);
 const leaveOk=()=>{const fo=!$("form").classList.contains("hide"),lo=!$("lbf").classList.contains("hide");
   const dirty=(fo&&($("t").value.trim()||$("n").value.trim()||tot(imgs)))||(lo&&lbMod);
   return !dirty||confirm("الخروج بدون حفظ؟ سيتم تجاهل البيانات المكتوبة.")};
-$("nvL").onclick=async()=>{if(!leaveOk())return;addTo=null;apFrom=null;apptMode=false;document.body.classList.remove("am");lbEdit=null;lbMod=false;document.querySelectorAll(".ov.on").forEach(x=>x.classList.remove("on"));await render();renderLab();show("lbl")};
+window.openLabWin=async()=>{if(!leaveOk())return;addTo=null;apFrom=null;apptMode=false;document.body.classList.remove("am");lbEdit=null;lbMod=false;document.querySelectorAll(".ov.on").forEach(x=>x.classList.remove("on"));await render();renderLab();show("lbl")};
 
 // ================= تصدير PowerPoint =================
 const crcT=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
@@ -657,7 +707,7 @@ $("ppt").onclick=async()=>{if(!cur)return;const hide=!confirm("إضافة اسم
 const GCID="837046658718-ca0mrea02or59sr2djnsh8hn582sv2t1.apps.googleusercontent.com";
 const GU="https://www.googleapis.com/drive/v3",GUP="https://www.googleapis.com/upload/drive/v3",GSC="https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/userinfo.email",GDEB=45000;
 let gTok=null,gExp=0,gBusy=false,gTimer=null;
-const gLS=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}return null};
+const gLS=(k,v)=>{k=k+(ACC.id=="a1"?"":"_"+ACC.id);try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}return null};
 const gLinked=()=>!!gLS("g_em");
 const gSay=t=>{const e=$("gst");if(e)e.textContent=t};
 const gz=async t=>{const b=new Blob([t]);return typeof CompressionStream=="undefined"?b:new Response(b.stream().pipeThrough(new CompressionStream("gzip"))).blob()};
@@ -684,7 +734,7 @@ async function gInit(){const h=location.hash;if(!/state=/.test(h)||!/access_toke
   gUI();await gSync()}
 async function gApi(url,o){o=o||{};const r=await fetch(url,{...o,headers:{...(o.headers||{}),Authorization:"Bearer "+gTok}});if(r.status==401){gSetTok(null,0);throw new Error("auth")}if(!r.ok)throw new Error("http"+r.status);return r}
 async function gList(){const m={};let pt="";do{const r=await(await gApi(`${GU}/files?spaces=appDataFolder&pageSize=1000&fields=nextPageToken,files(id,name,appProperties)${pt?"&pageToken="+encodeURIComponent(pt):""}`)).json();(r.files||[]).forEach(f=>{m[f.name]={id:f.id,mt:+((f.appProperties||{}).mt||0)}});pt=r.nextPageToken||""}while(pt);return m}
-async function gUpload(rec,rem){const blob=await gz(JSON.stringify(rec)),name="r-"+rec.id,props={appProperties:{mt:String(rec.mt||0)}};
+async function gUpload(rec,rem){const blob=await gz(JSON.stringify(rec)),name=GP()+rec.id,props={appProperties:{mt:String(rec.mt||0)}};
   const meta=JSON.stringify(rem?props:{name,parents:["appDataFolder"],...props}),path=rem?`/files/${rem.id}`:"/files",method=rem?"PATCH":"POST";
   if(blob.size<=4*1048576){const body=new Blob([`--gb\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n--gb\r\nContent-Type: application/octet-stream\r\n\r\n`,blob,"\r\n--gb--"]);
     await gApi(`${GUP}${path}?uploadType=multipart&fields=id`,{method,headers:{"Content-Type":"multipart/related; boundary=gb"},body})}
@@ -696,14 +746,14 @@ async function gSync(){if(gBusy)return;if(!GCID){gSay("الخدمة لسه ما 
     // 1) حذف اللي اتمسح محليًا (الأول، عشان ما يتنزّلش تاني)
     let pend=[];try{pend=JSON.parse(gLS("g_del")||"[]")}catch(e){}
     const pset=new Set(pend.map(String));
-    for(const id of pend){const f=remote["r-"+id];if(f&&!lm.has(String(id))){await gApi(`${GU}/files/${f.id}`,{method:"DELETE"});delete remote["r-"+id];dl++}}
+    for(const id of pend){const f=remote[GP()+id];if(f&&!lm.has(String(id))){await gApi(`${GU}/files/${f.id}`,{method:"DELETE"});delete remote[GP()+id];dl++}}
     gLS("g_del",null);
     // 2) تنزيل الجديد/الناقص
-    const D=Object.keys(remote).filter(n=>n.startsWith("r-")).filter(n=>{const id=n.slice(2),l=lm.get(id);return !pset.has(id)&&(!l||remote[n].mt>(l.mt||0))});
+    const D=Object.keys(remote).filter(n=>n.startsWith(GP())).filter(n=>{const id=n.slice(GP().length),l=lm.get(id);return !pset.has(id)&&(!l||remote[n].mt>(l.mt||0))});
     for(let i=0;i<D.length;i++){gSay(`جاري التنزيل ${i+1}/${D.length}...`);const rec=JSON.parse(await ungz(await(await gApi(`${GU}/files/${remote[D[i]].id}?alt=media`)).blob()));rec.mt=remote[D[i]].mt;await putRaw(rec);lm.set(String(rec.id),rec);dn++}
     // 3) رفع الجديد
-    const U=[...lm.values()].filter(x=>{const f=remote["r-"+x.id];return !f||(x.mt||0)>f.mt});
-    for(let i=0;i<U.length;i++){gSay(`جاري الرفع ${i+1}/${U.length}...`);if(!U[i].mt){U[i].mt=Date.now();await putRaw(U[i])}await gUpload(U[i],remote["r-"+U[i].id]);up++}
+    const U=[...lm.values()].filter(x=>{const f=remote[GP()+x.id];return !f||(x.mt||0)>f.mt});
+    for(let i=0;i<U.length;i++){gSay(`جاري الرفع ${i+1}/${U.length}...`);if(!U[i].mt){U[i].mt=Date.now();await putRaw(U[i])}await gUpload(U[i],remote[GP()+U[i].id]);up++}
     gLS("g_dirty",null);gLS("g_last",String(Date.now()));gSay(`✓ تمت المزامنة: نزّلت ${dn}، رفعت ${up}${dl?`، حذفت ${dl}`:""}.`);
     if(dn){await render()}}
   catch(e){gSay(gErr(e))}
@@ -724,7 +774,48 @@ $("gin").onclick=gLogin;$("gnow").onclick=gSync;
 $("gout").onclick=()=>{if(!confirm("تسجيل الخروج من جوجل؟ الحالات هتفضل على موبايلك ونسختك على Drive متتمسحش."))return;gSetTok(null,0);gLS("g_em",null);gLS("g_dirty",null);gLS("g_del",null);$("gst").textContent="";gUI()};
 $("gear").addEventListener("click",()=>gUI());
 function maybeTour(){let seen="";try{seen=localStorage.getItem("tour")}catch(e){}
-  if(seen=="5")return;tourStart(seen=="4"?TS.v5:seen=="3"?TS.v4:seen=="2"?TS.v3:(cases.length||appts.length||labs.length||logo?TS.upd:TS.new))}
+  if(seen=="6")return;if(_ch)return;tourStart(seen=="5"?TS.v6:seen=="4"?TS.v5:seen=="3"?TS.v4:seen=="2"?TS.v3:(cases.length||appts.length||labs.length||logo?TS.upd:TS.new))}
+
+// ================= القائمة الجانبية / الحسابات / اللغة / الوضع الداكن =================
+var _ch=_ls("acc_out")=="1";
+const _EN={"القائمة":"Menu","المواعيد المحجوزة":"Booked appointments","الإعدادات":"Settings","حسابي":"My account","إضافة حساب":"Add account","إضافة":"Add","اسم الحساب":"Account name","اختر الحساب":"Choose account","ملفي الشخصي":"My profile","حفظ الاسم":"Save name","اللوجو":"Logo","لوجو خاص بك (اختياري)":"Your own logo (optional)","يظهر في التطبيق وفي ملف الـ PDF.":"Shown in the app and in the PDF file.","اختر لوجو":"Choose logo","حذف اللوجو":"Remove logo","إجمالي الحالات":"Total cases","إجمالي الجلسات":"Total sessions","حالات المعمل":"Lab cases","إجمالي الصور":"Total photos","عدد الحالات في كل قسم":"Cases per section","حالة جديدة":"New case","موعد جديد":"New appointment","حالة جديدة للمعمل":"New lab case","الأقسام":"Sections","اللغة":"Language","الوضع الداكن":"Dark mode","شكاوي واقتراحات":"Complaints & suggestions","إعادة الجولة التعريفية":"Replay intro tour","تسجيل الخروج":"Log out","الحد الأقصى ٣ حسابات":"Maximum 3 accounts","اكتب اسم الحساب":"Enter the account name","تم الحفظ":"Saved","تسجيل الخروج من هذا الحساب؟ بياناتك هتفضل محفوظة على الجهاز.":"Log out of this account? Your data stays saved on this device.","الكل":"All","المواعيد":"Appointments","الحالات":"Cases","ابحث في الحالات...":"Search cases...","لا توجد حالات بعد. اضغط زر إضافة حالة في الشريط السفلي لإضافة أول حالة.":"No cases yet. Tap the add button in the bottom bar to add your first case.","حفظ الحالات بحساب جوجل":"Save cases with Google account","تسجيل الدخول بجوجل":"Sign in with Google","حفظ ومزامنة الآن":"Save & sync now","سياسة الخصوصية":"Privacy policy","اسم المريض":"Patient name","مثال: مصطفى أحمد":"e.g. Mustafa Ahmed","العمر (بالسنوات)":"Age (years)","النوع":"Gender","ذكر":"Male","أنثى":"Female","التخصص (يمكنك اختيار أكثر من تخصص)":"Specialty (you can pick more than one)","مرحلة الأسنان (Dentition)":"Dentition stage","الأسنان (اضغط على السن لتحديد ما تم عليه)":"Teeth (tap a tooth to mark what was done)","التاريخ":"Date","الساعة (اختيارية)":"Time (optional)","رقم هاتف المريض (اختياري)":"Patient phone (optional)","التفاصيل (التشخيص، خطوات العلاج، الخامات...)":"Details (diagnosis, treatment steps, materials...)","حفظ":"Save","إلغاء":"Cancel","إضافة صورة":"Add photo","حجز موعد":"Book appointment","تاريخ الموعد (اختياري)":"Appointment date (optional)","حفظ الموعد":"Save appointment","← رجوع":"← Back","📄 حفظ PDF / طباعة":"📄 Save PDF / Print","حذف":"Delete","＋ إضافة جلسة جديدة لهذه الحالة":"+ Add a new session to this case","حجز موعد لهذه الحالة":"Book an appointment for this case","تحويل الحالة لملف PowerPoint":"Export case to PowerPoint","حفظ صور الحالة على الموبايل":"Save case photos to phone","ملخص الحالة":"Case summary","إغلاق":"Close","حذف الجلسة":"Delete session","حذف الموعد":"Delete appointment","✓ تم الموعد — حوّله لحالة / جلسة":"✓ Done — convert to case / session","اليوم":"Today","القادمة":"Upcoming","بدون موعد محدد":"No set time","فات موعدها":"Overdue","فات موعده":"Overdue","المعمل":"Lab","＋ إضافة حالة للمعمل":"+ Add lab case","حالة معمل جديدة":"New lab case","لم يُسلَّم":"Not delivered","عند المعمل":"At the lab","تم الاستلام":"Received","تم التسليم للمعمل":"Delivered to lab","تم الاستلام من المعمل":"Received from lab","تعديل":"Edit","عايز المعمل يعمل إيه (يمكن أكثر من اختيار)":"What the lab should make (multiple allowed)","وديت إيه للمعمل (يمكن أكثر من اختيار)":"What you sent to the lab (multiple allowed)","الأسنان (اضغط على أكتر من سن لتحديدهم)":"Teeth (tap several)","تحديد كل الفك العلوي":"Select whole upper jaw","تحديد كل الفك السفلي":"Select whole lower jaw","مسح التحديد":"Clear selection","تاريخ التسليم للمعمل":"Delivery date to lab","تاريخ الاستلام من المعمل":"Receive date from lab","المدفوع للمعمل (جنيه)":"Paid to lab (EGP)","حالة الشغل":"Work status","ملاحظات":"Notes","اختر ما تم عمله على هذا السن (يمكن أكثر من اختيار)":"Choose what was done on this tooth (multiple allowed)","تم":"Done","مسح العلامة":"Clear mark","تُرسل إلينا عبر واتساب فقط.":"Sent to us via WhatsApp only.","اقتراح":"Suggestion","شكوى":"Complaint","إرسال عبر واتساب":"Send via WhatsApp","اكتب رسالتك هنا... (بدون أي بيانات مرضى)":"Write your message here... (no patient data)","اكتب اسم المريض":"Enter the patient name","تخطي":"Skip","السابق":"Previous","التالي":"Next","ابدأ الاستخدام":"Get started"};
+const _PF=[["عدد الجلسات: ","Sessions: "],["عدد الصور: ","Photos: "],["الأسنان: ","Teeth: "],["المواعيد القادمة (","Upcoming appointments ("],["المطلوب: ","Requested: "],["جلسة جديدة — ","New session — "],["حجز موعد — ","Book appointment — "]];
+const _T=k=>{if(_EN[k])return _EN[k];const p=_PF.find(p=>k.startsWith(p[0]));return p?p[1]+k.slice(p[0].length):null};
+const _og=new WeakMap(),_AT=[["placeholder","oph"],["aria-label","oal"]];let _td=false;
+function _tn(n){if(n.nodeType==3){const m=_og.get(n),o=m&&n.nodeValue==m.e?m.o:n.nodeValue,k=o.trim(),t=LG=="en"&&k?_T(k):null,v=t?o.replace(k,()=>t):o;if(t||m){_og.set(n,{o,e:v});if(n.nodeValue!=v)n.nodeValue=v}}
+  else if(n.nodeType==1&&!/^(SCRIPT|STYLE)$/.test(n.tagName)){_AT.forEach(([a,d])=>{if(n.hasAttribute(a)){const o=n.dataset[d]!==undefined?n.dataset[d]:n.getAttribute(a),t=LG=="en"?_T(o.trim()):null;if(t||n.dataset[d]!==undefined){n.dataset[d]=o;n.setAttribute(a,t||o)}}});n.childNodes.forEach(_tn)}}
+new MutationObserver(ms=>{if(LG!="en"&&!_td)return;ms.forEach(r=>{if(r.type=="characterData")_tn(r.target);else r.addedNodes.forEach(_tn)})}).observe(document.body,{childList:true,subtree:true,characterData:true});
+const _al=window.alert.bind(window),_cf=window.confirm.bind(window);window.alert=m=>_al(LG=="en"?(_T(String(m))||m):m);window.confirm=m=>_cf(LG=="en"?(_T(String(m))||m):m);
+function _lang(l){LG=l;_ls("lang",l);_td=true;document.documentElement.lang=l;document.documentElement.dir=l=="en"?"ltr":"rtl";document.title=l=="en"?"Halati – Dental Cases":"حالاتي – Dental Cases";_tn(document.body);_ui()}
+const _dk=()=>{const t=_ls("theme");return t?t=="dark":matchMedia("(prefers-color-scheme:dark)").matches};
+function _theme(){const t=_ls("theme");if(t)document.documentElement.dataset.theme=t;const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=_dk()?"#0c1a34":"#eef3f8";$("dsw").classList.toggle("on",_dk())}
+$("dth").onclick=()=>{_ls("theme",_dk()?"light":"dark");_theme()};
+$("dlang").onclick=()=>_lang(LG=="en"?"ar":"en");
+const _sv=()=>_ls("accs",JSON.stringify(ACCS)),_dc=()=>{$("drw").classList.remove("on");$("dov").classList.remove("on")},_FL=["الكل","المواعيد",...SP.slice(1)],_an=a=>a.name||"حسابي";
+const _sw=id=>{_ls("acc_on",id);_ls("acc_out","0");location.reload()};
+function _ui(){const n=_an(ACC);$("dnm").textContent=n;$("dav").textContent=[...n][0]||"ح";$("dlv").textContent=LG=="en"?"العربية":"English";
+  $("dal").innerHTML=ACCS.map(a=>`<button class="di sub ${a.id==ACC.id?"on":""}" data-a="${a.id}">${esc(_an(a))}${a.id==ACC.id?" ✓":""}</button>`).join("");
+  $("dsl").innerHTML=_FL.map(x=>`<button class="di sub ${x==flt?"on":""}" data-s="${x}">${x}</button>`).join("");_theme()}
+$("menub").onclick=()=>{_ui();$("drw").classList.add("on");$("dov").classList.add("on")};
+$("dov").onclick=_dc;
+$("dacc").onclick=()=>$("dal").classList.toggle("hide");
+$("dal").onclick=e=>{const id=e.target.dataset.a;if(!id||id==ACC.id)return;if(leaveOk())_sw(id)};
+$("dsec").onclick=()=>$("dsl").classList.toggle("hide");
+$("dsl").onclick=e=>{const x=e.target.dataset.s;if(!x)return;if(!leaveOk())return;_dc();flt=x;$("q").value="";render();show("list")};
+const _go=f=>()=>{_dc();if(leaveOk())f()};
+$("dnc").onclick=_go(()=>startForm(false));$("dnp").onclick=_go(()=>startForm(true));
+$("dnl").onclick=()=>{_dc();openLabWin()};
+function _addAcc(){if(ACCS.length>=3){alert("الحد الأقصى ٣ حسابات");return}if(!_ch&&!leaveOk())return;_dc();$("ani").value="";$("anm").classList.add("on");setTimeout(()=>$("ani").focus(),60)}
+$("dadd").onclick=_addAcc;$("acn").onclick=_addAcc;$("anx").onclick=()=>$("anm").classList.remove("on");
+$("anok").onclick=()=>{const n=$("ani").value.trim();if(!n){alert("اكتب اسم الحساب");return}const id=["a1","a2","a3"].find(i=>!ACCS.some(a=>a.id==i));if(!id)return;ACCS.push({id,name:n});_sv();_sw(id)};
+async function _openPrf(){await render();$("pnm").value=ACC.name||"";const r=(l,v)=>`<div class="sr"><span>${l}</span><b>${v}</b></div>`;
+  $("pst").innerHTML=(logo?`<img src="${logo}" alt="" style="max-height:70px;border-radius:10px;margin-bottom:8px">`:"")+r("إجمالي الحالات",cases.length)+r("إجمالي الجلسات",cases.reduce((a,c)=>a+sessOf(c).length,0))+r("حالات المعمل",labs.length)+r("المواعيد المحجوزة",appts.length)+r("إجمالي الصور",cases.reduce((a,c)=>a+allImgs(c).length,0))+`<div class="sec">عدد الحالات في كل قسم</div>`+SP.slice(1).map(x=>r(x,cases.filter(c=>allSps(c).includes(x)).length)).join("");show("prf")}
+$("dprf").onclick=_go(_openPrf);
+$("pns").onclick=()=>{ACC.name=$("pnm").value.trim();_sv();_ui();alert("تم الحفظ")};
+$("dout").onclick=()=>{if(!leaveOk())return;if(!confirm("تسجيل الخروج من هذا الحساب؟ بياناتك هتفضل محفوظة على الجهاز."))return;gSetTok(null,0);_ls("acc_out","1");location.reload()};
+$("acl").onclick=e=>{const id=e.target.dataset.a;if(id)_sw(id)};
+if(_ch){$("acl").innerHTML=ACCS.map(a=>`<button class="di" data-a="${a.id}">${esc(_an(a))}</button>`).join("");$("acs").classList.add("on")}
+_ui();if(LG=="en"){_td=true;_tn(document.body)}
 open().then(render).then(maybeTour).then(()=>{gUI();gInit()});
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
