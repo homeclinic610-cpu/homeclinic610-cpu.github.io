@@ -148,6 +148,7 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
 .sr{display:flex;justify-content:space-between;padding:9px 0;border-top:1px solid var(--bd)}
 #acs{position:fixed;inset:0;background:var(--bg);z-index:40;display:none;align-items:center;justify-content:center;padding:20px}#acs.on{display:flex}
 .acb{width:100%;max-width:360px;text-align:center}.acb .di{border:1px solid var(--bd);border-radius:12px;margin:8px 0;justify-content:center;background:var(--card);padding:14px}
+#gate{position:fixed;inset:0;background:var(--bg);z-index:45;display:none;align-items:center;justify-content:center;padding:20px}#gate.on{display:flex}#gout{display:none!important}
 </style>
 </head>
 <body>
@@ -267,7 +268,7 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
 
 <div id="prf" class="hide">
   <h2 style="color:var(--gd);margin:8px 0 10px">ملفي الشخصي</h2>
-  <div class="card"><label style="margin-top:0">اسم الحساب</label><input id="pnm"><button class="pri" id="pns" style="width:100%;margin-top:8px">حفظ الاسم</button></div>
+  <div class="card"><label style="margin-top:0">حساب جوجل</label><b id="pem" dir="ltr" style="display:block;text-align:start"></b></div>
   <div class="card"><b>لوجو خاص بك (اختياري)</b><div class="mu" style="margin:4px 0 8px">يظهر في التطبيق وفي ملف الـ PDF.</div><div class="row"><label class="pri" style="margin:0;padding:10px;border-radius:10px;color:#fff">اختر لوجو<input id="lf" type="file" accept="image/*" hidden></label><button id="lrm">حذف اللوجو</button></div></div>
   <div class="card" id="pst"></div>
 </div>
@@ -298,7 +299,7 @@ label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mu)}
   <button class="di" id="dtour">إعادة الجولة التعريفية</button>
   <button class="di" id="dout">تسجيل الخروج</button>
 </aside>
-<div class="ov" id="anm"><div class="sheet"><b>إضافة حساب</b><input id="ani" placeholder="اسم الحساب" style="margin:8px 0"><div class="row" style="margin:0"><button class="pri" id="anok" style="flex:1">إضافة</button><button id="anx">إلغاء</button></div></div></div>
+<div id="gate"><div class="acb"><img src="icons/icon-192.png" class="appmark" alt=""><h2 style="color:var(--gd)">حالاتي</h2><p class="mu" style="line-height:1.8">سجّل الدخول بحساب جوجل عشان تتحفظ حالاتك في حسابك وترجّعها على أي موبايل.</p><div id="gmsg" class="mu" style="margin:8px 0"></div><button class="pri" id="gsign" style="width:100%">تسجيل الدخول بجوجل</button><button id="gback" class="hide" style="width:100%;margin-top:8px">رجوع للحساب الآخر</button></div></div>
 <div id="acs"><div class="acb"><img src="icons/icon-192.png" class="appmark" alt=""><h2 style="color:var(--gd)">اختر الحساب</h2><div id="acl"></div><button class="pri" id="acn" style="width:100%;margin-top:10px">إضافة حساب</button></div></div>
 
 <div id="tour" data-pos="mid"><div class="tcard">
@@ -314,6 +315,7 @@ const _ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStora
 let ACCS=[];try{ACCS=JSON.parse(_ls("accs")||"[]")}catch(e){}
 if(!Array.isArray(ACCS)||!ACCS.length){ACCS=[{id:"a1",name:""}];_ls("accs",JSON.stringify(ACCS))}
 const ACC=ACCS.find(a=>a.id==_ls("acc_on"))||ACCS[0],GP=()=>ACC.id=="a1"?"r-":"r"+ACC.id+"-";let LG=_ls("lang")||"ar";
+ACCS.forEach(a=>{try{const e=localStorage.getItem(a.id=="a1"?"g_em":"g_em_"+a.id);if(e)a.email=e}catch(x){}});
 const arr=v=>Array.isArray(v)?v:(v?[v]:[]);
 const tot=o=>stagesFor(sel).reduce((n,k)=>n+arr(o[k]).length,0);
 const ST={Operative:["Before","Cavity","After"],Fixed:["Before","Preparation","After"],Endo:["Before","X-ray Master Cone","X-ray Obturation","After"],Prosthesis:["Before","Try-in","After"]};
@@ -535,7 +537,7 @@ const NEW4=[{ic:IC.flask,t:"menub",pos:"top",ti:"المعمل",tx:"المعمل 
   {ic:IC.img,ti:"حفظ صور الحالة",tx:"لو الصور اتمسحت من المعرض، في صفحة الحالة زرار \"حفظ صور الحالة على الموبايل\" بينزّلها تاني."},
   {ic:IC.clip,ti:"تحويل لـ PowerPoint",tx:"في صفحة الحالة زرار \"تحويل الحالة لملف PowerPoint\" بيطلع لك عرض جاهز بالجلسات والصور، وتقدر تخفي اسم المريض."}];
 const NEW5=[{ic:IC.cloud,t:"gear",pos:"top",ti:"حفظ الحالات بحساب جوجل",tx:"من الإعدادات سجّل دخول بحساب جوجل، وحالاتك وصورها بتتحفظ في Google Drive بتاعك. لو غيّرت الموبايل، ثبّت التطبيق وسجّل بنفس الحساب وكل حالاتك ترجع."}];
-const NEW6=[{ic:IC.gear,t:"menub",pos:"top",ti:"القائمة الجانبية",tx:"زرار ☰ في الأعلى: حسابك وملفك الشخصي (وتقدر تضيف لحد ٣ حسابات)، حالة جديدة وموعد جديد وحالة للمعمل، الأقسام، اللغة، الوضع الداكن، وإعادة الجولة وتسجيل الخروج."}];
+const NEW6=[{ic:IC.gear,t:"menub",pos:"top",ti:"القائمة الجانبية",tx:"زرار ☰ في الأعلى: حساب جوجل بتاعك وملفك الشخصي (وتقدر تضيف لحد ٣ حسابات جوجل)، حالة جديدة وموعد جديد وحالة للمعمل، الأقسام، اللغة، الوضع الداكن، وإعادة الجولة وتسجيل الخروج."}];
 const TS={
  new:[{ic:IC.tooth,ti:"أهلاً بك في حالاتي",tx:"أرشيف حالاتك السنية في جيبك. هنعرّفك على كل زر في ثواني."},
   {ic:IC.doc,t:"add",pos:"bot",ti:"إضافة حالة",tx:"الزر اللي على اليمين: سجّل مريض جديد بصوره وأسنانه وتفاصيله."},
@@ -709,7 +711,7 @@ const GU="https://www.googleapis.com/drive/v3",GUP="https://www.googleapis.com/u
 let gTok=null,gExp=0,gBusy=false,gTimer=null;
 const gLS=(k,v)=>{k=k+(ACC.id=="a1"?"":"_"+ACC.id);try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}return null};
 const gLinked=()=>!!gLS("g_em");
-const gSay=t=>{const e=$("gst");if(e)e.textContent=t};
+const gSay=t=>{const e=$("gst");if(e)e.textContent=t;const g=$("gmsg");if(g)g.textContent=t};
 const gz=async t=>{const b=new Blob([t]);return typeof CompressionStream=="undefined"?b:new Response(b.stream().pipeThrough(new CompressionStream("gzip"))).blob()};
 const ungz=async b=>{const u=new Uint8Array(await b.slice(0,2).arrayBuffer());return(u[0]==0x1f&&u[1]==0x8b&&typeof DecompressionStream!="undefined")?new Response(b.stream().pipeThrough(new DecompressionStream("gzip"))).text():b.text()};
 function gErr(e){const m=String((e&&e.message)||e);try{console.warn("google-sync:",m)}catch(x){}
@@ -730,7 +732,7 @@ async function gInit(){const h=location.hash;if(!/state=/.test(h)||!/access_toke
   $("set").classList.remove("hide");
   if(!p.get("access_token")){gLS("g_pend",null);gSay(gErr(new Error(p.get("error")||"unknown")));return}
   gSetTok(p.get("access_token"),Date.now()+(+p.get("expires_in")||3600)*1000);const pend=gLS("g_pend");gLS("g_pend",null);
-  if(pend=="login"){try{const u=await(await gApi("https://www.googleapis.com/oauth2/v3/userinfo")).json();gLS("g_em",u.email||"حساب جوجل");gLS("g_dirty","1")}catch(e){gSay(gErr(e));return}}
+  if(pend=="login"){try{const u=await(await gApi("https://www.googleapis.com/oauth2/v3/userinfo")).json();gLS("g_em",u.email||"حساب جوجل");if(_dupChk(u.email||"حساب جوجل"))throw new Error("dup");gLS("g_dirty","1")}catch(e){gSay(gErr(e));return}}
   gUI();await gSync()}
 async function gApi(url,o){o=o||{};const r=await fetch(url,{...o,headers:{...(o.headers||{}),Authorization:"Bearer "+gTok}});if(r.status==401){gSetTok(null,0);throw new Error("auth")}if(!r.ok)throw new Error("http"+r.status);return r}
 async function gList(){const m={};let pt="";do{const r=await(await gApi(`${GU}/files?spaces=appDataFolder&pageSize=1000&fields=nextPageToken,files(id,name,appProperties)${pt?"&pageToken="+encodeURIComponent(pt):""}`)).json();(r.files||[]).forEach(f=>{m[f.name]={id:f.id,mt:+((f.appProperties||{}).mt||0)}});pt=r.nextPageToken||""}while(pt);return m}
@@ -769,16 +771,16 @@ function gUI(){const on=gLinked(),last=+gLS("g_last")||0;
   $("gin").classList.toggle("hide",on);$("gon").classList.toggle("hide",!on);$("gin").disabled=!GCID;
   if(!gBusy){const base=!GCID?"الخدمة دي لسه بتتجهز.":on?`✓ مربوط بـ ${gLS("g_em")}${last?` — آخر مزامنة: ${new Date(last).toLocaleString("ar-EG")}`:""}`:"سجّل دخول بحساب جوجل وحالاتك تتحفظ في Google Drive بتاعك (فولدر مخفي مخصوص للتطبيق)، وترجّعها على أي موبايل جديد بنفس الحساب. البيانات في حسابك أنت بس، مش عندنا.";
     const cur=$("gst").textContent;if(!cur||/^✓ مربوط|^سجّل دخول|^الخدمة دي لسه/.test(cur)||!on)gSay(base)}
-  gBanner()}
+  gBanner();if(window._gateUp)_gateUp()}
 $("gin").onclick=gLogin;$("gnow").onclick=gSync;
 $("gout").onclick=()=>{if(!confirm("تسجيل الخروج من جوجل؟ الحالات هتفضل على موبايلك ونسختك على Drive متتمسحش."))return;gSetTok(null,0);gLS("g_em",null);gLS("g_dirty",null);gLS("g_del",null);$("gst").textContent="";gUI()};
 $("gear").addEventListener("click",()=>gUI());
 function maybeTour(){let seen="";try{seen=localStorage.getItem("tour")}catch(e){}
-  if(seen=="6")return;if(_ch)return;tourStart(seen=="5"?TS.v6:seen=="4"?TS.v5:seen=="3"?TS.v4:seen=="2"?TS.v3:(cases.length||appts.length||labs.length||logo?TS.upd:TS.new))}
+  if(seen=="6")return;if(_ch||!gLinked())return;tourStart(seen=="5"?TS.v6:seen=="4"?TS.v5:seen=="3"?TS.v4:seen=="2"?TS.v3:(cases.length||appts.length||labs.length||logo?TS.upd:TS.new))}
 
 // ================= القائمة الجانبية / الحسابات / اللغة / الوضع الداكن =================
 var _ch=_ls("acc_out")=="1";
-const _EN={"القائمة":"Menu","المواعيد المحجوزة":"Booked appointments","الإعدادات":"Settings","حسابي":"My account","إضافة حساب":"Add account","إضافة":"Add","اسم الحساب":"Account name","اختر الحساب":"Choose account","ملفي الشخصي":"My profile","حفظ الاسم":"Save name","اللوجو":"Logo","لوجو خاص بك (اختياري)":"Your own logo (optional)","يظهر في التطبيق وفي ملف الـ PDF.":"Shown in the app and in the PDF file.","اختر لوجو":"Choose logo","حذف اللوجو":"Remove logo","إجمالي الحالات":"Total cases","إجمالي الجلسات":"Total sessions","حالات المعمل":"Lab cases","إجمالي الصور":"Total photos","عدد الحالات في كل قسم":"Cases per section","حالة جديدة":"New case","موعد جديد":"New appointment","حالة جديدة للمعمل":"New lab case","الأقسام":"Sections","اللغة":"Language","الوضع الداكن":"Dark mode","شكاوي واقتراحات":"Complaints & suggestions","إعادة الجولة التعريفية":"Replay intro tour","تسجيل الخروج":"Log out","الحد الأقصى ٣ حسابات":"Maximum 3 accounts","اكتب اسم الحساب":"Enter the account name","تم الحفظ":"Saved","تسجيل الخروج من هذا الحساب؟ بياناتك هتفضل محفوظة على الجهاز.":"Log out of this account? Your data stays saved on this device.","الكل":"All","المواعيد":"Appointments","الحالات":"Cases","ابحث في الحالات...":"Search cases...","لا توجد حالات بعد. اضغط زر إضافة حالة في الشريط السفلي لإضافة أول حالة.":"No cases yet. Tap the add button in the bottom bar to add your first case.","حفظ الحالات بحساب جوجل":"Save cases with Google account","تسجيل الدخول بجوجل":"Sign in with Google","حفظ ومزامنة الآن":"Save & sync now","سياسة الخصوصية":"Privacy policy","اسم المريض":"Patient name","مثال: مصطفى أحمد":"e.g. Mustafa Ahmed","العمر (بالسنوات)":"Age (years)","النوع":"Gender","ذكر":"Male","أنثى":"Female","التخصص (يمكنك اختيار أكثر من تخصص)":"Specialty (you can pick more than one)","مرحلة الأسنان (Dentition)":"Dentition stage","الأسنان (اضغط على السن لتحديد ما تم عليه)":"Teeth (tap a tooth to mark what was done)","التاريخ":"Date","الساعة (اختيارية)":"Time (optional)","رقم هاتف المريض (اختياري)":"Patient phone (optional)","التفاصيل (التشخيص، خطوات العلاج، الخامات...)":"Details (diagnosis, treatment steps, materials...)","حفظ":"Save","إلغاء":"Cancel","إضافة صورة":"Add photo","حجز موعد":"Book appointment","تاريخ الموعد (اختياري)":"Appointment date (optional)","حفظ الموعد":"Save appointment","← رجوع":"← Back","📄 حفظ PDF / طباعة":"📄 Save PDF / Print","حذف":"Delete","＋ إضافة جلسة جديدة لهذه الحالة":"+ Add a new session to this case","حجز موعد لهذه الحالة":"Book an appointment for this case","تحويل الحالة لملف PowerPoint":"Export case to PowerPoint","حفظ صور الحالة على الموبايل":"Save case photos to phone","ملخص الحالة":"Case summary","إغلاق":"Close","حذف الجلسة":"Delete session","حذف الموعد":"Delete appointment","✓ تم الموعد — حوّله لحالة / جلسة":"✓ Done — convert to case / session","اليوم":"Today","القادمة":"Upcoming","بدون موعد محدد":"No set time","فات موعدها":"Overdue","فات موعده":"Overdue","المعمل":"Lab","＋ إضافة حالة للمعمل":"+ Add lab case","حالة معمل جديدة":"New lab case","لم يُسلَّم":"Not delivered","عند المعمل":"At the lab","تم الاستلام":"Received","تم التسليم للمعمل":"Delivered to lab","تم الاستلام من المعمل":"Received from lab","تعديل":"Edit","عايز المعمل يعمل إيه (يمكن أكثر من اختيار)":"What the lab should make (multiple allowed)","وديت إيه للمعمل (يمكن أكثر من اختيار)":"What you sent to the lab (multiple allowed)","الأسنان (اضغط على أكتر من سن لتحديدهم)":"Teeth (tap several)","تحديد كل الفك العلوي":"Select whole upper jaw","تحديد كل الفك السفلي":"Select whole lower jaw","مسح التحديد":"Clear selection","تاريخ التسليم للمعمل":"Delivery date to lab","تاريخ الاستلام من المعمل":"Receive date from lab","المدفوع للمعمل (جنيه)":"Paid to lab (EGP)","حالة الشغل":"Work status","ملاحظات":"Notes","اختر ما تم عمله على هذا السن (يمكن أكثر من اختيار)":"Choose what was done on this tooth (multiple allowed)","تم":"Done","مسح العلامة":"Clear mark","تُرسل إلينا عبر واتساب فقط.":"Sent to us via WhatsApp only.","اقتراح":"Suggestion","شكوى":"Complaint","إرسال عبر واتساب":"Send via WhatsApp","اكتب رسالتك هنا... (بدون أي بيانات مرضى)":"Write your message here... (no patient data)","اكتب اسم المريض":"Enter the patient name","تخطي":"Skip","السابق":"Previous","التالي":"Next","ابدأ الاستخدام":"Get started"};
+const _EN={"حساب جوجل":"Google account","حساب جديد":"New account","سجّل الدخول بحساب جوجل عشان تتحفظ حالاتك في حسابك وترجّعها على أي موبايل.":"Sign in with your Google account to save your cases and restore them on any phone.","رجوع للحساب الآخر":"Back to the other account","الحساب ده مضاف بالفعل":"This account is already added","القائمة":"Menu","المواعيد المحجوزة":"Booked appointments","الإعدادات":"Settings","حسابي":"My account","إضافة حساب":"Add account","إضافة":"Add","اسم الحساب":"Account name","اختر الحساب":"Choose account","ملفي الشخصي":"My profile","حفظ الاسم":"Save name","اللوجو":"Logo","لوجو خاص بك (اختياري)":"Your own logo (optional)","يظهر في التطبيق وفي ملف الـ PDF.":"Shown in the app and in the PDF file.","اختر لوجو":"Choose logo","حذف اللوجو":"Remove logo","إجمالي الحالات":"Total cases","إجمالي الجلسات":"Total sessions","حالات المعمل":"Lab cases","إجمالي الصور":"Total photos","عدد الحالات في كل قسم":"Cases per section","حالة جديدة":"New case","موعد جديد":"New appointment","حالة جديدة للمعمل":"New lab case","الأقسام":"Sections","اللغة":"Language","الوضع الداكن":"Dark mode","شكاوي واقتراحات":"Complaints & suggestions","إعادة الجولة التعريفية":"Replay intro tour","تسجيل الخروج":"Log out","الحد الأقصى ٣ حسابات":"Maximum 3 accounts","اكتب اسم الحساب":"Enter the account name","تم الحفظ":"Saved","تسجيل الخروج من هذا الحساب؟ بياناتك هتفضل محفوظة على الجهاز.":"Log out of this account? Your data stays saved on this device.","الكل":"All","المواعيد":"Appointments","الحالات":"Cases","ابحث في الحالات...":"Search cases...","لا توجد حالات بعد. اضغط زر إضافة حالة في الشريط السفلي لإضافة أول حالة.":"No cases yet. Tap the add button in the bottom bar to add your first case.","حفظ الحالات بحساب جوجل":"Save cases with Google account","تسجيل الدخول بجوجل":"Sign in with Google","حفظ ومزامنة الآن":"Save & sync now","سياسة الخصوصية":"Privacy policy","اسم المريض":"Patient name","مثال: مصطفى أحمد":"e.g. Mustafa Ahmed","العمر (بالسنوات)":"Age (years)","النوع":"Gender","ذكر":"Male","أنثى":"Female","التخصص (يمكنك اختيار أكثر من تخصص)":"Specialty (you can pick more than one)","مرحلة الأسنان (Dentition)":"Dentition stage","الأسنان (اضغط على السن لتحديد ما تم عليه)":"Teeth (tap a tooth to mark what was done)","التاريخ":"Date","الساعة (اختيارية)":"Time (optional)","رقم هاتف المريض (اختياري)":"Patient phone (optional)","التفاصيل (التشخيص، خطوات العلاج، الخامات...)":"Details (diagnosis, treatment steps, materials...)","حفظ":"Save","إلغاء":"Cancel","إضافة صورة":"Add photo","حجز موعد":"Book appointment","تاريخ الموعد (اختياري)":"Appointment date (optional)","حفظ الموعد":"Save appointment","← رجوع":"← Back","📄 حفظ PDF / طباعة":"📄 Save PDF / Print","حذف":"Delete","＋ إضافة جلسة جديدة لهذه الحالة":"+ Add a new session to this case","حجز موعد لهذه الحالة":"Book an appointment for this case","تحويل الحالة لملف PowerPoint":"Export case to PowerPoint","حفظ صور الحالة على الموبايل":"Save case photos to phone","ملخص الحالة":"Case summary","إغلاق":"Close","حذف الجلسة":"Delete session","حذف الموعد":"Delete appointment","✓ تم الموعد — حوّله لحالة / جلسة":"✓ Done — convert to case / session","اليوم":"Today","القادمة":"Upcoming","بدون موعد محدد":"No set time","فات موعدها":"Overdue","فات موعده":"Overdue","المعمل":"Lab","＋ إضافة حالة للمعمل":"+ Add lab case","حالة معمل جديدة":"New lab case","لم يُسلَّم":"Not delivered","عند المعمل":"At the lab","تم الاستلام":"Received","تم التسليم للمعمل":"Delivered to lab","تم الاستلام من المعمل":"Received from lab","تعديل":"Edit","عايز المعمل يعمل إيه (يمكن أكثر من اختيار)":"What the lab should make (multiple allowed)","وديت إيه للمعمل (يمكن أكثر من اختيار)":"What you sent to the lab (multiple allowed)","الأسنان (اضغط على أكتر من سن لتحديدهم)":"Teeth (tap several)","تحديد كل الفك العلوي":"Select whole upper jaw","تحديد كل الفك السفلي":"Select whole lower jaw","مسح التحديد":"Clear selection","تاريخ التسليم للمعمل":"Delivery date to lab","تاريخ الاستلام من المعمل":"Receive date from lab","المدفوع للمعمل (جنيه)":"Paid to lab (EGP)","حالة الشغل":"Work status","ملاحظات":"Notes","اختر ما تم عمله على هذا السن (يمكن أكثر من اختيار)":"Choose what was done on this tooth (multiple allowed)","تم":"Done","مسح العلامة":"Clear mark","تُرسل إلينا عبر واتساب فقط.":"Sent to us via WhatsApp only.","اقتراح":"Suggestion","شكوى":"Complaint","إرسال عبر واتساب":"Send via WhatsApp","اكتب رسالتك هنا... (بدون أي بيانات مرضى)":"Write your message here... (no patient data)","اكتب اسم المريض":"Enter the patient name","تخطي":"Skip","السابق":"Previous","التالي":"Next","ابدأ الاستخدام":"Get started"};
 const _PF=[["عدد الجلسات: ","Sessions: "],["عدد الصور: ","Photos: "],["الأسنان: ","Teeth: "],["المواعيد القادمة (","Upcoming appointments ("],["المطلوب: ","Requested: "],["جلسة جديدة — ","New session — "],["حجز موعد — ","Book appointment — "]];
 const _T=k=>{if(_EN[k])return _EN[k];const p=_PF.find(p=>k.startsWith(p[0]));return p?p[1]+k.slice(p[0].length):null};
 const _og=new WeakMap(),_AT=[["placeholder","oph"],["aria-label","oal"]];let _td=false;
@@ -791,11 +793,11 @@ const _dk=()=>{const t=_ls("theme");return t?t=="dark":matchMedia("(prefers-colo
 function _theme(){const t=_ls("theme");if(t)document.documentElement.dataset.theme=t;const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=_dk()?"#0c1a34":"#eef3f8";$("dsw").classList.toggle("on",_dk())}
 $("dth").onclick=()=>{_ls("theme",_dk()?"light":"dark");_theme()};
 $("dlang").onclick=()=>_lang(LG=="en"?"ar":"en");
-const _sv=()=>_ls("accs",JSON.stringify(ACCS)),_dc=()=>{$("drw").classList.remove("on");$("dov").classList.remove("on")},_FL=["الكل","المواعيد",...SP.slice(1)],_an=a=>a.name||"حسابي";
+const _sv=()=>_ls("accs",JSON.stringify(ACCS)),_dc=()=>{$("drw").classList.remove("on");$("dov").classList.remove("on")},_FL=["الكل","المواعيد",...SP.slice(1)],_an=a=>a.email||"حساب جديد";
 const _sw=id=>{_ls("acc_on",id);_ls("acc_out","0");location.reload()};
 function _ui(){const n=_an(ACC);$("dnm").textContent=n;$("dav").textContent=[...n][0]||"ح";$("dlv").textContent=LG=="en"?"العربية":"English";
   $("dal").innerHTML=ACCS.map(a=>`<button class="di sub ${a.id==ACC.id?"on":""}" data-a="${a.id}">${esc(_an(a))}${a.id==ACC.id?" ✓":""}</button>`).join("");
-  $("dsl").innerHTML=_FL.map(x=>`<button class="di sub ${x==flt?"on":""}" data-s="${x}">${x}</button>`).join("");_theme()}
+  $("dsl").innerHTML=_FL.map(x=>`<button class="di sub ${x==flt?"on":""}" data-s="${x}">${x}</button>`).join("");_theme();_gateUp()}
 $("menub").onclick=()=>{_ui();$("drw").classList.add("on");$("dov").classList.add("on")};
 $("dov").onclick=_dc;
 $("dacc").onclick=()=>$("dal").classList.toggle("hide");
@@ -805,13 +807,16 @@ $("dsl").onclick=e=>{const x=e.target.dataset.s;if(!x)return;if(!leaveOk())retur
 const _go=f=>()=>{_dc();if(leaveOk())f()};
 $("dnc").onclick=_go(()=>startForm(false));$("dnp").onclick=_go(()=>startForm(true));
 $("dnl").onclick=()=>{_dc();openLabWin()};
-function _addAcc(){if(ACCS.length>=3){alert("الحد الأقصى ٣ حسابات");return}if(!_ch&&!leaveOk())return;_dc();$("ani").value="";$("anm").classList.add("on");setTimeout(()=>$("ani").focus(),60)}
-$("dadd").onclick=_addAcc;$("acn").onclick=_addAcc;$("anx").onclick=()=>$("anm").classList.remove("on");
-$("anok").onclick=()=>{const n=$("ani").value.trim();if(!n){alert("اكتب اسم الحساب");return}const id=["a1","a2","a3"].find(i=>!ACCS.some(a=>a.id==i));if(!id)return;ACCS.push({id,name:n});_sv();_sw(id)};
-async function _openPrf(){await render();$("pnm").value=ACC.name||"";const r=(l,v)=>`<div class="sr"><span>${l}</span><b>${v}</b></div>`;
+function _gateUp(){$("gate").classList.toggle("on",!_ch&&!gLinked()&&!/access_token|error=/.test(location.hash));$("gback").classList.toggle("hide",!ACCS.some(a=>a!==ACC&&a.email))}
+function _dupChk(em){const o=ACCS.find(a=>a!==ACC&&a.email==em);if(!o){ACC.email=em;_sv();return false}
+  alert("الحساب ده مضاف بالفعل");gLS("g_em",null);if(ACC.id!="a1"){ACCS=ACCS.filter(a=>a!==ACC);_sv()}_sw(o.id);return true}
+function _addAcc(){const e=ACCS.find(a=>!a.email&&a!==ACC);if(e){if(_ch||leaveOk())_sw(e.id);return}if(!ACC.email){_dc();return}
+  if(ACCS.length>=3){alert("الحد الأقصى ٣ حسابات");return}if(!_ch&&!leaveOk())return;const id=["a1","a2","a3"].find(i=>!ACCS.some(a=>a.id==i));ACCS.push({id,email:""});_sv();_sw(id)}
+$("dadd").onclick=_addAcc;$("acn").onclick=_addAcc;$("gsign").onclick=()=>gLogin();
+$("gback").onclick=()=>{const o=ACCS.find(a=>a!==ACC&&a.email);if(!o)return;if(ACC.id!="a1"&&!ACC.email){ACCS=ACCS.filter(a=>a!==ACC);_sv()}_sw(o.id)};
+async function _openPrf(){await render();$("pem").textContent=ACC.email||"";const r=(l,v)=>`<div class="sr"><span>${l}</span><b>${v}</b></div>`;
   $("pst").innerHTML=(logo?`<img src="${logo}" alt="" style="max-height:70px;border-radius:10px;margin-bottom:8px">`:"")+r("إجمالي الحالات",cases.length)+r("إجمالي الجلسات",cases.reduce((a,c)=>a+sessOf(c).length,0))+r("حالات المعمل",labs.length)+r("المواعيد المحجوزة",appts.length)+r("إجمالي الصور",cases.reduce((a,c)=>a+allImgs(c).length,0))+`<div class="sec">عدد الحالات في كل قسم</div>`+SP.slice(1).map(x=>r(x,cases.filter(c=>allSps(c).includes(x)).length)).join("");show("prf")}
 $("dprf").onclick=_go(_openPrf);
-$("pns").onclick=()=>{ACC.name=$("pnm").value.trim();_sv();_ui();alert("تم الحفظ")};
 $("dout").onclick=()=>{if(!leaveOk())return;if(!confirm("تسجيل الخروج من هذا الحساب؟ بياناتك هتفضل محفوظة على الجهاز."))return;gSetTok(null,0);_ls("acc_out","1");location.reload()};
 $("acl").onclick=e=>{const id=e.target.dataset.a;if(id)_sw(id)};
 if(_ch){$("acl").innerHTML=ACCS.map(a=>`<button class="di" data-a="${a.id}">${esc(_an(a))}</button>`).join("");$("acs").classList.add("on")}
