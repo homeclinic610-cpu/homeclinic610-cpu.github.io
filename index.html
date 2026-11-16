@@ -316,7 +316,7 @@ details.sp{border-top:1px solid var(--bd);margin:0 8px}details.sp>summary{paddin
   <button class="di" id="dtour">إعادة الجولة التعريفية</button>
   <button class="di" id="dinst" hidden>تثبيت التطبيق على الكمبيوتر</button>
   <button class="di" id="dout">تسجيل الخروج</button>
-  <div class="mu" style="text-align:center;padding:12px">v41</div>
+  <div class="mu" style="text-align:center;padding:12px">v42</div>
 </aside>
 <div id="gate"><div class="acb"><img src="icons/icon-192.png" class="appmark" alt=""><h2 style="color:var(--gd)">حالاتي</h2><p class="mu" style="line-height:1.8">سجّل الدخول بحساب جوجل عشان تتحفظ حالاتك في حسابك وترجّعها على أي موبايل.</p><div id="gmsg" class="mu" style="margin:8px 0"></div><button class="pri" id="gsign" style="width:100%">تسجيل الدخول بجوجل</button><button id="gback" class="hide" style="width:100%;margin-top:8px">رجوع للحساب الآخر</button></div></div>
 <div id="acs"><div class="acb"><img src="icons/icon-192.png" class="appmark" alt=""><h2 style="color:var(--gd)">اختر الحساب</h2><div id="acl"></div><button class="pri" id="acn" style="width:100%;margin-top:10px">إضافة حساب</button></div></div>
@@ -772,7 +772,7 @@ $("ppt").onclick=async()=>{if(!cur)return;const hide=!confirm("إضافة اسم
 // ================= حفظ الحالات بحساب جوجل (Google Drive – فولدر التطبيق المخفي) =================
 const GCID="837046658718-ca0mrea02or59sr2djnsh8hn582sv2t1.apps.googleusercontent.com";
 const GU="https://www.googleapis.com/drive/v3",GUP="https://www.googleapis.com/upload/drive/v3",GSC="https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/userinfo.email",GDEB=800;
-let gTok=null,gExp=0,gBusy=false,gTimer=null,gSig="";const gSigOf=m=>Object.keys(m).filter(k=>k.startsWith(GP())).sort().map(k=>k+":"+m[k].mt).join("|");
+let gTok=null,gExp=0,gBusy=false,gTimer=null,gSig="",gVer=0;const gTomb=()=>{try{return JSON.parse(gLS("g_tomb")||"{}")||{}}catch(e){return{}}};const gSigOf=m=>Object.keys(m).filter(k=>k.startsWith(GP())).sort().map(k=>k+":"+m[k].mt).join("|");
 const gLS=(k,v)=>{k=k+(ACC.id=="a1"?"":"_"+ACC.id);try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}return null};
 const gLinked=()=>!!gLS("g_em");
 const gSay=t=>{const e=$("gst");if(e)e.textContent=t;const g=$("gmsg");if(g)g.textContent=t};
@@ -805,35 +805,41 @@ async function gInit(){const h=location.hash;if(!/state=/.test(h)||!/access_toke
   if(pend=="login"){try{const u=await(await gApi("https://www.googleapis.com/oauth2/v3/userinfo")).json();gLS("g_em",u.email||"حساب جوجل");if(_dupChk(u.email||"حساب جوجل"))throw new Error("dup");gLS("g_dirty","1")}catch(e){gSay(gErr(e));return}}
   gUI();await gSync()}
 async function gApi(url,o){o=o||{};const r=await fetch(url,{...o,headers:{...(o.headers||{}),Authorization:"Bearer "+gTok}});if(r.status==401){gSetTok(null,0);throw new Error("auth")}if(!r.ok)throw new Error("http"+r.status);return r}
-async function gList(){const m={};let pt="";do{const r=await(await gApi(`${GU}/files?spaces=appDataFolder&pageSize=1000&fields=nextPageToken,files(id,name,appProperties)${pt?"&pageToken="+encodeURIComponent(pt):""}`)).json();(r.files||[]).forEach(f=>{m[f.name]={id:f.id,mt:+((f.appProperties||{}).mt||0)}});pt=r.nextPageToken||""}while(pt);return m}
-async function gUpload(rec,rem){const blob=await gz(JSON.stringify(rec)),name=GP()+rec.id,props={appProperties:{mt:String(rec.mt||0)}};
+async function gList(){const m={};let pt="";do{const r=await(await gApi(`${GU}/files?spaces=appDataFolder&pageSize=1000&fields=nextPageToken,files(id,name,appProperties)${pt?"&pageToken="+encodeURIComponent(pt):""}`)).json();(r.files||[]).forEach(f=>{m[f.name]={id:f.id,mt:+((f.appProperties||{}).mt||0),del:(f.appProperties||{}).del=="1"}});pt=r.nextPageToken||""}while(pt);return m}
+async function gUpload(rec,rem){const blob=await gz(JSON.stringify(rec)),name=GP()+rec.id,props={appProperties:{mt:String(rec.mt||0),...(rec.deleted?{del:"1"}:(rem&&rem.del?{del:null}:{}))}};
   const meta=JSON.stringify(rem?props:{name,parents:["appDataFolder"],...props}),path=rem?`/files/${rem.id}`:"/files",method=rem?"PATCH":"POST";
   if(blob.size<=4*1048576){const body=new Blob([`--gb\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n--gb\r\nContent-Type: application/octet-stream\r\n\r\n`,blob,"\r\n--gb--"]);
     await gApi(`${GUP}${path}?uploadType=multipart&fields=id`,{method,headers:{"Content-Type":"multipart/related; boundary=gb"},body})}
   else{const r1=await gApi(`${GUP}${path}?uploadType=resumable&fields=id`,{method,headers:{"Content-Type":"application/json; charset=UTF-8","X-Upload-Content-Type":"application/octet-stream","X-Upload-Content-Length":String(blob.size)},body:meta});
     await gApi(r1.headers.get("Location"),{method:"PUT",body:blob})}}
-async function gSync(){if(gBusy)return;if(!GCID){gSay("الخدمة لسه ما اتفعّلتش.");return}gBusy=true;let dn=0,up=0,dl=0;
+async function gSync(){if(gBusy)return;if(!GCID){gSay("الخدمة لسه ما اتفعّلتش.");return}gBusy=true;const v0=gVer;let dn=0,up=0,dl=0,lc=0;
   try{await gToken(true,"sync");gSay("جاري الاتصال بجوجل...");const remote=await gList(),local=(await all()).filter(x=>x&&x.id!=null);
-    const lm=new Map(local.map(x=>[String(x.id),x]));
-    // 1) حذف اللي اتمسح محليًا (الأول، عشان ما يتنزّلش تاني)
-    let pend=[];try{pend=JSON.parse(gLS("g_del")||"[]")}catch(e){}
-    const pset=new Set(pend.map(String));
-    for(const id of pend){const f=remote[GP()+id];if(f&&!lm.has(String(id))){await gApi(`${GU}/files/${f.id}`,{method:"DELETE"});delete remote[GP()+id];dl++}}
-    gLS("g_del",null);
-    // 2) تنزيل الجديد/الناقص
-    const D=Object.keys(remote).filter(n=>n.startsWith(GP())).filter(n=>{const id=n.slice(GP().length),l=lm.get(id);return !pset.has(id)&&(!l||remote[n].mt>(l.mt||0))});
-    for(let i=0;i<D.length;i++){gSay(`جاري التنزيل ${i+1}/${D.length}...`);const rec=JSON.parse(await ungz(await(await gApi(`${GU}/files/${remote[D[i]].id}?alt=media`)).blob()));rec.mt=remote[D[i]].mt;await putRaw(rec);lm.set(String(rec.id),rec);dn++}
-    // 3) رفع الجديد
-    const U=[...lm.values()].filter(x=>{const f=remote[GP()+x.id];return !f||(x.mt||0)>f.mt});
-    for(let i=0;i<U.length;i++){gSay(`جاري الرفع ${i+1}/${U.length}...`);if(!U[i].mt){U[i].mt=Date.now();await putRaw(U[i])}await gUpload(U[i],remote[GP()+U[i].id]);up++}
-    gLS("g_dirty",null);gLS("g_last",String(Date.now()));gSig=gSigOf(await gList());gSay(`✓ تمت المزامنة: نزّلت ${dn}، رفعت ${up}${dl?`، حذفت ${dl}`:""}.`);
-    if(dn){await render()}}
+    const lm=new Map(local.map(x=>[String(x.id),x])),T=gTomb(),P=GP(),done=new Set();
+    try{JSON.parse(gLS("g_del")||"[]").forEach(id=>{if(T[id]==null)T[id]=Date.now()})}catch(e){}gLS("g_del",null);
+    const getRec=async R=>{const rec=JSON.parse(await ungz(await(await gApi(`${GU}/files/${R.id}?alt=media`)).blob()));rec.mt=R.mt;await putRaw(rec);lm.set(String(rec.id),rec);dn++;lc++};
+    const ids=[...new Set([...lm.keys(),...Object.keys(T),...Object.keys(remote).filter(n=>n.startsWith(P)).map(n=>n.slice(P.length))])];
+    for(let k=0;k<ids.length;k++){const id=ids[k],L=lm.get(id),t=+T[id]||0,R=remote[P+id];if(k%5==0)gSay(`جاري المزامنة ${k+1}/${ids.length}...`);
+      const alive=L&&(!t||(L.mt||0)>t);
+      if(alive){if(!L.mt){L.mt=Date.now();await putRaw(L)}
+        if(!R||(R.del&&L.mt>R.mt)||(!R.del&&L.mt>R.mt)){await gUpload(L,R);up++}
+        else if(R.del){await rmRaw(L.id);lm.delete(id);dl++;lc++}
+        else if(L.mt<R.mt){await getRec(R)}
+        if(t)done.add(id)}
+      else if(t){
+        if(!R||R.del)done.add(id);
+        else if(R.mt>t){await getRec(R);done.add(id)}
+        else{await gUpload({id:L?L.id:id,deleted:true,mt:t},R);done.add(id);dl++}}
+      else if(R&&!R.del)await getRec(R)}
+    const cur=gTomb();Object.keys(T).forEach(id=>{if(done.has(id)){if(cur[id]===T[id]||cur[id]==null)delete cur[id]}else if(cur[id]==null)cur[id]=T[id]});gLS("g_tomb",JSON.stringify(cur));
+    if(gVer===v0)gLS("g_dirty",null);else{clearTimeout(gTimer);gTimer=setTimeout(gAuto,GDEB)}
+    gLS("g_last",String(Date.now()));gSig=gSigOf(await gList());gSay(`✓ تمت المزامنة: نزّلت ${dn}، رفعت ${up}${dl?`، حذفت ${dl}`:""}.`);
+    if(lc){await render()}}
   catch(e){gSay(gErr(e))}
   gBusy=false;gUI()}
 async function gLogin(){if(!GCID||gBusy)return;gSay("جاري تحويلك لصفحة جوجل...");await gGo("login")}
-function gChanged(){if(!gLinked())return;gLS("g_dirty","1");clearTimeout(gTimer);gTimer=setTimeout(gAuto,GDEB);gBanner()}
-function gDeleted(id){if(!gLinked())return;let p=[];try{p=JSON.parse(gLS("g_del")||"[]")}catch(e){}p.push(id);gLS("g_del",JSON.stringify(p));gChanged()}
-async function gAuto(){if(!gLinked()||gBusy||gLS("g_auto")=="0")return;if(await gToken(false))gSync();else if(await gSilentFrame())gSync();else gBanner()}
+function gChanged(){if(!gLinked())return;gVer++;gLS("g_dirty","1");clearTimeout(gTimer);gTimer=setTimeout(gAuto,GDEB);gBanner()}
+function gDeleted(id){if(!gLinked())return;const T=gTomb();T[id]=Date.now();gLS("g_tomb",JSON.stringify(T));gChanged()}
+async function gAuto(){if(!gLinked()||gLS("g_auto")=="0")return;if(gBusy){clearTimeout(gTimer);gTimer=setTimeout(gAuto,1500);return}if(await gToken(false))gSync();else if(await gSilentFrame())gSync();else gBanner()}
 function gBanner(){const e=$("gb");if(!e)return;const need=gLinked()&&gLS("g_dirty")=="1"&&!gBusy&&!(gTok&&Date.now()<gExp-60000);
   e.innerHTML=need?`<div class="card" style="border:2px solid var(--bl);margin-bottom:10px"><b style="color:var(--bl)">فيه تغييرات لسه ما اتحفظتش على حساب جوجل</b><button id="gbb" class="pri" style="width:100%;margin-top:8px">احفظها دلوقتي</button></div>`:"";
   if(need)$("gbb").onclick=gSync}
